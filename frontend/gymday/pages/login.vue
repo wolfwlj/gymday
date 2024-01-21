@@ -12,6 +12,8 @@ console.log(authenticated.value)
 
 const router = useRouter();
 
+let togglePassword = ref(false);
+
 const form = ref({
     Username : '',
     Password : '',
