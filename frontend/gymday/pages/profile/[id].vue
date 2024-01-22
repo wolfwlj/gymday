@@ -4,8 +4,9 @@ import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pini
 import  useAuthStore  from '../../stores/auth'; // import the auth store we just created
 import { onMounted } from 'vue'
 import useProfileStore from '../../stores/profile'
-import editprofile from '~/components/profile/editprofile.vue';
+import editprofile from '~/components/profile/modals/editprofile.vue';
 import listingsprofile from '~/components/profile/listingsprofile.vue';
+import Galleryprofile from '~/components/profile/galleryprofile.vue';
 
 const profileStore = useProfileStore()
 const route = useRoute()
@@ -62,14 +63,14 @@ userinfo.value = profileStore.user
                     </ul>
                 </div>
                 <div class="p-4 w-[80%]">
-                    <div v-if="currentProfileTab == 1" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+                    <div v-if="currentProfileTab == 1" >
                         <listingsprofile />
                     </div>
-                    <div v-if="currentProfileTab == 2" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+                    <div v-if="currentProfileTab == 2" >
                         producten
                     </div>
-                    <div v-if="currentProfileTab == 3" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-                        foto's
+                    <div v-if="currentProfileTab == 3" >
+                        <Galleryprofile />
                     </div>
                 </div>
             </div>

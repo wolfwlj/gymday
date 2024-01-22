@@ -15,6 +15,7 @@ type Listing struct {
 	Country string `gorm:"type:text"`
 	Province string `gorm:"type:text"`
 	City string `gorm:"type:text"`
+	Public bool `gorm:"type:bool;default:false"`
 	Images []ListingImage 
 	Reviews []Review 
 	UserID uint 

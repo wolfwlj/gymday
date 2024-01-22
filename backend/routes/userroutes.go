@@ -22,6 +22,9 @@ func UserRoutes(router *gin.RouterGroup) {
 
 	// profile related
 	router.GET("/listingsbyuser/:id", controllers.GetListingsByUser)
+	router.GET("/profileimages/:id", controllers.GetProfileImages)
+	router.POST("/profileimage", middleware.UserAuth, controllers.CreateProfileImage)
+	router.DELETE("/profileimage/:id", middleware.UserAuth, controllers.DeleteProfileImage)
 
 	
 	//listing routers
