@@ -2,7 +2,7 @@
 
 // export default async () => {
 //     const authstore = useAuthStore();
-//     const token = useCookie('token'); // get token from cookies
+//     const token = useCookie('gymdaytoken'); // get token from cookies
 //     authstore.kanker = 'niet kankjer'
 //     if (authstore.user === null && token) {
 //         await authstore.validate();

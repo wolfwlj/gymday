@@ -7,6 +7,7 @@ const useProfileStore = defineStore({
     state: () => ({
         isEditProfileOpen : false,
         user : null,
+        profilelistings : null,
     }),
     getters: {
 
@@ -26,13 +27,22 @@ const useProfileStore = defineStore({
                 credentials: 'include',
             });
             this.loading = pending;
-            console.log(data)
             if (data.value) {
                 this.isEditProfileOpen = false
                 this.user = data.value.user
             }
+        },
+        async getlistings() {
+            const { data, pending } = await useFetch(`${baseURL}/user/listingsbyuser/${this.user.ID}`, {
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+            });
+            this.loading = pending;
+            if (data.value) {
+                this.profilelistings = data.value.listings
+            }
         }
-        
     },
 })
 

@@ -5,12 +5,15 @@ import  useAuthStore  from '../../stores/auth'; // import the auth store we just
 import { onMounted } from 'vue'
 import useProfileStore from '../../stores/profile'
 import editprofile from '~/components/profile/editprofile.vue';
+import listingsprofile from '~/components/profile/listingsprofile.vue';
+
 const profileStore = useProfileStore()
 const route = useRoute()
 const authstore = useAuthStore()
 const userinfo = useState('profile')
 const param = route.params.id
 const isUser = authstore.user?.ID === parseInt(param)
+const currentProfileTab = ref(1)
 
 const { data : user} = await useFetch(`${baseURL}/user/user/${param}`, {
     method: 'get',
@@ -19,8 +22,6 @@ const { data : user} = await useFetch(`${baseURL}/user/user/${param}`, {
 
 profileStore.user = user.value.user
 userinfo.value = profileStore.user
-
-console.log(userinfo.value)
 
 </script>
 
@@ -35,16 +36,18 @@ console.log(userinfo.value)
                     <div v-else class=" aspect-square	w-full overflow-hidden  bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-[100%] rounded-xl ">
                         {{ userinfo?.ProfilePicture  }}
                         <img  src="" alt="">
+
                     </div>
                 </div>
                 <div class="w-[80%] max-w-[80%]">
-                    <div class="flex space-x-2">
+                    <div class="flex space-x-2 mb-2">
                         <h2 class="text-2xl font-semibold">{{userinfo?.FirstName}} {{userinfo?.LastName}}</h2>
                         <UButton v-if="isUser" @click="profileStore.isEditProfileOpen = true">Profiel bewerken</UButton>
                         <editprofile v-if="profileStore.isEditProfileOpen" />
                     </div>
-                    <p >{{ userinfo?.Bio}}</p>
-                    <p class="text-wrap">asdasdasasdasdasasdasdasasdasdasasdas</p>
+                    <div class="overflow-auto max-h-[85%]">
+                        <p class="text-wrap overflow-hidden break-words truncate">{{ userinfo?.Bio}}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,16 +56,20 @@ console.log(userinfo.value)
             <div class="flex w-[70%] border-solid border-t">
                 <div class="text-gray-500 p-4 w-[20%] m-h-full border-solid border-r">
                     <ul class="space-y-2 text-lg">
-                        <li><a href="#" class="block hover:text-gray-400">Listings</a></li>
-                        <li><a href="#" class="block hover:text-gray-400">Producten</a></li>
-                        <li><a href="#" class="block hover:text-gray-400">Foto Galerij</a></li>
+                        <li><a @click="currentProfileTab = 1" :class="currentProfileTab == 1 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-4 cursor-pointer">Listings</a></li>
+                        <li><a @click="currentProfileTab = 2" :class="currentProfileTab == 2 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-4 cursor-pointer">Producten</a></li>
+                        <li><a @click="currentProfileTab = 3" :class="currentProfileTab == 3 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-4 cursor-pointer">Foto Galerij</a></li>
                     </ul>
                 </div>
                 <div class="p-4 w-[80%]">
-                    <div class="">
-                        {{ userinfo?.Username}}               
-                        {{ userinfo?.ProfilePicture }} 
-                        <p>asdasdas</p>
+                    <div v-if="currentProfileTab == 1" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+                        <listingsprofile />
+                    </div>
+                    <div v-if="currentProfileTab == 2" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+                        producten
+                    </div>
+                    <div v-if="currentProfileTab == 3" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+                        foto's
                     </div>
                 </div>
             </div>

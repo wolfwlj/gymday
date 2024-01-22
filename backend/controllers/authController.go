@@ -146,7 +146,7 @@ func Login(c *gin.Context) {
 	c.SetSameSite(http.SameSiteNoneMode)
 	//secure flag moet true staan voor production, false zodat je het kan testen in postman
 
-	c.SetCookie("token", tokenString, 3600*24*30, "", "", true, true)
+	c.SetCookie("gymdaytoken", tokenString, 3600*24*30, "", "", true, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"user":   user,
@@ -173,7 +173,7 @@ func Validate(c *gin.Context) {
 func Logout(c *gin.Context) {
 	c.SetSameSite(http.SameSiteNoneMode)
 
-	c.SetCookie("token", "", -1, "", "", true, true)
+	c.SetCookie("gymdaytoken", "", -1, "", "", true, true)
 	c.JSON(http.StatusOK, gin.H{
 
 		"message": "Logged out successfully",

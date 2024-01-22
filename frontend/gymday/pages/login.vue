@@ -8,7 +8,6 @@ const { loginuser } = useAuthStore(); // use authenticateUser action from  auth 
 
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
-console.log(authenticated.value)
 
 const router = useRouter();
 
@@ -24,7 +23,6 @@ async function login(form){
   // redirect to homepage if user is authenticated
 
     if (authenticated) {
-        console.log(authenticated.value)
         router.push('/');
     }
 

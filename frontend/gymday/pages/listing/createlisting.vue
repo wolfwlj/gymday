@@ -52,7 +52,6 @@ async function CreateListing(){
         },
         credentials: 'include',
     })
-    console.log(data.value)
 }
 
 
@@ -66,7 +65,7 @@ async function CreateListing(){
     <div class="flex justify-center align-middle item-center">
         <div class="flex flex-col w-[30%] mt-10">
             <!-- inputs -->
-            <input v-model="createlisting.Title" type="text" placeholder="Titel" class="border border-gray-300 p-2 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
+            <!-- <input v-model="createlisting.Title" type="text" placeholder="Titel" class="border border-gray-300 p-2 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
             <textarea v-model="createlisting.Description" type="text" placeholder="Omschrijving" class="border border-gray-300 p-2 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
             </textarea>
 
@@ -83,7 +82,15 @@ async function CreateListing(){
             <input v-model="createlisting.Images[4].ImageURL" type="text" placeholder="foto 5 (url)" class="border border-gray-300 p-2 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
 
 
-            <button v-on:click="CreateListing(createlisting)" type="submit" class="bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-opacity-50">Post </button>
+            <button v-on:click="CreateListing(createlisting)" type="submit" class="bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-opacity-50">Post </button> -->
+            <p class="text-lg">Op deze pagina kan je aanvragen of je trainer kan worden.</p>
+
+            <p class="text-lg">vanaf dat moment kan je listings maken, deze listings kunnen dan alleen nog niet gezien worden.</p>
+            <p class="text-lg">Wij moeten de aanvraag accepteren, dit doen door iets te checken ofz, miss opbellen wie weet </p>
+
+
+            <p class="text-lg">blablabla accepteer voorwaarden, tel invullen miss bewijzen uploaden ofz. Miss stukje schrijven ov er je zelf. Wachten op approval van ons dit dat</p>
+        
         </div>
     </div>
 

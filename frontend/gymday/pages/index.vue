@@ -2,7 +2,6 @@
 import { baseURL } from '../api';
 // import  useAuthStore  from './stores/auth'; // import the auth store we just created
 // const authstore = useAuthStore()
-// console.log(authstore.kanker)
 </script>
 
 <template>

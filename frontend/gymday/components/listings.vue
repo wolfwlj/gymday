@@ -38,6 +38,5 @@ listingstore.listings = listings.value.listings
                 </div>
             </NuxtLink>
         </div>
-
     </div>
 </template>

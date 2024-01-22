@@ -14,7 +14,7 @@ import (
 
 func UserAuth(c *gin.Context) {
 
-	tokenString, err := c.Cookie("token")
+	tokenString, err := c.Cookie("gymdaytoken")
 
 	if err != nil {
 		if err == http.ErrNoCookie {

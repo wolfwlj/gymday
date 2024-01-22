@@ -131,6 +131,21 @@ func GetListings(c *gin.Context) {
 
 }
 
+func GetListingsByUser(c *gin.Context) {
+		
+	userID := c.Param("id")
+	var listings []models.Listing
+
+
+	initializers.DB.Preload("User").Preload("Images").Where("user_id = ?", userID).Find(&listings)
+
+	c.JSON(http.StatusOK, gin.H{
+		"listings": listings,
+	})
+}
+
+
+
 
 func GetListingsBySearch(c *gin.Context) {
 

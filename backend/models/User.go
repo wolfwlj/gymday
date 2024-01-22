@@ -17,4 +17,5 @@ type User struct {
 	ProfilePicture string `gorm:"type:text"`
 	Bio string `gorm:"type:text"`
 	Tier int `gorm:"default:1"`
+	Approved bool `gorm:"default:false"`
 }

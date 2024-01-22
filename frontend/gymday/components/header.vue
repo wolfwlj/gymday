@@ -13,7 +13,8 @@ const logout = () => {
     logoutuser();
     router.push('/login');
 };
-console.log(authstore.user)
+
+
 </script>
 
 <template>

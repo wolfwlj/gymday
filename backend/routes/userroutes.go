@@ -18,6 +18,11 @@ func UserRoutes(router *gin.RouterGroup) {
 	//user routers
 	router.GET("/user/:id", controllers.GetUser)
 	router.PUT("/user/:id", middleware.UserAuth, controllers.UpdateUser)
+
+
+	// profile related
+	router.GET("/listingsbyuser/:id", controllers.GetListingsByUser)
+
 	
 	//listing routers
 	router.GET("/listings", controllers.GetListings)

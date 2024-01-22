@@ -31,7 +31,6 @@ async function SubmitReview() {
     if (status.value == 'success') {
 
     } else {
-        console.log(data.value)
         alert("Er is iets mis gegaan met het plaatsen van je recensie")
     }
 }
