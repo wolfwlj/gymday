@@ -23,7 +23,6 @@ func Signup(c *gin.Context) {
 
 	var body struct {
 		Email      string
-		Username   string
 		Password   string 
 		FirstName 	  string `gorm:"type:text"`
 		LastName  string `gorm:"type:text"`
@@ -37,7 +36,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	//Find the user by username
+	//Find the user by email
 	var checkexist models.User
 
 	initializers.DB.First(&checkexist, "email= ?", body.Email)
@@ -65,7 +64,6 @@ func Signup(c *gin.Context) {
 	user := models.User{
 		Email:      body.Email,
 		Password:   string(hash),
-		Username:   body.Username,
 		FirstName:  body.FirstName,
 		LastName:   body.LastName,
 		PhoneNumber: body.PhoneNumber,
@@ -89,7 +87,7 @@ func Signup(c *gin.Context) {
 func Login(c *gin.Context) {
 
 	var body struct {
-		Username string
+		Email string
 		Password string
 	}
 
@@ -100,17 +98,17 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	//Find the user by username
+	//Find the user by email
 	var user models.User
 
-	initializers.DB.First(&user, "username= ?", body.Username)
+	initializers.DB.First(&user, "email= ?", body.Email)
 	//Check if the user exists
 
 	if user.ID == 0 {
 		log.Println("User not found")
 
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Verkeerde gebruikersnaam of wachtwoord",
+			"error": "Verkeerde email of wachtwoord",
 		})
 		return
 	}
@@ -121,7 +119,7 @@ func Login(c *gin.Context) {
 		log.Println("Wachtwoord is niet correct")
 
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Verkeerde gebruikersnaam of wachtwoord",
+			"error": "Verkeerde email of wachtwoord",
 		})
 		return
 	}

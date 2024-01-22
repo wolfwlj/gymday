@@ -10,7 +10,7 @@ func UserRoutes(router *gin.RouterGroup) {
 
 	//base user auth
 	router.POST("/login",  controllers.Login)
-	router.POST("/signup",  controllers.Signup)
+	router.POST("/register",  controllers.Signup)
 
 	router.GET("/validate", middleware.UserAuth, controllers.Validate)
 	router.POST("/logout", middleware.UserAuth, controllers.Logout)
