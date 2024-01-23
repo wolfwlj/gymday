@@ -10,7 +10,6 @@ const { data : listings} = await useFetch(`${baseURL}/user/listings`, {
 })
 listingstore.listings = listings.value.listings
 
-
 </script>
 
 <template>
@@ -18,7 +17,7 @@ listingstore.listings = listings.value.listings
         <div v-for="listing in listingstore.listings" :key="listing.ID" class="group relative">
             <NuxtLink :to="`listing/${listing.ID}`">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80 rounded">
-                    <img :src="`${listing.Images[0].ImageURL}`" alt="" class="h-full w-full object-cover object-center lg:h-full lg:w-full rounded" />
+                    <img :src="`${listing.Images[0]?.ImageURL}`" alt="" class="h-full w-full object-cover object-center lg:h-full lg:w-full rounded" />
                 </div>
                 <div class="mt-4 flex flex-col justify-between">
                     <div>

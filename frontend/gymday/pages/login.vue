@@ -8,10 +8,9 @@ const { loginuser } = useAuthStore(); // use authenticateUser action from  auth 
 
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
-
 const router = useRouter();
 
-let togglePassword = ref(false);
+const togglePassword = ref(false);
 
 const form = ref({
     Username : '',
@@ -20,15 +19,12 @@ const form = ref({
 
 async function login(form){
     await loginuser(form.Username, form.Password); // call authenticateUser and pass the user object
-  // redirect to homepage if user is authenticated
+    // redirect to homepage if user is authenticated
 
     if (authenticated) {
         router.push('/');
     }
-
-
 }
-
 </script>
 
 <template>
@@ -41,7 +37,6 @@ async function login(form){
                     class="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent flex-1">
                 <UIcon :name="[togglePassword ? 'i-heroicons-eye' : 'i-heroicons-eye-slash']" @click="togglePassword = !togglePassword" class="hover:cursor-pointer absolute right-0 top-3 right-3" />
             </div>
-
             <!-- button -->
             <button v-on:click="login(form)" type="submit" class="bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-opacity-50">Login</button>
         </div>

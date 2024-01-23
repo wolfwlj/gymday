@@ -50,23 +50,23 @@ async function SubmitReview() {
             <div class="mx-auto mt-6 max-w-2xl lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-3">
                 <div class="hidden lg:grid lg:grid-cols-1 lg:gap-y-4 lg:grid-rows-1 col-span-6">
                     <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-l-lg  ">
-                        <img :src="listing.listing.Images[1].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
+                        <img :src="listing.listing.Images[0].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
                     </div>
                 </div>
                 <div class="hidden lg:grid lg:grid-cols-1 col-span-3 lg:grid-rows-2 lg:gap-y-4">
                     <div class="aspect-h-2 aspect-w-3 overflow-hidden ">
-                        <img :src="listing.listing.Images[1].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
+                        <img :src="listing.listing?.Images[1].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
                     </div>
                     <div class="aspect-h-2 aspect-w-3 overflow-hidden ">
-                        <img :src="listing.listing.Images[2].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
+                        <img :src="listing.listing?.Images[2].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
                     </div>
                 </div>
                 <div class="hidden lg:grid lg:grid-cols-1 col-span-3 lg:grid-rows-2 lg:gap-y-4">
                     <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-tr-lg ">
-                        <img :src="listing.listing.Images[1].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
+                        <img :src="listing.listing?.Images[3].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
                     </div>
                     <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-br-lg">
-                        <img :src="listing.listing.Images[2].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
+                        <img :src="listing.listing?.Images[3].ImageURL" alt="listingpicigeuss" class="h-full w-full object-cover object-center aspect-block" />
                     </div>
                 </div>
             </div>

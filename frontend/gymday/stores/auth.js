@@ -7,7 +7,6 @@ const useAuthStore = defineStore({
     state: () => ({
         authenticated : false,
         user : null,
-        kanker : 'kanker'
     }),
     getters: {
 
@@ -35,7 +34,6 @@ const useAuthStore = defineStore({
                 this.user = data?.value?.user; // set user state value to user
             }
         },
-
 
         async logoutuser() { // logout action
             const token = useCookie('gymdaytoken'); // useCookie new hook in nuxt 3

@@ -8,9 +8,10 @@ const useProfileStore = defineStore({
         // modal states
         isEditProfileOpen : false,
         isAddListingOpen : false,
-        
+        isEditListingOpen : false,
         // data states
         user : null,
+        selectedListing : null,
         profilelistings : [],
         profileimages : [],
     }),
@@ -45,31 +46,78 @@ const useProfileStore = defineStore({
             });
             this.loading = pending;
             if (data.value) {
+                console.log(data.value.listings)
                 this.profilelistings = data.value.listings
             }
         },
 
-        async addListing() {
-            const { data, pending } = await useFetch(`${baseURL}/user/listingsbyuser/${this.user.ID}`, {
+        async addListing(title, city, description, price, location, province, country, images, privatelisting) {
+
+            console.log(title, city, description, price, location, province, country, images, privatelisting)
+
+            const { data, pending, error} = await useFetch(`${baseURL}/user/listing`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: {
-                    Title : this.user.Title,
-                    Description : this.user.Description,
-                    Price : this.user.Price,
-                    Location : this.user.Location,
-                    Image : this.user.Image,
+                    Title : title,
+                    City : city,
+                    Description : description,
+                    Price : price,
+                    Location : location,
+                    Province : province,
+                    Country : country,
+                    Images : images,
+                    Private : privatelisting
                 },
                 credentials: 'include',
             });
             this.loading = pending;
             if (data.value) {
-                this.profilelistings = data.value.listings
+                await this.getlistings()
+                this.isAddListingOpen = false
+            }
+        },
+
+        async editListing(title, city, description, price, location, province, country, images, privatelisting) {
+    
+            const { data, pending, error} = await useFetch(`${baseURL}/user/listing/${this.selectedListing.ID}`, {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+                    Title : title,
+                    City : city,
+                    Description : description,
+                    Price : price,
+                    Location : location,
+                    Province : province,
+                    Country : country,
+                    Images : images,
+                    Private : privatelisting
+                },
+                credentials: 'include',
+            });
+            this.loading = pending;
+            if (data.value) {
+                await this.getlistings()
+                this.isEditListingOpen = false
+            }
+        },
+        
+        async deleteListing() {
+            const { data, pending } = await useFetch(`${baseURL}/user/listing/${this.selectedListing.ID}`, {
+                method: 'delete',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+            });
+            this.loading = pending;
+            if (data.value) {
+                await this.getlistings()
+                this.isEditListingOpen = false
             }
         },
 
 
-        async GetProfileImages() {
+        async getProfileImages() {
             const { data, pending } = await useFetch(`${baseURL}/user/profileimages/${this.user.ID}`, {
                 method: 'get',
                 headers: { 'Content-Type': 'application/json' },
@@ -81,7 +129,7 @@ const useProfileStore = defineStore({
             }
         },
 
-        async UploadProfileImage() {
+        async uploadProfileImage() {
             const { data, pending } = await useFetch(`${baseURL}/user/profileimages/${this.user.ID}`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
@@ -94,7 +142,7 @@ const useProfileStore = defineStore({
             }
         },
 
-        async DeleteProfileImage() {
+        async deleteProfileImage() {
             const { data, pending } = await useFetch(`${baseURL}/user/profileimages/${this.user.ID}`, {
                 method: 'delete',
                 headers: { 'Content-Type': 'application/json' },

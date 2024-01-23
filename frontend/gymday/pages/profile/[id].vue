@@ -16,18 +16,25 @@ const param = route.params.id
 const isUser = authstore.user?.ID === parseInt(param)
 const currentProfileTab = ref(1)
 
-const { data : user} = await useFetch(`${baseURL}/user/user/${param}`, {
+const { data : user, error} = await useFetch(`${baseURL}/user/user/${param}`, {
     method: 'get',
     credentials: 'include',
 })
+if (error.value) {
+    console.log(error.value.data)
 
-profileStore.user = user.value.user
-userinfo.value = profileStore.user
+} else {
+    profileStore.user = user.value.user
+    userinfo.value = profileStore.user
+}
+// console.log(error.value.data)
+// profileStore.user = user.value.user
+// userinfo.value = profileStore.user
 
 </script>
 
 <template> 
-    <main class="flex flex-col w-full h-[90vh] pt-4">
+    <main v-if="!error" class="flex flex-col w-full h-[90vh] pt-4">
         <div class="flex justify-center">
             <div class="flex space-x-8 w-[70%] max-h-[20vh]  ">
                 <div class="w-[20%]">
@@ -42,8 +49,9 @@ userinfo.value = profileStore.user
                 </div>
                 <div class="w-[80%] max-w-[80%]">
                     <div class="flex space-x-2 mb-2">
-                        <h2 class="text-2xl font-semibold">{{userinfo?.FirstName}} {{userinfo?.LastName}}</h2>
+                        <h2 class="text-2xl font-semibold cursor-pointer">{{userinfo?.FirstName}} {{userinfo?.LastName}}</h2>
                         <UButton v-if="isUser" @click="profileStore.isEditProfileOpen = true">Profiel bewerken</UButton>
+
                         <editprofile v-if="profileStore.isEditProfileOpen" />
                     </div>
                     <div class="overflow-auto max-h-[85%]">
@@ -76,4 +84,11 @@ userinfo.value = profileStore.user
             </div>
         </div>
     </main>
+
+    <main v-else class="flex justify-center align-middle h-[40vh] ">
+        <p class="text-2xl"> 
+            Geen profiel gevonden...
+        </p>
+    </main>
+
 </template>

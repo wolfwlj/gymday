@@ -13,7 +13,17 @@ func GetUser(c *gin.Context) {
 
 	var user models.User
 
-	initializers.DB.First(&user, id)
+	initializers.DB.First(&user, "id = ?", id)
+	// check for error
+
+	if user.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+	
+
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": user,
