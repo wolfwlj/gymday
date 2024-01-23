@@ -57,12 +57,12 @@ async function login() {
                     <div>
                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                         <div class="mt-2 relative">
-                            <input v-model="form.Password" :type="[togglePassword ? 'text' : 'password']" id="password"
+                            <input v-model="form.Password" :type="togglePassword ? 'text' : 'password'" id="password"
                                 name="password" autocomplete="current-password" required=""
                                 class="block w-full rounded-md border-0 p-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6" />
-                            <UIcon :name="[togglePassword ? 'i-heroicons-eye' : 'i-heroicons-eye-slash']"
+                            <UIcon :name="togglePassword ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'"
                                 @click="togglePassword = !togglePassword"
-                                class="hover:cursor-pointer absolute right-0 top-3 right-3" />
+                                class="hover:cursor-pointer absolute top-3 right-3" />
                         </div>
                     </div>
 

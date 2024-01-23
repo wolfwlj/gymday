@@ -195,7 +195,7 @@ func GetListingsBySearch(c *gin.Context) {
 
 	var listings []models.Listing
 
-	initializers.DB.Preload("User").Preload("Images").Where("concat(city, country, province) like ?", "%"+query+"%").Find(&listings)
+	initializers.DB.Preload("User").Preload("Images").Where("concat(city, country, province, title) like ?", "%"+query+"%").Find(&listings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,
