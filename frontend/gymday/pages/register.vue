@@ -38,9 +38,10 @@ async function signup() {
 
         fields[i][0] = fields[i][0].replace('_', ' ');
 
-        if (!fields[i][1])
+        if (!fields[i][1]) {
             errors.push(fields[i][0] + ' is verplicht!');
-        errorCheck.value = true;
+            errorCheck.value = true;
+        }
     }
 
     if (form.Password !== form.PasswordConfirmation) {
@@ -53,16 +54,16 @@ async function signup() {
     const { data } = await useFetch(`${baseURL}/user/register`, {
         method: 'post',
         body: {
-            Email: form.Email,
-            Password: form.Password,
-            FirstName: form.First_Name,
-            LastName: form.Last_Name,
-            PhoneNumber: form.Phone_Number,
+            Email: form.value.Email,
+            Password: form.value.Password,
+            FirstName: form.value.First_Name,
+            LastName: form.value.Last_Name,
+            PhoneNumber: form.value.Phone_Number,
         },
     });
 
     if (data.value.user) {
-        await loginuser(form.Email, form.Password);
+        await loginuser(form.value.Email, form.value.Password);
 
         if (authenticated) router.push('/');
     }
@@ -73,7 +74,9 @@ async function signup() {
     <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md flex justify-between">
             <h2 class="mt-6 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Create Account</h2>
-            <h1 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GymDay</h1>
+            <NuxtLink :to="`/`" >
+                <button class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GymDay</button>
+            </NuxtLink>
         </div>
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 

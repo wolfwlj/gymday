@@ -36,7 +36,9 @@ async function login() {
         <div class="sm:mx-auto sm:w-full sm:max-w-md flex justify-between">
             <h2 class="mt-6 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account
             </h2>
-            <h1 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GymDay</h1>
+            <NuxtLink :to="`/`" >
+                <button class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GymDay</button>
+            </NuxtLink>
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
