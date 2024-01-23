@@ -13,13 +13,15 @@ const useAuthStore = defineStore({
     },
     actions: {
         async loginuser(Email, Password) {
+
+            console.log(Email, Password)
             // useFetch from nuxt 3
             const { data, pending } = await useFetch(`${baseURL}/user/login`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: {
-                    Email,
-                    Password,
+                    Email : Email,
+                    Password : Password,
                 },
             });
             this.loading = pending;
@@ -59,11 +61,5 @@ const useAuthStore = defineStore({
         }
     },
 })
-
-
-
-
-
-
 
 export default useAuthStore

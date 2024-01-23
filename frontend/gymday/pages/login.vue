@@ -22,9 +22,10 @@ const form = ref({
 })
 
 async function login() {
-    await loginuser(form.Email, form.Password); // call authenticateUser and pass the user object
-    // redirect to homepage if user is authenticated
+    console.log(form.value.Email, form.value.Password)
 
+    await loginuser(form.value.Email, form.value.Password); // call authenticateUser and pass the user object
+    // redirect to homepage if user is authenticated
     if (authenticated) {
         router.push('/');
     };
