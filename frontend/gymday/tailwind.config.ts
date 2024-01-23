@@ -9,5 +9,8 @@ export default <Partial<Config>>{
         video: '16 / 9'
       }
     }
-  }
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
