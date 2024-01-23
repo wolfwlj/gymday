@@ -31,9 +31,9 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.GET("/listings", controllers.GetListings)
 	router.GET("/listingssearch/:query", controllers.GetListingsBySearch)
 	router.GET("/listing/:id", controllers.GetListing)
-	router.POST("/listing", controllers.CreateListing)
-	router.PUT("/listing/:id", controllers.UpdateListing)
-	router.DELETE("/listing/:id", controllers.DeleteListing)
+	router.POST("/listing",  middleware.UserAuth, controllers.CreateListing)
+	router.PUT("/listing/:id",  middleware.UserAuth, controllers.UpdateListing)
+	router.DELETE("/listing/:id",  middleware.UserAuth, controllers.DeleteListing)
 
 	// review routers
 	router.GET("/reviews/:listingid", controllers.GetReviews)

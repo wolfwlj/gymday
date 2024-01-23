@@ -7,20 +7,21 @@ const useAuthStore = defineStore({
     state: () => ({
         authenticated : false,
         user : null,
-        kanker : 'kanker'
     }),
     getters: {
 
     },
     actions: {
         async loginuser(Email, Password) {
+
+            console.log(Email, Password)
             // useFetch from nuxt 3
             const { data, pending } = await useFetch(`${baseURL}/user/login`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: {
-                    Email,
-                    Password,
+                    Email : Email,
+                    Password : Password,
                 },
             });
             this.loading = pending;
@@ -35,7 +36,6 @@ const useAuthStore = defineStore({
                 this.user = data?.value?.user; // set user state value to user
             }
         },
-
 
         async logoutuser() { // logout action
             const token = useCookie('gymdaytoken'); // useCookie new hook in nuxt 3
@@ -61,11 +61,5 @@ const useAuthStore = defineStore({
         }
     },
 })
-
-
-
-
-
-
 
 export default useAuthStore

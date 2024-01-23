@@ -1,10 +1,12 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"gymday/initializers"
 	"gymday/models"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	decimal "github.com/shopspring/decimal"
 )
 
 
@@ -13,11 +15,12 @@ func CreateListing(c *gin.Context) {
 	var body struct {
 		Title       string
 		Description string
-		Price       float64
+		Price       string
 		Location    string
 		City        string
 		Province    string
 		Country     string
+		Private     bool
 		Images      []models.ListingImage
 	}
 
@@ -26,16 +29,17 @@ func CreateListing(c *gin.Context) {
 
 	c.Bind(&body)
 
-	// realprice, _ := strconv.ParseFloat(body.Price, 64)
+	realprice, _ := decimal.NewFromString(body.Price)
+
 	listing := models.Listing{
 		Title:       body.Title,
 		Description: body.Description,
-		// Price: realprice,
-		Price:    body.Price,
+		Price:    realprice,
 		Location: body.Location,
 		City:     body.City,
 		Province: body.Province,
 		Country:  body.Country,
+		Private:  body.Private,
 		UserID:   userID,
 	}
 
@@ -62,11 +66,17 @@ func UpdateListing(c *gin.Context) {
 	var body struct {
 		Title       string
 		Description string
-		Price       float64
+		Price       string
 		Location    string
-		Images      []string
-		UserID      uint
+		City        string
+		Province    string
+		Country     string
+		Private     bool
+		Images      []models.ListingImage
 	}
+	
+	user, _ := c.Get("user")
+	userID := user.(models.User).ID
 
 	if c.Bind(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -75,23 +85,40 @@ func UpdateListing(c *gin.Context) {
 		return
 	}
 
+	realprice, _ := decimal.NewFromString(body.Price)
+
 	var listing models.Listing
-	initializers.DB.First(&listing, id)
+	initializers.DB.Where("user_id = ?", userID).First(&listing, id)
+
+	if listing.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Listing not found",
+		})
+		return
+	}
+
 
 	listing.Title = body.Title
 	listing.Description = body.Description
-	listing.Price = body.Price
+	listing.Price = realprice
 	listing.Location = body.Location
-	listing.UserID = body.UserID
+	listing.City = body.City
+	listing.Province = body.Province
+	listing.Country = body.Country
+	listing.Private = body.Private
+
+	listing.UserID = userID
 
 	for i, image := range body.Images {
 
 		var listingImage models.ListingImage
-		listingImage.ListingID = listing.ID
-		initializers.DB.First(&listingImage, listingImage.ID)
-		listingImage.ImageNR = i + 1
-		listingImage.ImageURL = image
-		initializers.DB.Save(&listingImage)
+		// find image by id
+		initializers.DB.Where("listing_id = ? AND image_nr = ?", id, i+1).First(&listingImage)
+
+		if listingImage.ImageURL != image.ImageURL {
+			listingImage.ImageURL = image.ImageURL
+			initializers.DB.Save(&listingImage)
+		}
 
 	}
 
@@ -109,8 +136,24 @@ func DeleteListing(c *gin.Context) {
 	id := c.Param("id")
 	var listing models.Listing
 
-	initializers.DB.First(&listing, id)
+	user, _ := c.Get("user")
+	userID := user.(models.User).ID
+
+	initializers.DB.Where("user_id = ?", userID).First(&listing, id)
+	if listing.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Listing not found",
+		})
+		return
+	}
+
 	initializers.DB.Delete(&listing)
+	// delete images
+	initializers.DB.Where("listing_id = ?", id).Delete(&models.ListingImage{})
+	// delete reviews
+	initializers.DB.Where("listing_id = ?", id).Delete(&models.Review{})
+	// delete bookings
+	// todo
 
 	c.JSON(http.StatusOK, gin.H{
 		"listing": listing,
@@ -131,20 +174,19 @@ func GetListings(c *gin.Context) {
 
 }
 
+
 func GetListingsByUser(c *gin.Context) {
 		
 	userID := c.Param("id")
 	var listings []models.Listing
 
 
-	initializers.DB.Preload("User").Preload("Images").Where("user_id = ?", userID).Find(&listings)
+	initializers.DB.Preload("Images").Where("user_id = ?", userID).Order("created_at desc").Find(&listings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,
 	})
 }
-
-
 
 
 func GetListingsBySearch(c *gin.Context) {

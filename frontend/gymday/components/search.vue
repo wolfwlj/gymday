@@ -15,6 +15,8 @@ async function Search(){
         credentials: 'include',
         })
         listingstore.listings = listings.value.listings
+        router.push('../');
+
         return
     }
     const { data : listings} = await useFetch(`${baseURL}/user/listingssearch/${query.value}`, {
@@ -23,7 +25,7 @@ async function Search(){
     })
     listingstore.listings = listings.value.listings
 
-    router.push('/');
+    router.push('../');
 }
 
 </script>
