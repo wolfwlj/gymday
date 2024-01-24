@@ -15,10 +15,18 @@ const user = {
 }
 
 const navigation = [
-  { name: 'Dashboard', to: '#', current: true },
-  { name: 'Team', to: '#', current: false },
-  { name: 'Projects', to: '#', current: false },
-  { name: 'Calendar', to: '#', current: false },
+  { name: 'Bodybuilding', to: '#', current: false },
+  { name: 'Crossfit', to: '#', current: false },
+  { name: 'Calisthenics', to: '#', current: false },
+  { name: 'Yoga', to: '#', current: false },
+  { name: 'Cardio', to: '#', current: true },
+  { name: 'Fitness', to: '#', current: false },
+  { name: 'Powerlifting', to: '#', current: false },
+  { name: 'Powerbuilding', to: '#', current: false },
+  { name: 'Strongman', to: '#', current: false },
+  { name: 'Zwemmen', to: '#', current: false },
+  { name: 'Vechtsporten', to: '#', current: false },
+  { name: 'Andere', to: '#', current: false },
 ]
 
 const userNavigation = [
@@ -60,20 +68,43 @@ const logout = () => {
             class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
             <span class="absolute -inset-0.5" />
             <span class="sr-only">Open menu</span>
-            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-            <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+            <Bars3Icon v-show="!open" class="block h-6 w-6" aria-hidden="true" />
+            <XMarkIcon v-show="open" class="block h-6 w-6" aria-hidden="true" />
           </DisclosureButton>
         </div>
         <div class="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
-          <button type="button"
-            class="relative flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-            <span class="absolute -inset-1.5" />
-            <span class="sr-only">View notifications</span>
-            <BellIcon class="h-6 w-6" aria-hidden="true" />
-          </button>
+          <NuxtLink :to="`/listing/createlisting`" v-show="authstore.user?.Tier < 99">
+            <button class="font-semibold text-sm hover:bg-gray-50 py-2 px-2 rounded">Word een Gymday personal
+              trainer!</button>
+          </NuxtLink>
+
+          <NuxtLink :to="`/listing/createlisting`" v-show="authstore.user?.Tier == 99">
+            <button class="font-semibold text-sm hover:bg-gray-50 py-2 px-2 rounded">Post een Listing</button>
+          </NuxtLink>
+
+          <div class="flex space-x-3" v-show="!authstore.user">
+            <UButton
+              size="sm"
+              class="text-black bg-transparent hover:bg-gray-50"
+              variant="solid"
+              label="Register"
+              :trailing="false"
+              :to="`/register`"
+            />
+  
+            <UButton
+              icon="i-heroicons-arrow-right-end-on-rectangle"
+              size="sm"
+              class="text-black bg-transparent hover:bg-gray-50"
+              variant="solid"
+              label="Login"
+              :trailing="false"
+              :to="`/login`"
+            />
+          </div>
 
           <!-- Profile dropdown -->
-          <Menu as="div" class="relative ml-4 flex-shrink-0">
+          <Menu as="div" class="relative ml-4 flex-shrink-0" v-show="authstore.user">
             <div>
               <MenuButton
                 class="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -107,31 +138,42 @@ const logout = () => {
           </Menu>
         </div>
       </div>
-      <nav class="hidden justify-between lg:flex lg:py-2" aria-label="Global">
-        <div class="flex lg:space-x-8">
-          <a v-for="item in navigation" :key="item.name" :href="item.href"
-            :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium']"
-            :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
-        </div>
-
-        <NuxtLink :to="`/listing/createlisting`" v-if="authstore.user?.Tier < 99">
-          <button class=" text-black font-semibold hover:bg-gray-200/75  py-2 px-2 rounded">Word een Gymday personal
-            trainer!</button>
-        </NuxtLink>
-
-        <NuxtLink :to="`/listing/createlisting`" v-else-if="authstore.user?.Tier == 99">
-          <button class=" text-black font-semibold hover:bg-gray-200/75  py-2 px-2 rounded">Post een Listing</button>
-        </NuxtLink>
+      <nav class="hidden overflow-x-auto scroll-smooth no-scrollbar lg:space-x-8 lg:flex lg:py-2" aria-label="Global">
+        <a v-for="item in navigation" :key="item.name" :href="item.href"
+          :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium cursor-pointer']"
+          :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
       </nav>
     </div>
 
     <DisclosurePanel as="nav" class="lg:hidden" aria-label="Global">
-      <div class="space-y-1 px-2 pb-3 pt-2">
+      <div class="space-y-1 px-2 pb-3 pt-2 h-60 overflow-y-auto scroll-smooth no-scrollbar">
         <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href"
-          :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'block rounded-md py-2 px-3 text-base font-medium']"
+          :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'block rounded-md py-2 px-3 text-base font-medium cursor-pointer']"
           :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
       </div>
-      <div class="border-t border-gray-200 pb-3 pt-4">
+
+      <div class="flex space-x-3 justify-end" v-show="!authstore.user">
+        <UButton
+          size="sm"
+          class="text-black bg-transparent hover:bg-gray-50"
+          variant="solid"
+          label="Register"
+          :trailing="false"
+          :to="`/register`"
+        />
+
+        <UButton
+          icon="i-heroicons-arrow-right-end-on-rectangle"
+          size="sm"
+          class="text-black bg-transparent hover:bg-gray-50"
+          variant="solid"
+          label="Login"
+          :trailing="false"
+          :to="`/login`"
+        />
+      </div>
+
+      <div class="border-t border-gray-200 pb-3 pt-4" v-show="authstore.user">
         <div class="flex items-center px-4">
           <div class="flex-shrink-0">
             <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
@@ -140,16 +182,10 @@ const logout = () => {
             <div class="text-base font-medium text-gray-800">{{ user.name }}</div>
             <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
           </div>
-          <button type="button"
-            class="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-            <span class="absolute -inset-1.5" />
-            <span class="sr-only">View notifications</span>
-            <BellIcon class="h-6 w-6" aria-hidden="true" />
-          </button>
         </div>
         <div class="mt-3 space-y-1 px-2">
           <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900">{{
+            class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">{{
               item.name }}</DisclosureButton>
         </div>
       </div>
