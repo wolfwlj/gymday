@@ -1,10 +1,11 @@
 <script setup>
 import { baseURL } from '../../api';
 import { StarIcon, PhoneIcon, EnvelopeIcon } from "@heroicons/vue/24/outline"
-
+import useListingStore from '~/stores/listingstore';
 
 const { id } = useRoute().params
 const sessioncount = ref(1)
+const listingstore = useListingStore()
 
 const { data : listing} = await useFetch(`${baseURL}/user/listing/${id}`, {
     method: 'get',
@@ -129,7 +130,7 @@ async function SubmitReview() {
                             <p class="text-lg font-semibold">
                                 Totaal prijs : &euro;  {{ listing.listing.Price * sessioncount }}
                             </p>
-                            <button class="bg-black text-white py-3 px-2 rounded bg-emerald-500 hover:bg-emerald-500/75 font-semibold">
+                            <button class="bg-black text-white py-3 px-2 rounded bg-emerald-500 hover:bg-emerald-500/75 font-semibold" @click="listingstore.createBooking(id, listing.listing.Price)">
                                 Training Boeken
                             </button>
                         </div>

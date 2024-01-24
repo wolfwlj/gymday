@@ -50,4 +50,8 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.DELETE("/trainer/:id", middleware.UserAuth, controllers.DeleteTrainer)	
 	//
 
+
+	// booking routers
+	router.POST("/booking", middleware.UserAuth, controllers.CreateBooking)
+
 }

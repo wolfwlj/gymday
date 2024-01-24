@@ -97,6 +97,7 @@ const useProfileStore = defineStore({
                 credentials: 'include',
             });
             this.loading = pending;
+            
             if (data.value) {
                 await this.getlistings()
                 this.isEditListingOpen = false
