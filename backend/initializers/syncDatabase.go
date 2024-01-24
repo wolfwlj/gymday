@@ -11,4 +11,5 @@ func SyncDatabase() {
 	DB.AutoMigrate(&models.Review{})
 	DB.AutoMigrate(&models.ListingImage{})
 	DB.AutoMigrate(&models.ProfileImage{})
+	DB.AutoMigrate(&models.Booking{})
 }

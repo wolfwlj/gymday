@@ -7,6 +7,8 @@ const useAuthStore = defineStore({
     state: () => ({
         authenticated : false,
         user : null,
+
+        emailverified : false,
     }),
     getters: {
 
@@ -58,7 +60,24 @@ const useAuthStore = defineStore({
             this.authenticated = true
             this.user = user.user
 
-        }
+        },
+        async verifyEmail(token){
+                
+                if (token === undefined) return;
+    
+                const result = await $fetch(`${baseURL}/user/verifyemail`, {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: {
+                        Token : token
+                    },
+                }).catch((error) => error.data)
+
+                if (result.status === 200) {
+                    this.emailverified = true
+                }
+            },
     },
 })
 
