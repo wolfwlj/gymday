@@ -15,6 +15,53 @@ import {
   HeartIcon,
   XMarkIcon,
 } from '@heroicons/vue/20/solid'
+import { baseURL } from '../../api'
+import useListingStore from '~/stores/listingstore'
+
+const { id } = useRoute().params
+const sessioncount = ref(1)
+const listingstore = useListingStore()
+
+const { data: listing } = await useFetch(`${baseURL}/user/listing/${id}`, {
+    method: 'get',
+    credentials: 'include',
+})
+
+const { data: getReviews } = await useFetch(`${baseURL}/user/reviews/${id}`, {
+    method: 'get',
+    credentials: 'include',
+})
+
+const reviews = reactive(getReviews.value.reviews.slice().reverse())
+console.log(reviews.value);
+const WriteReview = ref({
+    Body: '',
+    Rating: 1,
+})
+
+async function SubmitReview() {
+    const { data, status } = await useFetch(`${baseURL}/user/review`, {
+        method: 'post',
+        body: {
+            Body: WriteReview.value.Body,
+            Rating: WriteReview.value.Rating,
+            ListingID: id,
+        },
+        credentials: 'include',
+    })
+    if (status.value == 'success') {
+        WriteReview.value.Body = ''
+        WriteReview.value.Rating = 1
+        const { data: getReviews } = await useFetch(`${baseURL}/user/reviews/${id}`, {
+            method: 'get',
+            credentials: 'include',
+        })
+
+        reviews.value = getReviews.value.reviews.slice().reverse()
+    } else {
+        alert("Er is iets mis gegaan met het plaatsen van je recensie")
+    }
+}
 
 const moods = [
   { name: 'Excited', value: 'excited', icon: FireIcon, iconColor: 'text-white', bgColor: 'bg-red-500' },
@@ -86,36 +133,7 @@ const product = {
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-05-product-01.jpg',
     imageAlt: 'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
 }
-const reviews = {
-    average: 4,
-    featured: [
-        {
-            id: 1,
-            rating: 5,
-            content: `
-        <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
-      `,
-            date: 'July 16, 2021',
-            datetime: '2021-07-16',
-            author: 'Emily Selman',
-            avatarSrc:
-                'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-        },
-        {
-            id: 2,
-            rating: 5,
-            content: `
-        <p>Blown away by how polished this icon pack is. Everything looks so consistent and each SVG is optimized out of the box so I can use it directly with confidence. It would take me several hours to create a single icon this good, so it's a steal at this price.</p>
-      `,
-            date: 'July 12, 2021',
-            datetime: '2021-07-12',
-            author: 'Hector Gibbons',
-            avatarSrc:
-                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-        },
-        // More reviews...
-    ],
-}
+
 const faqs = [
     {
         question: 'What format are these icons?',
@@ -168,7 +186,7 @@ const license = {
                 <!-- Product image -->
                 <div class="lg:col-span-4 lg:row-end-1">
                     <div class="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
-                        <img :src="product.imageSrc" :alt="product.imageAlt" class="object-cover object-center" />
+                        <img :src="listing.listing.Images[0].ImageURL" :alt="product.imageAlt" class="object-cover object-center" />
                     </div>
                 </div>
 
@@ -177,12 +195,11 @@ const license = {
                     class="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
                     <div class="flex flex-col-reverse">
                         <div class="mt-4">
-                            <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{{ product.name }}</h1>
+                            <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{{ listing.listing.Title }}</h1>
 
-                            <h2 id="information-heading" class="sr-only">Product information</h2>
+                            <h2 id="information-heading" class="sr-only">Listing information</h2>
                             <p class="mt-2 text-sm text-gray-500">
-                                Version {{ product.version.name }} (Updated <time :datetime="product.version.datetime">{{
-                                    product.version.date }}</time>)
+                                Created <time>{{ (new Date(listing.listing.CreatedAt)).toLocaleDateString("en-US") }} by {{ listing.listing.User.FirstName + ' ' + listing.listing.User.LastName }}</time>
                             </p>
                         </div>
 
@@ -190,14 +207,14 @@ const license = {
                             <h3 class="sr-only">Reviews</h3>
                             <div class="flex items-center">
                                 <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
-                                    :class="[reviews.average > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
+                                    :class="[listing.listing.Reviews[0].Rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
                                     aria-hidden="true" />
                             </div>
-                            <p class="sr-only">{{ reviews.average }} out of 5 stars</p>
+                            <p class="sr-only">{{ listing.listing.Reviews[0].Rating }} out of 5 stars</p>
                         </div>
                     </div>
 
-                    <p class="mt-6 text-gray-500">{{ product.description }}</p>
+                    <p class="mt-6 text-gray-500">{{ listing.listing.Description }}</p>
 
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
                         <button type="button"
@@ -302,14 +319,14 @@ const license = {
                     <div class="flex items-start space-x-4 mb-8">
                         <div class="flex-shrink-0">
                             <img class="inline-block h-10 w-10 rounded-full"
-                                src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                :src="listing.listing.User.ProfilePicture"
                                 alt="" />
                         </div>
                         <div class="min-w-0 flex-1">
-                            <form action="#">
+                            <form @submit.prevent="SubmitReview()">
                                 <div class="border-b border-gray-200 focus-within:border-indigo-600">
                                     <label for="comment" class="sr-only">Add your comment</label>
-                                    <textarea rows="3" name="comment" id="comment"
+                                    <textarea rows="3" name="comment" id="comment" v-model="WriteReview.Body"
                                         class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-900 placeholder:text-gray-400 focus:border-indigo-600 focus:ring-0 sm:text-sm sm:leading-6"
                                         placeholder="Add your comment..." />
                                 </div>
@@ -322,54 +339,14 @@ const license = {
                                                 <span class="sr-only">Attach a file</span>
                                             </button>
                                         </div>
-                                        <div class="flow-root">
-                                            <Listbox as="div" v-model="selected">
-                                                <ListboxLabel class="sr-only">Your mood</ListboxLabel>
-                                                <div class="relative">
-                                                    <ListboxButton
-                                                        class="relative -m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
-                                                        <span class="flex items-center justify-center">
-                                                            <span v-if="selected.value === null">
-                                                                <FaceSmileIconOutline class="h-6 w-6 flex-shrink-0"
-                                                                    aria-hidden="true" />
-                                                                <span class="sr-only">Add your mood</span>
-                                                            </span>
-                                                            <span v-if="!(selected.value === null)">
-                                                                <span
-                                                                    :class="[selected.bgColor, 'flex h-8 w-8 items-center justify-center rounded-full']">
-                                                                    <component :is="selected.icon"
-                                                                        class="h-5 w-5 flex-shrink-0 text-white"
-                                                                        aria-hidden="true" />
-                                                                </span>
-                                                                <span class="sr-only">{{ selected.name }}</span>
-                                                            </span>
-                                                        </span>
-                                                    </ListboxButton>
-    
-                                                    <transition leave-active-class="transition ease-in duration-100"
-                                                        leave-from-class="opacity-100" leave-to-class="opacity-0">
-                                                        <ListboxOptions
-                                                            class="absolute z-10 -ml-6 w-60 rounded-lg bg-white py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:ml-auto sm:w-64 sm:text-sm">
-                                                            <ListboxOption as="template" v-for="mood in moods" :key="mood.value"
-                                                                :value="mood" v-slot="{ active }">
-                                                                <li
-                                                                    :class="[active ? 'bg-gray-100' : 'bg-white', 'relative cursor-default select-none px-3 py-2']">
-                                                                    <div class="flex items-center">
-                                                                        <div
-                                                                            :class="[mood.bgColor, 'flex h-8 w-8 items-center justify-center rounded-full']">
-                                                                            <component :is="mood.icon"
-                                                                                :class="[mood.iconColor, 'h-5 w-5 flex-shrink-0']"
-                                                                                aria-hidden="true" />
-                                                                        </div>
-                                                                        <span class="ml-3 block truncate font-medium">{{
-                                                                            mood.name }}</span>
-                                                                    </div>
-                                                                </li>
-                                                            </ListboxOption>
-                                                        </ListboxOptions>
-                                                    </transition>
-                                                </div>
-                                            </Listbox>
+                                        <div class="flex">
+                                        <!-- <div class="flow-root"> -->
+                                            <!-- <UDropdown :items="items" :popper="{ placement: 'right-start' }">
+                                                <UButton color="white" label="Options" trailing-icon="i-heroicons-chevron-down-20-solid" />
+                                            </UDropdown> -->
+                                            <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
+                                                :class="[WriteReview.Rating >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 hover:text-yellow-400 cursor-pointer']"
+                                                aria-hidden="true" @click="WriteReview.Rating = rating"/>
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
@@ -400,28 +377,28 @@ const license = {
                             </TabList>
                         </div>
                         <TabPanels as="template">
-                            <TabPanel class="-mb-10">
+                            <TabPanel class="-mb-10 overflow-y-scroll no-scrollbar h-96">
                                 <h3 class="sr-only">Customer Reviews</h3>
 
-                                <div v-for="(review, reviewIdx) in reviews.featured" :key="review.id"
+                                <div v-for="(review, reviewIdx) in reviews" :key="review.id"
                                     class="flex space-x-4 text-sm text-gray-500">
                                     <div class="flex-none py-10">
-                                        <img :src="review.avatarSrc" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+                                        <img :src="review.User.ProfilePicture" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
                                     </div>
                                     <div :class="[reviewIdx === 0 ? '' : 'border-t border-gray-200', 'py-10']">
-                                        <h3 class="font-medium text-gray-900">{{ review.author }}</h3>
+                                        <h3 class="font-medium text-gray-900">{{ review.User.FirstName + ' ' + review.User.LastName }}</h3>
                                         <p>
-                                            <time :datetime="review.datetime">{{ review.date }}</time>
+                                            <time :datetime="review.datetime">{{ (new Date(review.CreatedAt)).toLocaleDateString("en-US") }}</time>
                                         </p>
 
                                         <div class="mt-4 flex items-center">
                                             <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
-                                                :class="[review.rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
+                                                :class="[review.Rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
                                                 aria-hidden="true" />
                                         </div>
-                                        <p class="sr-only">{{ review.rating }} out of 5 stars</p>
+                                        <p class="sr-only">{{ review.Rating }} out of 5 stars</p>
 
-                                        <div class="prose prose-sm mt-4 max-w-none text-gray-500" v-html="review.content" />
+                                        <div class="prose prose-sm mt-4 max-w-none text-gray-500" v-html="review.Body" />
                                     </div>
                                 </div>
                             </TabPanel>
