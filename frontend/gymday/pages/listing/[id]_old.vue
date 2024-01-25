@@ -18,7 +18,6 @@ const WriteReview = ref({
     ListingID: id,
 })
 
-
 async function SubmitReview() {
     const { data, status } = await useFetch(`${baseURL}/user/review`, {
         method: 'post',

@@ -36,7 +36,7 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.DELETE("/listing/:id",  middleware.UserAuth, controllers.DeleteListing)
 
 	// review routers
-	router.GET("/reviews/:listingid", controllers.GetReviews)
+	router.GET("/reviews/:id", controllers.GetReviews)
 	router.GET("/review/:id", controllers.GetReview)
 	router.POST("/review", middleware.UserAuth, controllers.CreateReview)
 	router.PUT("/review/:id", middleware.UserAuth, controllers.UpdateReview)

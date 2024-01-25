@@ -16,7 +16,7 @@ func GetReviews(c *gin.Context) {
 	
 	var reviews []models.Review
 	
-	initializers.DB.Where("listing_id = ?", listingid).Find(&reviews)
+	initializers.DB.Preload("User").Where("listing_id = ?", listingid).Find(&reviews)
 	
 	c.JSON(http.StatusOK, gin.H{
 		"reviews": reviews,
@@ -38,7 +38,7 @@ func GetReview(c *gin.Context) {
 func CreateReview(c *gin.Context) {
 	var body struct {
 		Body string 
-		Rating string
+		Rating int
 		ListingID   string
 	}
 
@@ -46,8 +46,7 @@ func CreateReview(c *gin.Context) {
 	userID := user.(models.User).ID
 
 	c.Bind(&body) 
-	
-	ratingtoint, _  := strconv.Atoi(body.Rating)
+
 	jemoeder, _  :=   strconv.Atoi(body.ListingID)
 	listingidtoint := uint(jemoeder)
 	// to unint 
@@ -55,7 +54,7 @@ func CreateReview(c *gin.Context) {
 	review := models.Review{
 		Body: body.Body,
 		ListingID: listingidtoint,
-		Rating: ratingtoint,
+		Rating: body.Rating,
 		UserID: userID,
 	}
 
