@@ -16,17 +16,20 @@ const param = route.params.id
 const isUser = authstore.user?.ID === parseInt(param)
 const currentProfileTab = ref(1)
 
-const { data : user, error} = await useFetch(`${baseURL}/user/user/${param}`, {
-    method: 'get',
-    credentials: 'include',
-})
-if (error.value) {
-    console.log(error.value.data)
 
-} else {
-    profileStore.user = user.value.user
-    userinfo.value = profileStore.user
-}
+await profileStore.getUser(param)
+
+// const { data : user, error} = await useFetch(`${baseURL}/user/user/${param}`, {
+//     method: 'get',
+//     credentials: 'include',
+// })
+// if (error.value) {
+//     console.log(error.value.data)
+
+// } else {
+//     profileStore.user = user.value.user
+//     userinfo.value = profileStore.user
+// }
 // console.log(error.value.data)
 // profileStore.user = user.value.user
 // userinfo.value = profileStore.user
@@ -34,28 +37,28 @@ if (error.value) {
 </script>
 
 <template> 
-    <main v-if="!error" class="flex flex-col w-full h-[90vh] pt-4">
+    <main class="flex flex-col w-full h-[90vh] pt-4">
         <div class="flex justify-center">
             <div class="flex space-x-8 w-[70%] max-h-[20vh]  ">
                 <div class="w-[20%]">
-                    <div v-if="userinfo?.ProfilePicture != undefined" class=" aspect-square	w-full overflow-hidden  bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-[100%] rounded-xl ">
-                        <img :src="userinfo?.ProfilePicture" alt="Profiel foto" class="h-full w-full object-cover object-center lg:h-full lg:w-full " />
+                    <div v-if="profileStore.user?.ProfilePicture != undefined" class=" aspect-square	w-full overflow-hidden  bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-[100%] rounded-xl ">
+                        <img :src="profileStore.user?.ProfilePicture" alt="Profiel foto" class="h-full w-full object-cover object-center lg:h-full lg:w-full " />
                     </div>
                     <div v-else class=" aspect-square	w-full overflow-hidden  bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-[100%] rounded-xl ">
-                        {{ userinfo?.ProfilePicture  }}
+                        {{ profileStore.user?.ProfilePicture  }}
                         <img  src="" alt="">
 
                     </div>
                 </div>
                 <div class="w-[80%] max-w-[80%]">
                     <div class="flex space-x-2 mb-2">
-                        <h2 class="text-2xl font-semibold cursor-pointer">{{userinfo?.FirstName}} {{userinfo?.LastName}}</h2>
+                        <h2 class="text-2xl font-semibold cursor-pointer">{{profileStore.user?.FirstName}} {{profileStore.user?.LastName}}</h2>
                         <UButton v-if="isUser" @click="profileStore.isEditProfileOpen = true">Profiel bewerken</UButton>
 
                         <editprofile v-if="profileStore.isEditProfileOpen" />
                     </div>
                     <div class="overflow-auto max-h-[85%]">
-                        <p class="text-wrap overflow-hidden break-words truncate">{{ userinfo?.Bio}}</p>
+                        <p class="text-wrap overflow-hidden break-words truncate">{{ profileStore.user?.Bio }}</p>
                     </div>
                 </div>
             </div>
@@ -85,10 +88,10 @@ if (error.value) {
         </div>
     </main>
 
-    <main v-else class="flex justify-center align-middle h-[40vh] ">
+    <!-- <main v-else class="flex justify-center align-middle h-[40vh] ">
         <p class="text-2xl"> 
             Geen profiel gevonden...
         </p>
-    </main>
+    </main> -->
 
 </template>

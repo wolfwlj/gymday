@@ -8,7 +8,3 @@ services:
       MYSQL_DATABASE: gymday
     ports:
       - "3308:3306"
-  mail:
-    image: schickling/mailcatcher
-    ports: 
-    - 1080:1080

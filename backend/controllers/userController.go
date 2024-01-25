@@ -5,6 +5,10 @@ import (
 	"gymday/initializers"
 	"gymday/models"
 	"github.com/gin-gonic/gin"
+	"log"
+	"path/filepath"
+	"gymday/utils"
+	"github.com/google/uuid"
 )
 
 func GetUser(c *gin.Context) {
@@ -23,7 +27,6 @@ func GetUser(c *gin.Context) {
 		return
 	}
 	
-
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": user,
@@ -47,23 +50,53 @@ func UpdateUser(c *gin.Context) {
 		FirstName 	  string `gorm:"type:text"`
 		LastName  string `gorm:"type:text"`
 		Bio string `gorm:"type:text"`
-		ProfilePicture string `gorm:"type:text"`
 	}
+	c.Bind(&body)
 
-	if c.Bind(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to parse request body",
-		})
-		return
+
+	log.Println(body)
+
+
+	var fullfilename string = ""
+
+	file, err := c.FormFile("file")
+
+	if err != nil {
+		log.Println("no file found")
+	} else {
+		blobFile, err := file.Open()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"file open error": err.Error(),
+			})
+			return
+		}
+	
+		randomfilename := uuid.New().String()
+	
+		extension := filepath.Ext(file.Filename)
+		prefix := "https://gymdayfilestore.s3.eu-central-1.amazonaws.com/"
+		fullfilename = prefix + randomfilename + extension
+
+		result := utils.UploadImage(blobFile, randomfilename + extension)
+	
+		if result != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"upload error": err.Error(),
+			})
+			return
+		}
+
 	}
+	user = models.User{FirstName: body.FirstName, LastName: body.LastName, Bio: body.Bio, ProfilePicture: fullfilename}
 
-	initializers.DB.Model(&user).Updates(body)
+	initializers.DB.Where("id = ?", id).Updates(&user)
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": user,
 	})
 
-}
+}	
 
 func GetProfileImages(c *gin.Context) {
 

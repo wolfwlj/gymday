@@ -29,6 +29,18 @@ const onSubmit = () => {
     profileStore.updateProfile()
 
 }
+
+
+
+const onWorkshopFilePicked = (Workshop) => {
+    const files = Workshop.target.files
+    const image = files[0]
+    // const filename = files[0].name
+    console.log(image)
+    state.profilepicture = image
+};
+
+
 </script>
 
 <template>
@@ -58,7 +70,7 @@ const onSubmit = () => {
                         </UFormGroup>
 
                         <UFormGroup label="Profiel foto" name="profilepicture">
-                            <UInput v-model="state.profilepicture" />
+                            <input @change="onWorkshopFilePicked" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
                         </UFormGroup>
 
                         <UButton type="submit">

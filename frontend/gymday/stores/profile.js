@@ -19,23 +19,35 @@ const useProfileStore = defineStore({
 
     },
     actions: {
-        async updateProfile() {
-            // update user
-            const { data, pending } = await useFetch(`${baseURL}/user/user/${this.user.ID}`, {
-                method: 'put',
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    FirstName : this.user.FirstName,
-                    LastName : this.user.LastName,
-                    Bio : this.user.Bio,
-                    ProfilePicture : this.user.ProfilePicture,
-                },
+        async getUser(userID) {
+            const { data, pending } = await useFetch(`${baseURL}/user/user/${userID}`, {
+                method: 'get',
                 credentials: 'include',
             });
             this.loading = pending;
             if (data.value) {
-                this.isEditProfileOpen = false
                 this.user = data.value.user
+                console.log(this.user)
+            }
+        },
+        async updateProfile() {
+            // update user
+            let bodydata = new FormData()
+            
+            bodydata.append('name', 'file');
+            bodydata.append('file',  this.user.ProfilePicture); 
+            bodydata.append('FirstName', this.user.FirstName)
+            bodydata.append('LastName', this.user.LastName)
+            bodydata.append('Bio', this.user.Bio)
+
+            const { data, pending } = await useFetch(`${baseURL}/user/user/${this.user.ID}`, {
+                method: 'put',
+                body: bodydata,
+                credentials: 'include',
+            });
+            this.loading = pending;
+            if (data.value) {
+                await this.getUser(this.user.ID)
             }
         },
         async getlistings() {

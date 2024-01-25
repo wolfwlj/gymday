@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
+
 )
 
 func init() {
@@ -24,7 +25,6 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type", "X-Requested-With", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-
 	}))
 
 
@@ -35,6 +35,7 @@ func main() {
 
 	}
 	router.Run(":9090") //development
-	// router.Run() //production
+
 
 }
+
