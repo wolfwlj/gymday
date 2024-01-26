@@ -8,18 +8,18 @@ import { ref } from 'vue'
 import { FaceSmileIcon as FaceSmileIconOutline, PaperClipIcon } from '@heroicons/vue/24/outline'
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import {
-  FaceFrownIcon,
-  FaceSmileIcon as FaceSmileIconMini,
-  FireIcon,
-  HandThumbUpIcon,
-  HeartIcon,
-  XMarkIcon,
+    FaceFrownIcon,
+    FaceSmileIcon as FaceSmileIconMini,
+    FireIcon,
+    HandThumbUpIcon,
+    HeartIcon,
+    XMarkIcon,
 } from '@heroicons/vue/20/solid'
+import ListingReviews from '~/components/listing/listingreviews.vue'
 import { baseURL } from '../../api'
 import useListingStore from '~/stores/listingstore'
 
 const { id } = useRoute().params
-const sessioncount = ref(1)
 const listingstore = useListingStore()
 
 const { data: listing } = await useFetch(`${baseURL}/user/listing/${id}`, {
@@ -27,40 +27,18 @@ const { data: listing } = await useFetch(`${baseURL}/user/listing/${id}`, {
     credentials: 'include',
 })
 
-const { data: getReviews } = await useFetch(`${baseURL}/user/reviews/${id}`, {
-    method: 'get',
-    credentials: 'include',
-})
-
-const reviews = reactive(getReviews.value.reviews.slice().reverse())
-console.log(reviews.value);
 const WriteReview = ref({
     Body: '',
     Rating: 1,
 })
 
 async function SubmitReview() {
-    const { data, status } = await useFetch(`${baseURL}/user/review`, {
-        method: 'post',
-        body: {
-            Body: WriteReview.value.Body,
-            Rating: WriteReview.value.Rating,
-            ListingID: id,
-        },
-        credentials: 'include',
-    })
-    if (status.value == 'success') {
-        WriteReview.value.Body = ''
-        WriteReview.value.Rating = 1
-        const { data: getReviews } = await useFetch(`${baseURL}/user/reviews/${id}`, {
-            method: 'get',
-            credentials: 'include',
-        })
+    console.log(WriteReview)
 
-        reviews.value = getReviews.value.reviews.slice().reverse()
-    } else {
-        alert("Er is iets mis gegaan met het plaatsen van je recensie")
-    }
+    await listingstore.submitReview(id, WriteReview.value.Rating, WriteReview.value.Body)
+    WriteReview.value.Body = ''
+    WriteReview.value.Rating = 1
+
 }
 
 const moods = [
@@ -206,7 +184,7 @@ const license = {
                         <div>
                             <h3 class="sr-only">Reviews</h3>
                             <div class="flex items-center">
-                                <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
+                                <StarIcon  v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
                                     :class="[listing.listing.Reviews[0].Rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
                                     aria-hidden="true" />
                             </div>
@@ -323,7 +301,6 @@ const license = {
                                 alt="" />
                         </div>
                         <div class="min-w-0 flex-1">
-                            <form @submit.prevent="SubmitReview()">
                                 <div class="border-b border-gray-200 focus-within:border-indigo-600">
                                     <label for="comment" class="sr-only">Add your comment</label>
                                     <textarea rows="3" name="comment" id="comment" v-model="WriteReview.Body"
@@ -344,17 +321,16 @@ const license = {
                                             <!-- <UDropdown :items="items" :popper="{ placement: 'right-start' }">
                                                 <UButton color="white" label="Options" trailing-icon="i-heroicons-chevron-down-20-solid" />
                                             </UDropdown> -->
-                                            <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
+                                            <StarIcon  v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
                                                 :class="[WriteReview.Rating >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 hover:text-yellow-400 cursor-pointer']"
                                                 aria-hidden="true" @click="WriteReview.Rating = rating"/>
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <button type="submit"
+                                        <button @click="SubmitReview"
                                             class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Post</button>
                                     </div>
                                 </div>
-                            </form>
                         </div>
                     </div>
 
@@ -380,27 +356,7 @@ const license = {
                             <TabPanel class="-mb-10 overflow-y-scroll no-scrollbar h-96">
                                 <h3 class="sr-only">Customer Reviews</h3>
 
-                                <div v-for="(review, reviewIdx) in reviews" :key="review.id"
-                                    class="flex space-x-4 text-sm text-gray-500">
-                                    <div class="flex-none py-10">
-                                        <img :src="review.User.ProfilePicture" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
-                                    </div>
-                                    <div :class="[reviewIdx === 0 ? '' : 'border-t border-gray-200', 'py-10']">
-                                        <h3 class="font-medium text-gray-900">{{ review.User.FirstName + ' ' + review.User.LastName }}</h3>
-                                        <p>
-                                            <time :datetime="review.datetime">{{ (new Date(review.CreatedAt)).toLocaleDateString("en-US") }}</time>
-                                        </p>
-
-                                        <div class="mt-4 flex items-center">
-                                            <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
-                                                :class="[review.Rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
-                                                aria-hidden="true" />
-                                        </div>
-                                        <p class="sr-only">{{ review.Rating }} out of 5 stars</p>
-
-                                        <div class="prose prose-sm mt-4 max-w-none text-gray-500" v-html="review.Body" />
-                                    </div>
-                                </div>
+                                <ListingReviews  />
                             </TabPanel>
 
                             <TabPanel class="text-sm text-gray-500">
