@@ -132,6 +132,13 @@ const logout = () => {
                   </div>
                 </MenuItem>
                 <MenuItem>
+                    <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
+                      <NuxtLink :to="`/settings/${authstore.user?.ID}`">
+                        Settings
+                      </NuxtLink>
+                    </div>
+                  </MenuItem>
+                <MenuItem>
                   <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
                     <NuxtLink v-on:click="logout()">
                       Uitloggen
