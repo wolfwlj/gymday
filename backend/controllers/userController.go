@@ -53,14 +53,8 @@ func UpdateUser(c *gin.Context) {
 	}
 	c.Bind(&body)
 
-
-	log.Println(body)
-
-
 	var fullfilename string = ""
-
 	file, err := c.FormFile("file")
-
 	if err != nil {
 		log.Println("no file found")
 	} else {
@@ -73,7 +67,6 @@ func UpdateUser(c *gin.Context) {
 		}
 	
 		randomfilename := uuid.New().String()
-	
 		extension := filepath.Ext(file.Filename)
 		prefix := "https://gymdayfilestore.s3.eu-central-1.amazonaws.com/"
 		fullfilename = prefix + randomfilename + extension
@@ -86,7 +79,6 @@ func UpdateUser(c *gin.Context) {
 			})
 			return
 		}
-
 	}
 	user = models.User{FirstName: body.FirstName, LastName: body.LastName, Bio: body.Bio, ProfilePicture: fullfilename}
 

@@ -34,6 +34,12 @@
         private : true,
     })
     
+    const onFilePicked1 = (file) => { const files = file.target.files; state.images[0] = files[0];};
+    const onFilePicked2 = (file) => { const files = file.target.files; state.images[1] = files[0];};
+    const onFilePicked3 = (file) => { const files = file.target.files; state.images[2] = files[0];};
+    const onFilePicked4 = (file) => { const files = file.target.files; state.images[3] = files[0];};
+    const onFilePicked5 = (file) => { const files = file.target.files; state.images[4] = files[0];};
+
     const validate = (state) => {
         const errors = []
         if (!state.title) errors.push({ path: 'title', message: 'Verplicht' })
@@ -94,19 +100,19 @@
                             </UFormGroup>
     
                             <UFormGroup label="Foto 1 (hoofd foto)" name="image1">
-                                <UInput v-model="state.images[0].ImageURL" />
+                                <input @change="onFilePicked1" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
                             </UFormGroup>
                             <UFormGroup label="Foto 2 " name="image2">
-                                <UInput v-model="state.images[1].ImageURL" />
+                                <input @change="onFilePicked2" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
                             </UFormGroup>
                             <UFormGroup label="Foto 3 " name="image3">
-                                <UInput v-model="state.images[2].ImageURL" />
+                                <input @change="onFilePicked3" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
                             </UFormGroup>
                             <UFormGroup label="Foto 4 " name="image4">
-                                <UInput v-model="state.images[3].ImageURL" />
+                                <input @change="onFilePicked4" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
                             </UFormGroup>
-                            <UFormGroup label="Foto 4 " name="image4">
-                                <UInput v-model="state.images[4].ImageURL" />
+                            <UFormGroup label="Foto 5" name="image5">
+                                <input @change="onFilePicked5" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
                             </UFormGroup>
                             <UFormGroup label="Prive listing" name="private">
                                 <UCheckbox v-model="state.private" name="private" label="prive" />

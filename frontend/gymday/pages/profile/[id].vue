@@ -1,6 +1,5 @@
 <script setup>
 import { baseURL } from '../../api';
-import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import  useAuthStore  from '../../stores/auth'; // import the auth store we just created
 import { onMounted } from 'vue'
 import useProfileStore from '../../stores/profile'

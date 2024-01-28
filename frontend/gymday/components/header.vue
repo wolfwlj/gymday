@@ -8,15 +8,12 @@ import useAuthStore from '../stores/auth'
 
 const authstore = useAuthStore()
 
-const user = ref({
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl: authstore.user?.ProfilePicture,
-})
-const profileimage = ref('')
-if (authstore.user?.ProfilePicture) {
-  profileimage.value = authstore.user?.ProfilePicture
-}
+
+// const user = ref({
+//   name: 'Tom Cook',
+//   email: 'tom@example.com',
+//   imageUrl: authstore.user?.ProfilePicture,
+// })
 
 const navigation = [
   { name: 'Bodybuilding', to: '#', current: false },
@@ -112,7 +109,7 @@ const logout = () => {
             <div>
               <MenuButton
                 class="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                <img v-if="profileimage != ''" class="h-10 w-10 rounded-full" :src="authstore.user?.ProfilePicture" alt="" />
+                <img v-if="authstore.user" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
                 <span class="absolute -inset-1.5" />
 
                 <span class="sr-only">Open user menu</span>
@@ -188,7 +185,7 @@ const logout = () => {
       <div class="border-t border-gray-200 pb-3 pt-4" v-show="authstore.user">
         <div class="flex items-center px-4">
           <div class="flex-shrink-0">
-            <img v-if="fuckingimage != ''" class="h-10 w-10 rounded-full" :src="authstore.user?.ProfilePicture" alt="" />
+            <img v-if="authstore.user" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
           </div>
           <div class="ml-3">
             <div class="text-base font-medium text-gray-800">{{ user.name }}</div>

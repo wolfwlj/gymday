@@ -6,7 +6,16 @@ const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
         authenticated : false,
-        user : null,
+        user : {
+            ID : 0,
+            FirstName : null,
+            LastName : null,
+            Email : null,
+            ProfilePicture : null,
+            Bio : null,
+            CreatedAt : null,
+            UpdatedAt : null,
+        } ,
 
         emailverified : false,
     }),

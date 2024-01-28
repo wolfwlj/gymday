@@ -27,7 +27,6 @@ const useProfileStore = defineStore({
             this.loading = pending;
             if (data.value) {
                 this.user = data.value.user
-                console.log(this.user)
             }
         },
         async updateProfile() {
@@ -65,22 +64,25 @@ const useProfileStore = defineStore({
 
         async addListing(title, city, description, price, location, province, country, images, privatelisting) {
 
-            console.log(title, city, description, price, location, province, country, images, privatelisting)
+            let dataForm = new FormData()
+
+            for (let i = 0; i < images.length; i++) {
+                dataForm.append(`name${i+1}`, `file${i+1}`);
+                dataForm.append(`file${i+1}`,  images[i]); 
+            }
+
+            dataForm.append('Title', title)
+            dataForm.append('City', city)
+            dataForm.append('Description', description)
+            dataForm.append('Price', price)
+            dataForm.append('Location', location)
+            dataForm.append('Province', province)
+            dataForm.append('Country', country)
+            dataForm.append('Private', privatelisting)
 
             const { data, pending, error} = await useFetch(`${baseURL}/user/listing`, {
                 method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    Title : title,
-                    City : city,
-                    Description : description,
-                    Price : price,
-                    Location : location,
-                    Province : province,
-                    Country : country,
-                    Images : images,
-                    Private : privatelisting
-                },
+                body: dataForm,
                 credentials: 'include',
             });
             this.loading = pending;
@@ -91,21 +93,26 @@ const useProfileStore = defineStore({
         },
 
         async editListing(title, city, description, price, location, province, country, images, privatelisting) {
-    
+            
+            let dataForm = new FormData()
+
+            for (let i = 0; i < images.length; i++) {
+                dataForm.append(`name${i+1}`, `file${i+1}`);
+                dataForm.append(`file${i+1}`,  images[i]); 
+            }
+
+            dataForm.append('Title', title)
+            dataForm.append('City', city)
+            dataForm.append('Description', description)
+            dataForm.append('Price', price)
+            dataForm.append('Location', location)
+            dataForm.append('Province', province)
+            dataForm.append('Country', country)
+            dataForm.append('Private', privatelisting)
+
             const { data, pending, error} = await useFetch(`${baseURL}/user/listing/${this.selectedListing.ID}`, {
                 method: 'put',
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    Title : title,
-                    City : city,
-                    Description : description,
-                    Price : price,
-                    Location : location,
-                    Province : province,
-                    Country : country,
-                    Images : images,
-                    Private : privatelisting
-                },
+                body: dataForm,
                 credentials: 'include',
             });
             this.loading = pending;
