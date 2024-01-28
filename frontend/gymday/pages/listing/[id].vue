@@ -181,15 +181,16 @@ const license = {
                             </p>
                         </div>
 
-                        <div>
+                        <!-- <div>
                             <h3 class="sr-only">Reviews</h3>
+                            
                             <div class="flex items-center">
                                 <StarIcon  v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
                                     :class="[listing.listing.Reviews[0].Rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
                                     aria-hidden="true" />
                             </div>
                             <p class="sr-only">{{ listing.listing.Reviews[0].Rating }} out of 5 stars</p>
-                        </div>
+                        </div> -->
                     </div>
 
                     <p class="mt-6 text-gray-500">{{ listing.listing.Description }}</p>
