@@ -8,6 +8,8 @@ const useListingStore = defineStore({
         listing : null,
         listings : null,
         reviews : null,
+        imageModal : false,
+        selectedimg : null,
     }),
     getters: {
 

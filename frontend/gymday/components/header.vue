@@ -66,7 +66,7 @@ const logout = () => {
         <div class="relative z-10 flex items-center lg:hidden">
           <!-- Mobile menu button -->
           <DisclosureButton
-            class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500">
             <span class="absolute -inset-0.5" />
             <span class="sr-only">Open menu</span>
             <Bars3Icon v-show="!open" class="block h-6 w-6" aria-hidden="true" />
@@ -109,7 +109,7 @@ const logout = () => {
           <Menu as="div" class="relative ml-4 flex-shrink-0" v-show="authstore.user">
             <div>
               <MenuButton
-                class="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                class="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                 <img v-if="authstore.user" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
                 <span class="absolute -inset-1.5" />
 
