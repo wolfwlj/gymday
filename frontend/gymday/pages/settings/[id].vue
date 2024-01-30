@@ -19,7 +19,7 @@ import Galleryprofile from '~/components/profile/galleryprofile.vue';
 const navigation = [
     { name: 'General', icon: UserCircleIcon },
     { name: 'Listings', icon: QueueListIcon },
-    { name: 'Producten', icon: ArchiveBoxIcon },
+    { name: 'Bookings', icon: ArchiveBoxIcon },
     { name: 'Foto Galerij', icon: PhotoIcon },
     { name: 'Security', icon: FingerPrintIcon },
     { name: 'Notifications', icon: BellIcon },
@@ -102,13 +102,13 @@ await profileStore.getUser(param)
                 </div>
             </div>
             <div v-show="currentProfileTab === 'Listings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                <listingsprofile />
+                listings
             </div>
-            <div v-show="currentProfileTab === 'Producten'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                producten
+            <div v-show="currentProfileTab === 'Bookings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+                Bookings
             </div>
             <div v-show="currentProfileTab === 'Foto Galerij'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                <Galleryprofile />
+                gallerij
             </div>
         </main>
     </div>

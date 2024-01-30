@@ -19,14 +19,12 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.GET("/user/:id", controllers.GetUser)
 	router.PUT("/user/:id", middleware.UserAuth, controllers.UpdateUser)
 
-
 	// profile related
 	router.GET("/listingsbyuser/:id", controllers.GetListingsByUser)
 	router.GET("/profileimages/:id", controllers.GetProfileImages)
 	router.POST("/profileimage", middleware.UserAuth, controllers.CreateProfileImage)
 	router.DELETE("/profileimage/:id", middleware.UserAuth, controllers.DeleteProfileImage)
 
-	
 	//listing routers
 	router.GET("/listings", controllers.GetListings)
 	router.GET("/listingssearch/:query", controllers.GetListingsBySearch)
@@ -48,10 +46,14 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.POST("/trainer", middleware.UserAuth, controllers.CreateTrainer)
 	router.PUT("/trainer/:id", middleware.UserAuth, controllers.UpdateTrainer)
 	router.DELETE("/trainer/:id", middleware.UserAuth, controllers.DeleteTrainer)	
-	//
 
+	// verification routers
+	router.GET("/verificationrequest/:id", controllers.GetVerificationRequest)
+	router.GET("/verificationrequests", middleware.SuperUser, controllers.GetVerificationRequests)
+	router.POST("/verificationrequest", middleware.UserAuth, controllers.CreateVerificationRequest)
+	router.PUT("/verificationrequest/:id", middleware.SuperUser, controllers.UpdateVerificationRequest)
 
 	// booking routers
 	router.POST("/booking", middleware.UserAuth, controllers.CreateBooking)
-
+	
 }

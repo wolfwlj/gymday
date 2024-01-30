@@ -74,9 +74,10 @@ const logout = () => {
           </DisclosureButton>
         </div>
         <div class="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
-          <NuxtLink :to="`/listing/createlisting`" v-show="authstore.user?.Tier < 99">
+          <NuxtLink :to="`/verification`" v-show="authstore.user?.Tier < 99">
             <button class="font-semibold text-sm hover:bg-gray-50 py-2 px-2 rounded">Word een Gymday personal
-              trainer!</button>
+              trainer!
+            </button>
           </NuxtLink>
 
           <NuxtLink :to="`/listing/createlisting`" v-show="authstore.user?.Tier == 99">
@@ -134,7 +135,14 @@ const logout = () => {
                         Settings
                       </NuxtLink>
                     </div>
-                  </MenuItem>
+                </MenuItem>
+                <MenuItem v-show="authstore.user?.Tier == 999">
+                    <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
+                      <NuxtLink :to="`/verification/dashboard`">
+                        Dash
+                      </NuxtLink>
+                    </div>
+                </MenuItem>
                 <MenuItem>
                   <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
                     <NuxtLink v-on:click="logout()">
