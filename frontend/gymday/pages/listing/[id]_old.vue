@@ -34,6 +34,8 @@ async function SubmitReview() {
         alert("Er is iets mis gegaan met het plaatsen van je recensie")
     }
 }
+
+const hover = ref(1)
 </script>
 
 <template>
@@ -165,22 +167,41 @@ async function SubmitReview() {
                         Recensie plaatsen
                     </button>
                 </div>
-            </div>
-            <div class="space-y-8 w-[50%]">
-                <p class="text-2xl font-semibold">
-                    Recente Recencies :
-                </p>
-                <div v-for="review  in listing.listing.Reviews.slice().reverse()" :key="listing.ID" class=" ">
-                    <div class="bg-white p-4 rounded-lg shadow-md space-y-1">
-                        <NuxtLink class="text-lg" :to="`../profile/${review.User.ID}`">
-                            <p class="text-gray-800 text-lg mr-2">{{ review.User.FirstName }} {{ review.User.LastName }}</p>
-                        </NuxtLink>
-                        <div class="flex">
-                            <StarIcon class="w-5 h-5" />
-                            <StarIcon class="w-5 h-5" v-show="review.Rating >= 2" />
-                            <StarIcon class="w-5 h-5" v-show="review.Rating >= 3" />
-                            <StarIcon class="w-5 h-5" v-show=" review.Rating >= 4  " />
-                            <StarIcon class="w-5 h-5" v-show="review.Rating ==  5 " />
+
+                <div class="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
+                    <div class="flex border-t border-gray-200 pt-10 items-start space-x-4 mb-8">
+                        <div class="flex-shrink-0">
+                            <img class="inline-block h-10 w-10 rounded-full" :src="authstore.user?.ProfilePicture"
+                                alt="" />
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="border-b border-gray-200 focus-within:border-green-600">
+                                <label for="comment" class="sr-only">Add your comment</label>
+                                <textarea rows="3" name="comment" id="comment" v-model="WriteReview.Body"
+                                    class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-900 placeholder:text-gray-400 focus:border-green-600 focus:ring-0 sm:text-sm sm:leading-6"
+                                    placeholder="Add your comment..." />
+                            </div>
+                            <div class="flex justify-between pt-2">
+                                <div class="flex items-center space-x-5">
+                                    <div class="flow-root">
+                                        <button type="button"
+                                            class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
+                                            <PaperClipIcon class="h-6 w-6" aria-hidden="true" />
+                                            <span class="sr-only">Attach a file</span>
+                                        </button>
+                                    </div>
+                                    <div class="flex">
+                                        <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
+                                        :class="[hover >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 cursor-pointer']"
+                                        aria-hidden="true" @click="WriteReview.Rating = rating" @mouseout="hover = WriteReview.Rating" @mouseover="hover = rating" />
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button @click="SubmitReview"
+                                        class="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Post</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <p class="text-gray-600">{{ review.Body }}</p>
                 </div>
