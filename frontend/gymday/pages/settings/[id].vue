@@ -45,9 +45,9 @@ await profileStore.getUser(param)
                 <ul role="list" class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
                     <li v-for="item in navigation" :key="item.name">
                         <span @click="currentProfileTab = item.name"
-                            :class="[item.name === currentProfileTab ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50', 'cursor-pointer group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold']">
+                            :class="[item.name === currentProfileTab ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-green-600 hover:bg-gray-50', 'cursor-pointer group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold']">
                             <component :is="item.icon"
-                                :class="[item.name === currentProfileTab ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'cursor-pointer h-6 w-6 shrink-0']"
+                                :class="[item.name === currentProfileTab ? 'text-green-600' : 'text-gray-400 group-hover:text-green-600', 'cursor-pointer h-6 w-6 shrink-0']"
                                 aria-hidden="true" />
                             {{ item.name }}
                         </span>
@@ -112,4 +112,4 @@ await profileStore.getUser(param)
             </div>
         </main>
     </div>
-</template>
+</template> 
