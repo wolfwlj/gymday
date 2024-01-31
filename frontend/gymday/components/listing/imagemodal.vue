@@ -2,7 +2,6 @@
 import useListingStore from '~/stores/listingstore';
 const listingstore = useListingStore()
 
-
 </script>
 <template>
     <div>  
@@ -13,8 +12,12 @@ const listingstore = useListingStore()
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="listingstore.imageModal = false" />
                     </div>
                 </template>
-                <div class="flex justify-center">
-                    <img :src="listingstore.selectedimg" alt="listingpicigeuss"
+                <div v-if="Array.isArray(listingstore.selectedimg)" class="flex gap-5 flex-wrap justify-center">
+                    <img v-for="img in listingstore.selectedimg" :src="img.ImageURL" alt=""
+                        class="max-w-[30vw] object-cover object-center rounded-lg" />
+                </div>
+                <div v-else class="flex justify-center">
+                    <img :src="listingstore.selectedimg" alt=""
                         class="max-h-[80vh] object-cover object-center" />
                 </div>
             </UCard>

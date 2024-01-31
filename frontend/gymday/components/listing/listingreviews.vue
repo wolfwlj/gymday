@@ -1,6 +1,7 @@
 <script setup>
 import useListingStore from '~/stores/listingstore'
 import { storeToRefs } from "pinia";
+import { UserIcon } from '@heroicons/vue/20/solid'
 
 const listingstore = useListingStore()
 console.log(listingstore.reviews)
@@ -16,7 +17,8 @@ const { reviews } = storeToRefs(listingstore);
 <template>
     <div v-for="review in reviews" :key="review.id" class="flex space-x-4 text-sm text-gray-500">
         <div class="flex-none py-10">
-            <img :src="review.User.ProfilePicture" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+            <img v-if="review.User.ProfilePicture !== ''" :src="review.User.ProfilePicture" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+            <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
         </div>
         <div :class="'border-t border-gray-200 py-10'">
             <h3 class="font-medium text-gray-900">{{ review.User.FirstName + ' ' + review.User.LastName }}</h3>

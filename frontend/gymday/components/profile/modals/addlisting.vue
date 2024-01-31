@@ -1,4 +1,5 @@
     <script setup>
+    import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/20/solid'
     import useProfileStore from '~/stores/profile';
     const profileStore = useProfileStore();
     
@@ -10,35 +11,16 @@
         city : '',
         province : '',
         country : '',
-        images : [{
-            ImageURL : '',
-            ImageNR : 1,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 2,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 3,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 4,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 5,
-        },
+        images : [
+            ''
         ],
         private : true,
     })
     
-    const onFilePicked1 = (file) => { const files = file.target.files; state.images[0] = files[0];};
-    const onFilePicked2 = (file) => { const files = file.target.files; state.images[1] = files[0];};
-    const onFilePicked3 = (file) => { const files = file.target.files; state.images[2] = files[0];};
-    const onFilePicked4 = (file) => { const files = file.target.files; state.images[3] = files[0];};
-    const onFilePicked5 = (file) => { const files = file.target.files; state.images[4] = files[0];};
+    function handleFile(e, index) {
+        const files = e.target.files;
+        state.images[index] = files[0];
+    }
 
     const validate = (state) => {
         const errors = []
@@ -49,6 +31,7 @@
         if (!state.location) errors.push({ path: 'location', message: 'Verplicht' })
         if (!state.province) errors.push({ path: 'province', message: 'Verplicht' })
         if (!state.country) errors.push({ path: 'country', message: 'Verplicht' })
+        if (!state.images[0]) errors.push({ path: 'images', message: 'Verplicht' })
     
         return errors
     }
@@ -99,21 +82,27 @@
                                 <UInput v-model="state.country" />
                             </UFormGroup>
     
-                            <UFormGroup label="Foto 1 (hoofd foto)" name="image1">
-                                <input @change="onFilePicked1" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 2 " name="image2">
-                                <input @change="onFilePicked2" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 3 " name="image3">
-                                <input @change="onFilePicked3" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 4 " name="image4">
-                                <input @change="onFilePicked4" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 5" name="image5">
-                                <input @change="onFilePicked5" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
+                            <div class="flex justify-between" v-for="image, index in state.images" :key="index">
+                                <UFormGroup :label="'Foto ' + (index + 1)" name="images">
+                                    <label class="block">
+                                        <span class="sr-only">Choose profile photo</span>
+                                        <input type="file" @change="handleFile($event, index)" 
+                                            name="upload" accept="image/*"
+                                            class="block w-full text-sm text-slate-500
+                                            file:mr-4 file:py-2 file:px-4
+                                            file:rounded-full file:border-0
+                                            file:text-sm file:font-semibold
+                                            file:bg-gray-50 file:text-gray-500
+                                            hover:file:bg-gray-100
+                                            "/>
+                                    </label>
+                                </UFormGroup>
+                                <MinusCircleIcon v-show="index !== 0" @click="state.images.splice(index, 1)" class="h-6 w-6 mt-auto text-red-500 hover:cursor-pointer" />
+                            </div>
+                            <div class="w-fit mx-auto">
+                                <PlusCircleIcon @click="state.images.push('')" class="h-6 w-6 text-green-500 hover:cursor-pointer" />
+                            </div>
+
                             <UFormGroup label="Prive listing" name="private">
                                 <UCheckbox v-model="state.private" name="private" label="prive" />
                             </UFormGroup>

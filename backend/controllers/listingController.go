@@ -17,6 +17,7 @@ import (
 func CreateListing(c *gin.Context) {
 
 	var body struct {
+		ImageAmount int
 		Title       string
 		Description string
 		Price       string
@@ -48,8 +49,7 @@ func CreateListing(c *gin.Context) {
 
 	initializers.DB.Create(&listing)
 
-	// loop over 5 images
-	for i := 1; i <= 5; i++ {
+	for i := 1; i <= body.ImageAmount; i++ {
 		var fullfilename string = ""
 		file, err := c.FormFile("file" + fmt.Sprint(i))
 		if err != nil {
