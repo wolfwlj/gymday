@@ -148,7 +148,7 @@ async function SubmitReview() {
                 <img :src="listing.listing.Images[3].ImageURL" alt="Model wearing plain gray basic tee."
                     class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
             </div>
-            <div v-if="listing.listing.Images.length === 5" class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+            <div v-if="listing.listing.Images.length >= 5" class="relative hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
                 <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                     <img :src="listing.listing.Images[3].ImageURL"
                         alt="Model wearing plain black basic tee." class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
@@ -156,6 +156,17 @@ async function SubmitReview() {
                 <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                     <img :src="listing.listing.Images[4].ImageURL"
                         alt="Model wearing plain gray basic tee." class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[4].ImageURL, listingstore.imageModal = true">
+                </div>
+                <div class="absolute bottom-5 right-5">
+                    <UButton
+                        icon="i-heroicons-view-columns"
+                        size="sm"
+                        color="black"
+                        variant="solid"
+                        @click="listingstore.imageModal = true, listingstore.selectedimg = listing.listing.Images"
+                        label="Alle foto's tonen"
+                        :trailing="false"
+                    />
                 </div>
             </div>
         </div>
