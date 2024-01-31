@@ -55,5 +55,5 @@ func UserRoutes(router *gin.RouterGroup) {
 
 	// booking routers
 	router.POST("/booking", middleware.UserAuth, controllers.CreateBooking)
-	
+	router.GET("/bookings", middleware.UserAuth, controllers.GetBookings)
 }

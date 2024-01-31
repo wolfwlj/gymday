@@ -21,83 +21,60 @@ import { baseURL } from '../../api'
 import useListingStore from '~/stores/listingstore'
 import useAuthStore from '~/stores/auth'
 import imagemodal from '~/components/listing/imagemodal.vue'
-
+import useBookingStore from '~/stores/booking'
 const hover = ref(1)
-const days = [
-    { date: '2021-12-27' },
-    { date: '2021-12-28' },
-    { date: '2021-12-29' },
-    { date: '2021-12-30' },
-    { date: '2021-12-31' },
-    { date: '2022-01-01', isCurrentMonth: true },
-    { date: '2022-01-02', isCurrentMonth: true },
-    { date: '2022-01-03', isCurrentMonth: true },
-    { date: '2022-01-04', isCurrentMonth: true },
-    { date: '2022-01-05', isCurrentMonth: true },
-    { date: '2022-01-06', isCurrentMonth: true },
-    { date: '2022-01-07', isCurrentMonth: true },
-    { date: '2022-01-08', isCurrentMonth: true },
-    { date: '2022-01-09', isCurrentMonth: true },
-    { date: '2022-01-10', isCurrentMonth: true },
-    { date: '2022-01-11', isCurrentMonth: true },
-    { date: '2022-01-12', isCurrentMonth: true, isToday: true },
-    { date: '2022-01-13', isCurrentMonth: true },
-    { date: '2022-01-14', isCurrentMonth: true },
-    { date: '2022-01-15', isCurrentMonth: true },
-    { date: '2022-01-16', isCurrentMonth: true },
-    { date: '2022-01-17', isCurrentMonth: true },
-    { date: '2022-01-18', isCurrentMonth: true },
-    { date: '2022-01-19', isCurrentMonth: true },
-    { date: '2022-01-20', isCurrentMonth: true },
-    { date: '2022-01-21', isCurrentMonth: true, isSelected: true },
-    { date: '2022-01-22', isCurrentMonth: true },
-    { date: '2022-01-23', isCurrentMonth: true },
-    { date: '2022-01-24', isCurrentMonth: true },
-    { date: '2022-01-25', isCurrentMonth: true },
-    { date: '2022-01-26', isCurrentMonth: true },
-    { date: '2022-01-27', isCurrentMonth: true },
-    { date: '2022-01-28', isCurrentMonth: true },
-    { date: '2022-01-29', isCurrentMonth: true },
-    { date: '2022-01-30', isCurrentMonth: true },
-    { date: '2022-01-31', isCurrentMonth: true },
-    { date: '2022-02-01' },
-    { date: '2022-02-02' },
-    { date: '2022-02-03' },
-    { date: '2022-02-04' },
-    { date: '2022-02-05' },
-    { date: '2022-02-06' },
-]
+// const days = [
+//     { date: '2021-12-27' },
+//     { date: '2021-12-28' },
+//     { date: '2021-12-29' },
+//     { date: '2021-12-30' },
+//     { date: '2021-12-31' },
+//     { date: '2022-01-01', isCurrentMonth: true },
+//     { date: '2022-01-02', isCurrentMonth: true },
+//     { date: '2022-01-03', isCurrentMonth: true },
+//     { date: '2022-01-04', isCurrentMonth: true },
+//     { date: '2022-01-05', isCurrentMonth: true },
+//     { date: '2022-01-06', isCurrentMonth: true },
+//     { date: '2022-01-07', isCurrentMonth: true },
+//     { date: '2022-01-08', isCurrentMonth: true },
+//     { date: '2022-01-09', isCurrentMonth: true },
+//     { date: '2022-01-10', isCurrentMonth: true },
+//     { date: '2022-01-11', isCurrentMonth: true },
+//     { date: '2022-01-12', isCurrentMonth: true, isToday: true },
+//     { date: '2022-01-13', isCurrentMonth: true },
+//     { date: '2022-01-14', isCurrentMonth: true },
+//     { date: '2022-01-15', isCurrentMonth: true },
+//     { date: '2022-01-16', isCurrentMonth: true },
+//     { date: '2022-01-17', isCurrentMonth: true },
+//     { date: '2022-01-18', isCurrentMonth: true },
+//     { date: '2022-01-19', isCurrentMonth: true },
+//     { date: '2022-01-20', isCurrentMonth: true },
+//     { date: '2022-01-21', isCurrentMonth: true, isSelected: true },
+//     { date: '2022-01-22', isCurrentMonth: true },
+//     { date: '2022-01-23', isCurrentMonth: true },
+//     { date: '2022-01-24', isCurrentMonth: true },
+//     { date: '2022-01-25', isCurrentMonth: true },
+//     { date: '2022-01-26', isCurrentMonth: true },
+//     { date: '2022-01-27', isCurrentMonth: true },
+//     { date: '2022-01-28', isCurrentMonth: true },
+//     { date: '2022-01-29', isCurrentMonth: true },
+//     { date: '2022-01-30', isCurrentMonth: true },
+//     { date: '2022-01-31', isCurrentMonth: true },
+//     { date: '2022-02-01' },
+//     { date: '2022-02-02' },
+//     { date: '2022-02-03' },
+//     { date: '2022-02-04' },
+//     { date: '2022-02-05' },
+//     { date: '2022-02-06' },
+// ]
 
-const product = {
-    name: 'Basic Tee 6-Pack',
-    price: '$192',
-    href: '#',
-    images: [
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-            alt: 'Two each of gray, white, and black shirts laying flat.',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-            alt: 'Model wearing plain black basic tee.',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-            alt: 'Model wearing plain gray basic tee.',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-            alt: 'Model wearing plain white basic tee.',
-        },
-    ],
-    description:
-        'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-}
+
 const reviews = { href: '#', average: 4, totalCount: 117 }
 
 const { id } = useRoute().params
 const listingstore = useListingStore()
 const authstore = useAuthStore()
+const bookingstore = useBookingStore()
 
 const { data: listing } = await useFetch(`${baseURL}/user/listing/${id}`, {
     method: 'get',
@@ -117,6 +94,12 @@ async function SubmitReview() {
     WriteReview.value.Rating = 1
 
 }
+
+const booking = ref({
+    Date: '',
+    Time: '',
+})
+
 </script>
 
 <template>
@@ -182,63 +165,25 @@ async function SubmitReview() {
                             reviews.totalCount }} reviews</a>
                     </div>
                 </div>
-<!-- 
-                <div class="mt-10 border-t border-gray-200 pt-10">
-                    <div class="md:pr-14">
-                        <div class="flex items-center">
-                            <h2 class="flex-auto text-sm font-semibold text-gray-900">January 2022</h2>
-                            <button type="button"
-                                class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
-                                <span class="sr-only">Previous month</span>
-                                <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
-                            </button>
-                            <button type="button"
-                                class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
-                                <span class="sr-only">Next month</span>
-                                <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
-                            </button>
-                        </div>
-                        <div class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
-                            <div>M</div>
-                            <div>T</div>
-                            <div>W</div>
-                            <div>T</div>
-                            <div>F</div>
-                            <div>S</div>
-                            <div>S</div>
-                        </div>
-                        <div class="mt-2 grid grid-cols-7 text-sm">
-                            <div v-for="(day, dayIdx) in days" :key="day.date"
-                                :class="[dayIdx > 6 && 'border-t border-gray-200', 'py-2']">
-                                <button type="button"
-                                    :class="[day.isSelected && 'text-white', !day.isSelected && day.isToday && 'text-green-600', !day.isSelected && !day.isToday && day.isCurrentMonth && 'text-gray-900', !day.isSelected && !day.isToday && !day.isCurrentMonth && 'text-gray-400', day.isSelected && day.isToday && 'bg-green-600', day.isSelected && !day.isToday && 'bg-gray-900', !day.isSelected && 'hover:bg-gray-200', (day.isSelected || day.isToday) && 'font-semibold', 'mx-auto flex h-8 w-8 items-center justify-center rounded-full']">
-                                    <time :datetime="day.date">{{ day.date.split('-').pop().replace(/^0/, '') }}</time>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
 
                 <form class="mt-10">    
-
                     <div class="mt-10 space-y-2">
-
-                        <p class="block text-sm font-medium text-gray-700">Afpspraak tijd voorkeur</p>
+                        <p class="block text-sm font-medium text-gray-700">Afspraak tijd voorkeur</p>
 
                         <label for="date" class="block text-sm font-medium text-gray-700">Datum</label>
                         <div class="mt-1">
-                            <input type="date" name="date" id="date" 
+                            <input v-model="booking.Date" type="date" name="date" id="date" 
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>
                         <label for="time" class="block text-sm font-medium text-gray-700">Tijd</label>
-                        <div class="mt-1">
-                            <input type="time" name="time" id="time" 
+                        <div  class="mt-1">
+                            <input v-model="booking.Time" type="time" name="time" id="time" 
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>
                     </div>
 
-                    <button type="submit"
-                        class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-600 px-8 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Training boeken</button>
+                    <button @click="bookingstore.createBooking(id, booking.Date, booking.Time)" type="button"
+                        class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-500 px-8 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Afspraak boeken</button>
                 </form>
             </div>
 
