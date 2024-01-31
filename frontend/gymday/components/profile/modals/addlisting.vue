@@ -1,4 +1,5 @@
     <script setup>
+    import { PlusCircleIcon, TrashIcon } from '@heroicons/vue/20/solid'
     import useProfileStore from '~/stores/profile';
     const profileStore = useProfileStore();
     
@@ -10,35 +11,17 @@
         city : '',
         province : '',
         country : '',
-        images : [{
-            ImageURL : '',
-            ImageNR : 1,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 2,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 3,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 4,
-        },
-        {
-            ImageURL : '',
-            ImageNR : 5,
-        },
+        images : [
+            ''
         ],
         private : true,
     })
     
-    const onFilePicked1 = (file) => { const files = file.target.files; state.images[0] = files[0];};
-    const onFilePicked2 = (file) => { const files = file.target.files; state.images[1] = files[0];};
-    const onFilePicked3 = (file) => { const files = file.target.files; state.images[2] = files[0];};
-    const onFilePicked4 = (file) => { const files = file.target.files; state.images[3] = files[0];};
-    const onFilePicked5 = (file) => { const files = file.target.files; state.images[4] = files[0];};
+    function handleFile(e, index) {
+        const files = e.target.files;
+        state.images[index] = files[0];
+        console.log(state.images);
+    }
 
     const validate = (state) => {
         const errors = []
@@ -99,21 +82,16 @@
                                 <UInput v-model="state.country" />
                             </UFormGroup>
     
-                            <UFormGroup label="Foto 1 (hoofd foto)" name="image1">
-                                <input @change="onFilePicked1" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 2 " name="image2">
-                                <input @change="onFilePicked2" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 3 " name="image3">
-                                <input @change="onFilePicked3" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 4 " name="image4">
-                                <input @change="onFilePicked4" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
-                            <UFormGroup label="Foto 5" name="image5">
-                                <input @change="onFilePicked5" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                            </UFormGroup>
+                            <div class="flex justify-between" v-for="image, index in state.images" :key="index">
+                                <UFormGroup :label="'Foto ' + (index + 1) + ' (hoofd foto)'">
+                                    <input @change="handleFile($event, index)" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
+                                </UFormGroup>
+                                <TrashIcon v-show="index !== 0" @click="state.images.splice(index, 1)" class="h-7 w-7 my-auto text-red-500 hover:cursor-pointer" />
+                            </div>
+                            <div class="w-fit mx-auto">
+                                <PlusCircleIcon @click="state.images.push('')" class="h-7 w-7 text-green-500 hover:cursor-pointer" />
+                            </div>
+
                             <UFormGroup label="Prive listing" name="private">
                                 <UCheckbox v-model="state.private" name="private" label="prive" />
                             </UFormGroup>
