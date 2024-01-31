@@ -22,7 +22,7 @@ import useListingStore from '~/stores/listingstore'
 import useAuthStore from '~/stores/auth'
 import imagemodal from '~/components/listing/imagemodal.vue'
 
-
+const hover = ref(1)
 const days = [
     { date: '2021-12-27' },
     { date: '2021-12-28' },
@@ -166,7 +166,6 @@ async function SubmitReview() {
 
             <!-- Options -->
             <div class="mt-4 lg:row-span-3 lg:mt-0 sticky top-20 overflow-hidden h-fit">
-                <h2 class="sr-only">Product information</h2>
                 <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training</p>
 
                 <!-- Reviews -->
@@ -174,10 +173,10 @@ async function SubmitReview() {
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">
                         <div class="flex items-center">
-                            <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
-                                :class="[reviews.average > rating ? 'text-gray-900' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
-                                aria-hidden="true" />
-                        </div>
+                                        <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
+                                            :class="[reviews.average > rating ? 'text-gray-900' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
+                                            aria-hidden="true" />
+                                    </div>
                         <p class="sr-only">{{ reviews.average }} out of 5 stars</p>
                         <a :href="reviews.href" class="ml-3 text-sm font-medium text-green-600 hover:text-green-500">{{
                             reviews.totalCount }} reviews</a>
@@ -245,38 +244,32 @@ async function SubmitReview() {
 
             <div class="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
                 <div class="mb-10">
-                    <h3 class="sr-only">Description</h3>
+                    <h3 class="sr-only">Omschrijving</h3>
                     <div class="space-y-6">
-                        <p class="text-base text-gray-900">{{ product.description }}</p>
+                        <p class="text-base text-gray-900">{{ listing.listing.Description }}</p>
                     </div>
                 </div>
 
                 <div class="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
                     <div class="flex border-t border-gray-200 pt-10 items-start space-x-4 mb-8">
                         <div class="flex-shrink-0">
-                            <img class="inline-block h-10 w-10 rounded-full" :src="authstore.user?.ProfilePicture"
+                            <img class="inline-block h-10 w-10 rounded-full" v-if="authstore.user" :src="authstore.user.ProfilePicture"
                                 alt="" />
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="border-b border-gray-200 focus-within:border-green-600">
-                                <label for="comment" class="sr-only">Add your comment</label>
+                                <label for="comment" class="sr-only">Voeg een recensie toe</label>
                                 <textarea rows="3" name="comment" id="comment" v-model="WriteReview.Body"
                                     class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-900 placeholder:text-gray-400 focus:border-green-600 focus:ring-0 sm:text-sm sm:leading-6"
-                                    placeholder="Add your comment..." />
+                                    placeholder="Voeg een recensie toe..." />
                             </div>
                             <div class="flex justify-between pt-2">
                                 <div class="flex items-center space-x-5">
-                                    <div class="flow-root">
-                                        <button type="button"
-                                            class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
-                                            <PaperClipIcon class="h-6 w-6" aria-hidden="true" />
-                                            <span class="sr-only">Attach a file</span>
-                                        </button>
-                                    </div>
+
                                     <div class="flex">
                                         <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
-                                            :class="[WriteReview.Rating >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 hover:text-yellow-400 cursor-pointer']"
-                                            aria-hidden="true" @click="WriteReview.Rating = rating" />
+                                        :class="[hover >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 cursor-pointer']"
+                            aria-hidden="true" @click="WriteReview.Rating = rating" @mouseout="hover = WriteReview.Rating" @mouseover="hover = rating" />
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -292,7 +285,7 @@ async function SubmitReview() {
                             <TabList class="-mb-px flex space-x-8">
                                 <Tab as="template" v-slot="{ selected }">
                                     <button
-                                        :class="[selected ? 'border-green-600 text-green-600' : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800', 'whitespace-nowrap border-b-2 py-6 text-sm font-medium']">Customer
+                                        :class="[selected ? 'border-green-600 text-green-600' : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800', 'whitespace-nowrap border-b-2 py-6 text-sm font-medium']">Klanten
                                         Reviews</button>
                                 </Tab>
                                 <Tab as="template" v-slot="{ selected }">
@@ -308,7 +301,7 @@ async function SubmitReview() {
                         <TabPanels as="template">
                             <TabPanel class="-mb-10">
                                 <!-- <TabPanel class="-mb-10 overflow-y-scroll no-scrollbar h-96"> -->
-                                <h3 class="sr-only">Customer Reviews</h3>
+                                <h3 class="sr-only">Klanten Reviews</h3>
 
                                 <ListingReviews />
                             </TabPanel>
