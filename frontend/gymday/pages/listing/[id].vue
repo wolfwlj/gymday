@@ -1,5 +1,5 @@
 <script setup>
-import { StarIcon } from '@heroicons/vue/20/solid'
+import { StarIcon, UserIcon } from '@heroicons/vue/20/solid'
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
@@ -253,8 +253,9 @@ async function SubmitReview() {
                 <div class="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
                     <div class="flex border-t border-gray-200 pt-10 items-start space-x-4 mb-8">
                         <div class="flex-shrink-0">
-                            <img class="inline-block h-10 w-10 rounded-full" v-if="authstore.user" :src="authstore.user.ProfilePicture"
+                            <img class="inline-block h-10 w-10 rounded-full" v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''" :src="authstore.user.ProfilePicture"
                                 alt="" />
+                            <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="border-b border-gray-200 focus-within:border-green-600">

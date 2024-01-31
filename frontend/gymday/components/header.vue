@@ -1,4 +1,5 @@
 <script setup>
+import { UserIcon } from '@heroicons/vue/20/solid'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
@@ -110,7 +111,8 @@ const logout = () => {
             <div>
               <MenuButton
                 class="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                <img v-if="authstore.user" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
+                <img v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
+                <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
                 <span class="absolute -inset-1.5" />
 
                 <span class="sr-only">Open user menu</span>
@@ -193,7 +195,8 @@ const logout = () => {
       <div class="border-t border-gray-200 pb-3 pt-4" v-show="authstore.user">
         <div class="flex items-center px-4">
           <div class="flex-shrink-0">
-            <img v-if="authstore.user" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
+            <img v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
+            <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
           </div>
           <div class="ml-3">
             <div class="text-base font-medium text-gray-800">{{ user.name }}</div>
