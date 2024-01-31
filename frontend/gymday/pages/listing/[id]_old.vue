@@ -117,6 +117,8 @@ async function SubmitReview() {
     WriteReview.value.Rating = 1
 
 }
+
+const hover = ref(1)
 </script>
 
 <template>
@@ -275,8 +277,8 @@ async function SubmitReview() {
                                     </div>
                                     <div class="flex">
                                         <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
-                                            :class="[WriteReview.Rating >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 hover:text-yellow-400 cursor-pointer']"
-                                            aria-hidden="true" @click="WriteReview.Rating = rating" />
+                                        :class="[hover >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 cursor-pointer']"
+                                        aria-hidden="true" @click="WriteReview.Rating = rating" @mouseout="hover = WriteReview.Rating" @mouseover="hover = rating" />
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0">
