@@ -71,7 +71,7 @@ const useProfileStore = defineStore({
                 dataForm.append(`file${i+1}`,  images[i]); 
             }
 
-            dataForm.append('ImageCount', images.length)
+            dataForm.append('ImageAmount', images.length)
             dataForm.append('Title', title)
             dataForm.append('City', city)
             dataForm.append('Description', description)

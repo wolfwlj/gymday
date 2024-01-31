@@ -1,5 +1,5 @@
     <script setup>
-    import { PlusCircleIcon, TrashIcon } from '@heroicons/vue/20/solid'
+    import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/20/solid'
     import useProfileStore from '~/stores/profile';
     const profileStore = useProfileStore();
     
@@ -20,7 +20,6 @@
     function handleFile(e, index) {
         const files = e.target.files;
         state.images[index] = files[0];
-        console.log(state.images);
     }
 
     const validate = (state) => {
@@ -32,6 +31,7 @@
         if (!state.location) errors.push({ path: 'location', message: 'Verplicht' })
         if (!state.province) errors.push({ path: 'province', message: 'Verplicht' })
         if (!state.country) errors.push({ path: 'country', message: 'Verplicht' })
+        if (!state.images[0]) errors.push({ path: 'images', message: 'Verplicht' })
     
         return errors
     }
@@ -83,13 +83,24 @@
                             </UFormGroup>
     
                             <div class="flex justify-between" v-for="image, index in state.images" :key="index">
-                                <UFormGroup :label="'Foto ' + (index + 1) + ' (hoofd foto)'">
-                                    <input @change="handleFile($event, index)" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
+                                <UFormGroup :label="'Foto ' + (index + 1)" name="images">
+                                    <label class="block">
+                                        <span class="sr-only">Choose profile photo</span>
+                                        <input type="file" @change="handleFile($event, index)" 
+                                            name="upload" accept="image/*"
+                                            class="block w-full text-sm text-slate-500
+                                            file:mr-4 file:py-2 file:px-4
+                                            file:rounded-full file:border-0
+                                            file:text-sm file:font-semibold
+                                            file:bg-gray-50 file:text-gray-500
+                                            hover:file:bg-gray-100
+                                            "/>
+                                    </label>
                                 </UFormGroup>
-                                <TrashIcon v-show="index !== 0" @click="state.images.splice(index, 1)" class="h-7 w-7 my-auto text-red-500 hover:cursor-pointer" />
+                                <MinusCircleIcon v-show="index !== 0" @click="state.images.splice(index, 1)" class="h-6 w-6 mt-auto text-red-500 hover:cursor-pointer" />
                             </div>
                             <div class="w-fit mx-auto">
-                                <PlusCircleIcon @click="state.images.push('')" class="h-7 w-7 text-green-500 hover:cursor-pointer" />
+                                <PlusCircleIcon @click="state.images.push('')" class="h-6 w-6 text-green-500 hover:cursor-pointer" />
                             </div>
 
                             <UFormGroup label="Prive listing" name="private">

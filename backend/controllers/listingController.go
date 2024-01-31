@@ -49,7 +49,6 @@ func CreateListing(c *gin.Context) {
 
 	initializers.DB.Create(&listing)
 
-	// loop over 5 images
 	for i := 1; i <= body.ImageAmount; i++ {
 		var fullfilename string = ""
 		file, err := c.FormFile("file" + fmt.Sprint(i))

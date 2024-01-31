@@ -122,38 +122,45 @@ async function SubmitReview() {
 <template>
     <imagemodal v-if="listingstore.imageModal" />
     <div class="pt-6">
-        <div class="mx-auto mt-6 max-w-2xl lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-3">
-                <div class="hidden lg:grid lg:grid-cols-1 lg:gap-y-4 lg:grid-rows-1 col-span-6">
-                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-l-lg  cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
-                        <img :src="listing.listing.Images[0].ImageURL" alt="listingpicigeuss"
-                            class="h-full w-full object-cover object-center aspect-block" />
-                    </div>
+        <div class="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 rounded-lg"
+            :class="listing.listing.Images.length > 1 ? '' : 'bg-gray-50'">
+            <div class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg"
+                :class="listing.listing.Images.length > 1 ? 'col-start-1' : 'col-start-2'">
+                <img :src="listing.listing.Images[0].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
+            </div>
+            <div v-show="listing.listing.Images.length === 2"
+                class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+                <img :src="listing.listing.Images[1].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
+            </div>
+            <div v-if="[3, 4, 5].includes(listing.listing.Images.length)" class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                    <img :src="listing.listing.Images[1].ImageURL" alt="Model wearing plain black basic tee."
+                        class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
                 </div>
-                <div class="hidden lg:grid lg:grid-cols-1 col-span-3 lg:grid-rows-2 lg:gap-y-4">
-                    <div class="aspect-h-2 aspect-w-3 overflow-hidden cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
-                        <img :src="listing.listing?.Images[1].ImageURL" alt="listingpicigeuss"
-                            class="h-full w-full object-cover object-center aspect-block" />
-                    </div>
-                    <div class="aspect-h-2 aspect-w-3 overflow-hidden cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[2].ImageURL, listingstore.imageModal = true">
-                        <img :src="listing.listing?.Images[2].ImageURL" alt="listingpicigeuss"
-                            class="h-full w-full object-cover object-center aspect-block" />
-                    </div>
-                </div>
-                <div class="hidden lg:grid lg:grid-cols-1 col-span-3 lg:grid-rows-2 lg:gap-y-4">
-                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-tr-lg cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
-                        <img :src="listing.listing?.Images[3].ImageURL" alt="listingpicigeuss"
-                            class="h-full w-full object-cover object-center aspect-block" />
-                    </div>
-                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-br-lg cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[4].ImageURL, listingstore.imageModal = true">
-                        <img :src="listing.listing?.Images[4].ImageURL" alt="listingpicigeuss"
-                            class="h-full w-full object-cover object-center aspect-block" />
-                    </div>
+
+                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                    <img :src="listing.listing.Images[2].ImageURL" alt="Model wearing plain gray basic tee."
+                        class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[2].ImageURL, listingstore.imageModal = true">
                 </div>
             </div>
-        <!-- Product info -->
+            <div v-if="listing.listing.Images.length === 4"
+                class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+                <img :src="listing.listing.Images[3].ImageURL" alt="Model wearing plain gray basic tee."
+                    class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
+            </div>
+            <div v-if="listing.listing.Images.length === 5" class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                    <img :src="listing.listing.Images[3].ImageURL"
+                        alt="Model wearing plain black basic tee." class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
+                </div>
+                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                    <img :src="listing.listing.Images[4].ImageURL"
+                        alt="Model wearing plain gray basic tee." class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[4].ImageURL, listingstore.imageModal = true">
+                </div>
+            </div>
+        </div>
         <div
             class="mx-auto max-w-2xl  pb-16 pt-10  lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:pb-24 lg:pt-16">
-            
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{{ listing.listing.Title }}</h1>
                 <div class="text-gray-500 w-[20%]">
@@ -163,26 +170,22 @@ async function SubmitReview() {
                     </NuxtLink>
                 </div>
             </div>
-
-            <!-- Options -->
-            <div class="mt-4 lg:row-span-3 lg:mt-0 sticky top-20 overflow-hidden h-fit">
+            <div class="mt-4 lg:row-span-3 lg:mt-0 lg:sticky top-20 overflow-hidden h-fit">
                 <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training</p>
-
-                <!-- Reviews -->
                 <div class="mt-6">
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">
                         <div class="flex items-center">
-                                        <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
-                                            :class="[reviews.average > rating ? 'text-gray-900' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
-                                            aria-hidden="true" />
-                                    </div>
+                            <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
+                                :class="[reviews.average > rating ? 'text-gray-900' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
+                                aria-hidden="true" />
+                        </div>
                         <p class="sr-only">{{ reviews.average }} out of 5 stars</p>
                         <a :href="reviews.href" class="ml-3 text-sm font-medium text-green-600 hover:text-green-500">{{
                             reviews.totalCount }} reviews</a>
                     </div>
                 </div>
-<!-- 
+                <!-- 
                 <div class="mt-10 border-t border-gray-200 pt-10">
                     <div class="md:pr-14">
                         <div class="flex items-center">
@@ -219,7 +222,7 @@ async function SubmitReview() {
                     </div>
                 </div> -->
 
-                <form class="mt-10">    
+                <form class="mt-10">
 
                     <div class="mt-10 space-y-2">
 
@@ -227,18 +230,19 @@ async function SubmitReview() {
 
                         <label for="date" class="block text-sm font-medium text-gray-700">Datum</label>
                         <div class="mt-1">
-                            <input type="date" name="date" id="date" 
+                            <input type="date" name="date" id="date"
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>
                         <label for="time" class="block text-sm font-medium text-gray-700">Tijd</label>
                         <div class="mt-1">
-                            <input type="time" name="time" id="time" 
+                            <input type="time" name="time" id="time"
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>
                     </div>
 
                     <button type="submit"
-                        class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-600 px-8 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Training boeken</button>
+                        class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-600 px-8 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Training
+                        boeken</button>
                 </form>
             </div>
 
@@ -253,8 +257,9 @@ async function SubmitReview() {
                 <div class="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
                     <div class="flex border-t border-gray-200 pt-10 items-start space-x-4 mb-8">
                         <div class="flex-shrink-0">
-                            <img class="inline-block h-10 w-10 rounded-full" v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''" :src="authstore.user.ProfilePicture"
-                                alt="" />
+                            <img class="inline-block h-10 w-10 rounded-full"
+                                v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''"
+                                :src="authstore.user.ProfilePicture" alt="" />
                             <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
                         </div>
                         <div class="min-w-0 flex-1">
@@ -269,8 +274,9 @@ async function SubmitReview() {
 
                                     <div class="flex">
                                         <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
-                                        :class="[hover >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 cursor-pointer']"
-                            aria-hidden="true" @click="WriteReview.Rating = rating" @mouseout="hover = WriteReview.Rating" @mouseover="hover = rating" />
+                                            :class="[hover >= rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0 cursor-pointer']"
+                                            aria-hidden="true" @click="WriteReview.Rating = rating"
+                                            @mouseout="hover = WriteReview.Rating" @mouseover="hover = rating" />
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -329,6 +335,5 @@ async function SubmitReview() {
                     </TabGroup>
                 </div>
             </div>
-        </div>
     </div>
-</template>
+</div></template>
