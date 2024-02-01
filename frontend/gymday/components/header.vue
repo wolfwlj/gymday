@@ -38,7 +38,12 @@ const router = useRouter()
 async function setFilter(filter) {
   navigation.value.forEach((item) => {
     if (item.name === filter) {
-      item.current = true
+      if (item.current) {
+        item.current = false
+        filter = 'none'
+      } else {
+        item.current = true
+      }
     } else {
       item.current = false
     }
