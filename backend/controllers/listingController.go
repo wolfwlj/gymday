@@ -232,7 +232,7 @@ func GetListings(c *gin.Context) {
 	if tag == "none" {
 		initializers.DB.Preload("User").Preload("Tags").Preload("Images").Find(&listings)
 	} else {
-		initializers.DB.Preload("User").Joins("join listing_tags on listing_tags.name = ?", tag).Preload("Images").Find(&listings)
+		initializers.DB.Preload("User").Preload("Tags").Joins("JOIN listing_tags on listing_tags.listing_id = listings.id AND listing_tags.name = ?", tag).Preload("Images").Find(&listings)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
