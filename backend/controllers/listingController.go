@@ -227,8 +227,13 @@ func DeleteListing(c *gin.Context) {
 func GetListings(c *gin.Context) {
 
 	var listings []models.Listing
+	tag := c.Param("tag")
 
-	initializers.DB.Preload("User").Preload("Images").Find(&listings)
+	if tag == "none" {
+		initializers.DB.Preload("User").Preload("Tags").Preload("Images").Find(&listings)
+	} else {
+		initializers.DB.Preload("User").Joins("join listing_tags on listing_tags.name = ?", tag).Preload("Images").Find(&listings)
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,
@@ -257,7 +262,7 @@ func GetListingsBySearch(c *gin.Context) {
 
 	var listings []models.Listing
 	
-	initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Images").Where("concat(city, country, province, title, users.first_name) like ?", "%"+query+"%").Find(&listings)
+	initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Tags").Preload("Images").Where("concat(city, country, province, title, users.first_name) like ?", "%"+query+"%").Find(&listings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,
@@ -271,7 +276,7 @@ func GetListing(c *gin.Context) {
 
 	var listing models.Listing
 
-	initializers.DB.Preload("User").Preload("Images").Preload("Reviews.User").First(&listing, id)
+	initializers.DB.Preload("User").Preload("Tags").Preload("Images").Preload("Reviews.User").First(&listing, id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"listing": listing,

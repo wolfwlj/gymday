@@ -19,6 +19,7 @@ type Listing struct {
 	City string `gorm:"type:text"`
 	Private bool `gorm:"type:bool;default:false"`
 	Images []ListingImage 
+	Tags []ListingTag
 	Reviews []Review 
 	UserID uint 
 	User User `gorm:"foreignKey:UserID"`

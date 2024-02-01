@@ -6,7 +6,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { baseURL } from '../api'
 import { storeToRefs } from 'pinia'
 import useAuthStore from '../stores/auth'
+import useListingStore from '../stores/listingstore';
 
+const listingstore = useListingStore()
 const authstore = useAuthStore()
 
 
@@ -16,12 +18,12 @@ const authstore = useAuthStore()
 //   imageUrl: authstore.user?.ProfilePicture,
 // })
 
-const navigation = [
+const navigation = ref([
   { name: 'Bodybuilding', to: '#', current: false },
   { name: 'Crossfit', to: '#', current: false },
   { name: 'Calisthenics', to: '#', current: false },
   { name: 'Yoga', to: '#', current: false },
-  { name: 'Cardio', to: '#', current: true },
+  { name: 'Cardio', to: '#', current: false },
   { name: 'Fitness', to: '#', current: false },
   { name: 'Powerlifting', to: '#', current: false },
   { name: 'Powerbuilding', to: '#', current: false },
@@ -29,15 +31,33 @@ const navigation = [
   { name: 'Zwemmen', to: '#', current: false },
   { name: 'Vechtsporten', to: '#', current: false },
   { name: 'Andere', to: '#', current: false },
-]
+])
+
+const router = useRouter()
+
+async function setFilter(filter) {
+  navigation.value.forEach((item) => {
+    if (item.name === filter) {
+      item.current = true
+    } else {
+      item.current = false
+    }
+  })
+
+  const { data: listings } = await useFetch(`${baseURL}/user/listings/${filter}`, {
+    method: 'get',
+    credentials: 'include',
+  })
+
+  listingstore.listings = listings.value.listings
+  router.push('../');
+} 
 
 const userNavigation = [
   { name: 'Your Profile', to: '#' },
   { name: 'Settings', to: '#' },
   { name: 'Sign out', to: '#' },
 ]
-
-const router = useRouter()
 
 const { logoutuser } = useAuthStore()
 
@@ -160,7 +180,7 @@ const logout = () => {
       <nav class="hidden overflow-x-auto scroll-smooth no-scrollbar lg:space-x-8 lg:flex lg:py-2" aria-label="Global">
         <a v-for="item in navigation" :key="item.name" :href="item.href"
           :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium cursor-pointer']"
-          :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+          :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</a>
       </nav>
     </div>
 
@@ -168,7 +188,7 @@ const logout = () => {
       <div class="space-y-1 px-2 pb-3 pt-2 h-60 overflow-y-auto scroll-smooth no-scrollbar">
         <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href"
           :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'block rounded-md py-2 px-3 text-base font-medium cursor-pointer']"
-          :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
+          :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</DisclosureButton>
       </div>
 
       <div class="flex space-x-3 justify-end" v-show="!authstore.user">

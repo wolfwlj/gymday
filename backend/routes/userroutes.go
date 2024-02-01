@@ -26,7 +26,7 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.DELETE("/profileimage/:id", middleware.UserAuth, controllers.DeleteProfileImage)
 
 	//listing routers
-	router.GET("/listings", controllers.GetListings)
+	router.GET("/listings/:tag", controllers.GetListings)
 	router.GET("/listingssearch/:query", controllers.GetListingsBySearch)
 	router.GET("/listing/:id", controllers.GetListing)
 	router.POST("/listing",  middleware.UserAuth, controllers.CreateListing)

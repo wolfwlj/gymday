@@ -90,7 +90,7 @@ async function SubmitReview() {
     await listingstore.submitReview(id, WriteReview.value.Rating, WriteReview.value.Body)
     WriteReview.value.Body = ''
     WriteReview.value.Rating = 1
-
+    hover.value = 1
 }
 
 const booking = ref({

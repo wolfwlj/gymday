@@ -5,7 +5,7 @@ import useListingStore from '../stores/listingstore'
 
 const listingstore = useListingStore()
 
-const { data: listings } = await useFetch(`${baseURL}/user/listings`, {
+const { data: listings } = await useFetch(`${baseURL}/user/listings/none`, {
     method: 'get',
     credentials: 'include',
 })
@@ -26,7 +26,7 @@ listingstore.listings = listings.value.listings
                             <img :src="listing.Images[0]?.ImageURL" alt=""
                                 class="h-full w-full object-cover object-center" />
                         </div>
-                        <div class="pb-4 pt-10 text-center">
+                        <div class="pt-10 text-center">
                             <h3 class="text-sm font-medium text-gray-900">
                                 <span aria-hidden="true" class="absolute inset-0" />
                                 {{ listing.Title }}
@@ -50,6 +50,9 @@ listingstore.listings = listings.value.listings
                             <p class="mt-4 text-base font-medium text-gray-900">
                                 {{ listing.Location }}
                             </p>
+                            <div class="flex justify-center gap-2 flex-wrap mt-4">
+                                <span v-for="tag in listing.Tags" class="rounded bg-gray-50 px-2 py-1 text-xs font-semibold text-gray-600 shadow-sm hover:bg-gray-100">{{ tag.Name }}</span>
+                            </div>
                         </div>
                     </NuxtLink>
                 </div>
