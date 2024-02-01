@@ -229,10 +229,20 @@ func GetListings(c *gin.Context) {
 	var listings []models.Listing
 	tag := c.Param("tag")
 
-	if tag == "none" {
-		initializers.DB.Preload("User").Preload("Tags").Preload("Images").Find(&listings)
-	} else {
-		initializers.DB.Preload("User").Preload("Tags").Joins("JOIN listing_tags on listing_tags.listing_id = listings.id AND listing_tags.name = ?", tag).Preload("Images").Find(&listings)
+	// base query
+	query := initializers.DB.Preload("User").Preload("Tags").Preload("Images")
+	// add tag to query
+	if tag != "none" {
+		query = query.Joins("JOIN listing_tags on listing_tags.listing_id = listings.id AND listing_tags.name = ?", tag)
+	}	
+	// order by created_at
+	query = query.Order("created_at desc")
+
+	// execute query and check for errors
+    if err := query.Find(&listings).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "No listings found or there is an error.",
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
