@@ -13,7 +13,6 @@ const useAdminStore = defineStore({
     },
     actions: {
         async submitApplication(Reason) {
-            console.log(Reason)
             const {data, error} = await useFetch(`${baseURL}/user/verificationrequest`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
@@ -23,7 +22,6 @@ const useAdminStore = defineStore({
                 credentials: 'include',
             })
             if (data) {
-                console.log(data)
                 return 'success'
             }
         },
@@ -34,7 +32,6 @@ const useAdminStore = defineStore({
                 credentials: 'include',
             })
             if (data) {
-                console.log(data)
                 this.applications = data.value.verificationrequests
                 return data.value.verificationrequests
             }

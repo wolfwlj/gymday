@@ -11,8 +11,8 @@ import (
 	"gymday/utils"
 	"github.com/google/uuid"
 	"fmt"
+	"strings"
 )
-
 
 func CreateListing(c *gin.Context) {
 
@@ -26,6 +26,7 @@ func CreateListing(c *gin.Context) {
 		Province    string
 		Country     string
 		Private     bool
+		Tags		string
 	}
 
 	user, _ := c.Get("user")
@@ -48,6 +49,15 @@ func CreateListing(c *gin.Context) {
 	}
 
 	initializers.DB.Create(&listing)
+
+	Tags := strings.SplitN(body.Tags, ",", -1)
+
+	for _, tag := range Tags {
+		var listingTag models.ListingTag
+		listingTag.ListingID = listing.ID
+		listingTag.Name = tag
+		initializers.DB.Create(&listingTag)
+	}
 
 	for i := 1; i <= body.ImageAmount; i++ {
 		var fullfilename string = ""

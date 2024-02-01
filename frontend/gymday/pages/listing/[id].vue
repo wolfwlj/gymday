@@ -87,8 +87,6 @@ const WriteReview = ref({
 })
 
 async function SubmitReview() {
-    console.log(WriteReview)
-
     await listingstore.submitReview(id, WriteReview.value.Rating, WriteReview.value.Body)
     WriteReview.value.Body = ''
     WriteReview.value.Rating = 1
@@ -111,7 +109,7 @@ const booking = ref({
                 :class="listing.listing.Images.length > 1 ? 'col-start-1' : 'col-start-2'">
                 <img :src="listing.listing.Images[0].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
             </div>
-            <div v-show="listing.listing.Images.length === 2"
+            <div v-if="listing.listing.Images.length === 2"
                 class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
                 <img :src="listing.listing.Images[1].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
             </div>

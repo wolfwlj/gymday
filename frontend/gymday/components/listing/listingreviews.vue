@@ -1,18 +1,15 @@
 <script setup>
 import useListingStore from '~/stores/listingstore'
 import { storeToRefs } from "pinia";
-import { UserIcon } from '@heroicons/vue/20/solid'
+import { UserIcon, StarIcon } from '@heroicons/vue/20/solid'
 
 const listingstore = useListingStore()
-console.log(listingstore.reviews)
+
 const { id } = useRoute().params
 
 await listingstore.getListingReviews(id)
 
-
-
 const { reviews } = storeToRefs(listingstore);
-
 </script>
 <template>
     <div v-for="review in reviews" :key="review.id" class="flex space-x-4 text-sm text-gray-500">
@@ -27,7 +24,7 @@ const { reviews } = storeToRefs(listingstore);
             </p>
 
             <div class="mt-4 flex items-center">
-                <StarIcon v-if="!loading"  v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
+                <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
                     :class="[review.Rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']"
                     aria-hidden="true" />
             </div>
