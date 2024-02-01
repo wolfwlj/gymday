@@ -15,7 +15,7 @@ import useProfileStore from '../../stores/profile'
 import editprofile from '~/components/profile/modals/editprofile.vue';
 import listingsprofile from '~/components/profile/listingsprofile.vue';
 import Galleryprofile from '~/components/profile/galleryprofile.vue';
-
+import Bookings from '~/components/booking/bookings.vue';
 const navigation = [
     { name: 'General', icon: UserCircleIcon },
     { name: 'Listings', icon: QueueListIcon },
@@ -104,8 +104,8 @@ await profileStore.getUser(param)
             <div v-show="currentProfileTab === 'Listings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 listings
             </div>
-            <div v-show="currentProfileTab === 'Bookings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                Bookings
+            <div v-if="currentProfileTab === 'Bookings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+                <Bookings />
             </div>
             <div v-show="currentProfileTab === 'Foto Galerij'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 gallerij

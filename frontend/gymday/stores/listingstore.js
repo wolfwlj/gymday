@@ -15,23 +15,6 @@ const useListingStore = defineStore({
 
     },
     actions: {
-        async createBooking(listingid, price) {
-            const response = await useFetch(`${baseURL}/user/booking`, {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    Title : "Test",
-                    Price : price,
-                    StartDate : "2021-01-01",
-                    EndDate : "2021-02-01",
-                    ListingID : listingid,
-                },
-                credentials: 'include',
-                
-            })
-            const data = await response.json()
-            return data
-        },
         async getListingReviews(listingid) {
             const {data, error } = await useFetch(`${baseURL}/user/reviews/${listingid}`, {
                 method: 'get',
