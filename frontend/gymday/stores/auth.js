@@ -25,7 +25,6 @@ const useAuthStore = defineStore({
     actions: {
         async loginuser(Email, Password) {
 
-            console.log(Email, Password)
             // useFetch from nuxt 3
             const { data, pending } = await useFetch(`${baseURL}/user/login`, {
                 method: 'post',
@@ -65,7 +64,6 @@ const useAuthStore = defineStore({
                 credentials: 'include',
             }).catch((error) => error.data)
 
-            console.log(user)
             this.authenticated = true
             this.user = user.user
 

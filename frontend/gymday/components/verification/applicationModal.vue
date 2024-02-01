@@ -2,7 +2,7 @@
 import useAdminStore from  '~/stores/admin';
 
 const adminStore = useAdminStore();
-console.log("dfsadasd")
+
 const reply = ref('')
 </script>
 

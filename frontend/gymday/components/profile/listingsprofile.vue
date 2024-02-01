@@ -4,7 +4,7 @@ import Addlisting from './modals/addlisting.vue';
 import Editlisting from './modals/editlisting.vue';
 const profileStore = useProfileStore();
 await profileStore.getlistings()
-console.log(profileStore.profilelistings)
+
 </script>
 
 <template>

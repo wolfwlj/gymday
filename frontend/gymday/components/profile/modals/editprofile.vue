@@ -36,7 +36,7 @@ const onWorkshopFilePicked = (Workshop) => {
     const files = Workshop.target.files
     const image = files[0]
     // const filename = files[0].name
-    console.log(image)
+
     state.profilepicture = image
 };
 

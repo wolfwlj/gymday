@@ -22,8 +22,6 @@ const form = ref({
 })
 
 async function login() {
-    console.log(form.value.Email, form.value.Password)
-
     await loginuser(form.value.Email, form.value.Password); // call authenticateUser and pass the user object
     // redirect to homepage if user is authenticated
     if (authenticated) {

@@ -16,7 +16,6 @@ const useListingStore = defineStore({
     },
     actions: {
         async createBooking(listingid, price) {
-            console.log(listingid, price)
             const response = await useFetch(`${baseURL}/user/booking`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
@@ -34,7 +33,6 @@ const useListingStore = defineStore({
             return data
         },
         async getListingReviews(listingid) {
-            console.log("dasdsad")
             const {data, error } = await useFetch(`${baseURL}/user/reviews/${listingid}`, {
                 method: 'get',
                 headers: { 'Content-Type': 'application/json' },
@@ -47,7 +45,6 @@ const useListingStore = defineStore({
         },
 
         async submitReview(listingid, rating, review) {
-            console.log(listingid, rating, review)
             const {data, error} = await useFetch(`${baseURL}/user/review`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
