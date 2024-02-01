@@ -2,6 +2,10 @@
 import useBookingStore from  '~/stores/booking';
 import BookingModal from '~/components/booking/bookingModal.vue';
 import { storeToRefs } from "pinia";
+import createbookingModal from './createbookingModal.vue';
+
+
+
 const bookingStore = useBookingStore();
 await bookingStore.getBookings()
 
@@ -23,7 +27,6 @@ function formatDate(date) {
         minutes = '0' + minutes
 
     return [day, month, year].join('-') + ' ' + [hour, minutes].join(':')
-
 }
 
 </script>
@@ -32,12 +35,18 @@ function formatDate(date) {
 
     <div class="flex justify-center align-middle item-center">
         <div class="flex flex-col w-[90%]">
-            <h1 class="text-3xl font-bold mb-5">
-                beheer jouw bookings
-            </h1>
-
             <div class=" w-full">
-                <div class="mt-4 flow-root">
+                <div class="flow-root">
+                    <div class="sm:flex sm:items-center">
+                        <div class="sm:flex-auto">
+                            <h1 class="text-base font-semibold leading-6 text-gray-900">Bookingen</h1>
+                            <p class="mt-2 text-sm text-gray-700">Een lijst met al jouw bookingen.</p>
+                        </div>
+                        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                            <UButton variant="outline" color="black" @click="bookingStore.addbookingModal=true">Voeg handmatig een booking toe</UButton>
+                            <createbookingModal v-if="bookingStore.addbookingModal"/>
+                        </div>
+                    </div>
                     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table class="min-w-full divide-y divide-gray-300">
@@ -46,10 +55,8 @@ function formatDate(date) {
                                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Datum en tijd</th>
-
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tel.</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Listing</th>
- 
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">Actie <span class="sr-only">Open</span></th>
                             </tr>
                             </thead>
@@ -80,7 +87,7 @@ function formatDate(date) {
                                     <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{booking.Title}}</span>
                                 </td>
                                 <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                    <UButton  @click="bookingStore.bookingModal = true, bookingStore.selectedBooking = booking">Meer informatie</UButton>
+                                    <UButton  @click="bookingStore.bookingModal = true, bookingStore.selectedBooking = booking">Beheer booking</UButton>
                                     <BookingModal v-if="bookingStore.bookingModal"/>
 
                                 </td>

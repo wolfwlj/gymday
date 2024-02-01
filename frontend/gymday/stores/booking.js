@@ -5,22 +5,57 @@ const useBookingStore = defineStore({
     id: 'bookingstore',
     state: () => ({
         bookings : [],
+        
+        addbookingModal : false,
         bookingModal : false,
+        
         selectedBooking : null,
+
     }),
     getters: {
 
     },
     actions: {
-        async createBooking(listingid, startdate, starttime) {
+        async manualCreateBooking(form) {
 
+            const startdate = new Date(form.startdate)
+            const starttime = form.starttime.split(':')
+            startdate.setHours(starttime[0])
+            startdate.setMinutes(starttime[1])
+            const enddate = new Date(form.startdate)
+            const endtime = form.endtime.split(':')
+            enddate.setHours(endtime[0])
+            enddate.setMinutes(endtime[1])
+
+            const {data, error} = await useFetch(`${baseURL}/user/manualbooking`, {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+                    FirstName : form.firstname,
+                    LastName : form.lastname,
+                    Email : form.email,
+                    Phone : form.phone,
+                    StartDate : startdate,
+                    EndDate : enddate,
+                    ListingID : form.listingID,
+
+                },
+                credentials: 'include',
+                
+            })
+            if (data) {
+                this.addbookingModal = false
+                await this.getBookings()
+                alert('Booking verzonden!')
+            }
+        },
+
+        async createBooking(listingid, startdate, starttime) {
             // create timestamp
             const date = new Date(startdate)
             const time = starttime.split(':')
-            console.log(time)
             date.setHours(time[0])
             date.setMinutes(time[1])
-            console.log(date)
 
             const {data, error} = await useFetch(`${baseURL}/user/booking`, {
                 method: 'post',
@@ -32,7 +67,7 @@ const useBookingStore = defineStore({
                 credentials: 'include',
                 
             })
-            if (data.success) {
+            if (data) {
                 alert('Booking verzonden!')
             }
         },
@@ -45,6 +80,20 @@ const useBookingStore = defineStore({
             console.log(data)
             this.bookings = data.value.bookings
             console.log(this.bookings)
+        },
+        async UpdateBooking(status) {
+            const { data, error } = await useFetch(`${baseURL}/user/booking/${this.selectedBooking.ID}`, {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+                    Status : status,
+                },
+                credentials: 'include',
+            })
+            if (data) {
+                await this.getBookings()
+                this.bookingModal = false
+            }
         }
     },
 })

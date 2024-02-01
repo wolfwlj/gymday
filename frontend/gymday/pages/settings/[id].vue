@@ -7,8 +7,10 @@ import {
     FingerPrintIcon,
     UserCircleIcon,
     PhotoIcon,
+    CalendarDaysIcon,
     ArchiveBoxIcon,
     QueueListIcon,
+    CurrencyEuroIcon,
 } from '@heroicons/vue/24/outline'
 import useAuthStore from '../../stores/auth'; // import the auth store we just created
 import useProfileStore from '../../stores/profile'
@@ -20,8 +22,8 @@ const navigation = [
     { name: 'General', icon: UserCircleIcon },
     { name: 'Listings', icon: QueueListIcon },
     { name: 'Bookings', icon: ArchiveBoxIcon },
-    { name: 'Foto Galerij', icon: PhotoIcon },
-    { name: 'Security', icon: FingerPrintIcon },
+    { name: 'Betalingen', icon: CurrencyEuroIcon },
+    { name: 'Mijn Beschikbaarheid', icon: CalendarDaysIcon },
     { name: 'Notifications', icon: BellIcon },
     { name: 'Plan', icon: CubeIcon },
     { name: 'Billing', icon: CreditCardIcon },
@@ -107,8 +109,11 @@ await profileStore.getUser(param)
             <div v-if="currentProfileTab === 'Bookings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 <Bookings />
             </div>
-            <div v-show="currentProfileTab === 'Foto Galerij'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                gallerij
+            <div v-show="currentProfileTab === 'Betalingen'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+                Betaling beheer
+            </div>
+            <div v-if="currentProfileTab === 'Mijn Beschikbaarheid'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+                Beschikbaarheid
             </div>
         </main>
     </div>
