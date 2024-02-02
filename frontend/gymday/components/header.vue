@@ -1,7 +1,7 @@
 <script setup>
 import { UserIcon } from '@heroicons/vue/20/solid'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import { MagnifyingGlassIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { baseURL } from '../api'
 import { storeToRefs } from 'pinia'
@@ -182,10 +182,16 @@ const logout = () => {
           </Menu>
         </div>
       </div>
-      <nav class="hidden overflow-x-auto scroll-smooth no-scrollbar lg:space-x-8 lg:flex lg:py-2" aria-label="Global">
+      <nav class="relative hidden overflow-x-auto scroll-smooth no-scrollbar lg:space-x-3 lg:flex lg:py-2" aria-label="Global">
+        <div class="sticky left-2 cursor-pointer" @click="$event.target.parentElement.parentElement.scrollLeft -= 1000">
+          <ChevronLeftIcon class="h-8 w-8 text-gray-900" />
+        </div>
         <a v-for="item in navigation" :key="item.name" :href="item.href"
-          :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium cursor-pointer']"
+          :class="[item.current ? 'bg-gray-200 text-gray-900' : 'text-gray-600 bg-gray-50 hover:bg-gray-100 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium cursor-pointer']"
           :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</a>
+        <div class="sticky right-2 cursor-pointer px-3" @click="$event.target.parentElement.parentElement.scrollLeft += 1000">
+          <ChevronRightIcon class="h-8 w-8 text-gray-900" />
+        </div>
       </nav>
     </div>
 
