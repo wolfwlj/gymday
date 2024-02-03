@@ -152,7 +152,7 @@ const booking = ref({
             </div>
         </div>
         <div
-            class="mx-auto max-w-2xl  pb-16 pt-10  lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:pb-24 lg:pt-16">
+            class="mx-auto max-w-2xl pb-12 pt-10  lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:pb-18 lg:pt-16">
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{{ listing.listing.Title }}</h1>
                 <div class="text-gray-500 w-[20%]">
@@ -201,7 +201,10 @@ const booking = ref({
             </div>
 
             <div class="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
-                <div class="mb-10">
+                <div class="mb-10 flex flex-col gap-3">
+                    <div class="flex gap-2">
+                        <span v-for="tag in listing.listing.Tags" class="rounded bg-gray-50 px-2 py-1 text-xs font-semibold text-gray-600 shadow-sm">{{ tag.Name }}</span>
+                    </div>
                     <h3 class="sr-only">Omschrijving</h3>
                     <div class="space-y-6">
                         <p class="text-base text-gray-900">{{ listing.listing.Description }}</p>

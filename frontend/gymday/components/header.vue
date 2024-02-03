@@ -186,9 +186,9 @@ const logout = () => {
         <div class="sticky left-2 cursor-pointer" @click="$event.target.parentElement.parentElement.scrollLeft -= 1000">
           <ChevronLeftIcon class="h-8 w-8 text-gray-900" />
         </div>
-        <a v-for="item in navigation" :key="item.name" :href="item.href"
+        <span v-for="item in navigation" :key="item.name"
           :class="[item.current ? 'bg-gray-200 text-gray-900' : 'text-gray-600 bg-gray-50 hover:bg-gray-100 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium cursor-pointer']"
-          :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</a>
+          :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</span>
         <div class="sticky right-2 cursor-pointer px-3" @click="$event.target.parentElement.parentElement.scrollLeft += 1000">
           <ChevronRightIcon class="h-8 w-8 text-gray-900" />
         </div>
@@ -197,7 +197,7 @@ const logout = () => {
 
     <DisclosurePanel as="nav" class="lg:hidden" aria-label="Global">
       <div class="space-y-1 px-2 pb-3 pt-2 h-60 overflow-y-auto scroll-smooth no-scrollbar">
-        <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href"
+        <DisclosureButton v-for="item in navigation" :key="item.name" as="a"
           :class="[item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'block rounded-md py-2 px-3 text-base font-medium cursor-pointer']"
           :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</DisclosureButton>
       </div>
