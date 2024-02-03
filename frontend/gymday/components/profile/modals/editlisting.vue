@@ -1,131 +1,129 @@
 <script setup>
+import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/20/solid'
 import useProfileStore from '~/stores/profile';
 const profileStore = useProfileStore();
 
-const state = reactive({
-    title : profileStore.selectedListing.Title,
-    description : profileStore.selectedListing.Description,
-    price : profileStore.selectedListing.Price,
-    location : profileStore.selectedListing.Location,
-    city : profileStore.selectedListing.City,
-    province : profileStore.selectedListing.Province,
-    country : profileStore.selectedListing.Country,
-    images : [{
-        ImageURL : profileStore.selectedListing.Images[0].ImageURL,
-        ImageNR : 1,
-    },
-    {
-        ImageURL : profileStore.selectedListing.Images[1].ImageURL,
-        ImageNR : 2,
-    },
-    {
-        ImageURL : profileStore.selectedListing.Images[2].ImageURL,
-        ImageNR : 3,
-    },
-    {
-        ImageURL : profileStore.selectedListing.Images[3].ImageURL,    
-        ImageNR : 4,
-    },
-    {
-        ImageURL : profileStore.selectedListing.Images[4].ImageURL,    
-        ImageNR : 5,
-    },
-    ],
-    private : profileStore.selectedListing.Private,
-})
+const tags = [
+    'Bodybuilding',
+    'Crossfit',
+    'Calisthenics',
+    'Yoga',
+    'Cardio',
+    'Fitness',
+    'Powerlifting',
+    'Powerbuilding',
+    'Strongman',
+    'Zwemmen',
+    'Vechtsporten',
+    'Andere',
+]
 
-const onFilePicked1 = (file) => { const files = file.target.files; state.images[0] = files[0];};
-const onFilePicked2 = (file) => { const files = file.target.files; state.images[1] = files[0];};
-const onFilePicked3 = (file) => { const files = file.target.files; state.images[2] = files[0];};
-const onFilePicked4 = (file) => { const files = file.target.files; state.images[3] = files[0];};
-const onFilePicked5 = (file) => { const files = file.target.files; state.images[4] = files[0];};
+function handleFile(e, index) {
+    const files = e.target.files;
+    profileStore.selectedListing.images[index] = files[0];
+}
 
 const validate = (state) => {
     const errors = []
     if (!state.title) errors.push({ path: 'title', message: 'Verplicht' })
+    if (!state.tags) errors.push({ path: 'title', message: 'Verplicht' })
     if (!state.city) errors.push({ path: 'city', message: 'Verplicht' })
     if (!state.description) errors.push({ path: 'description', message: 'Verplicht' })
     if (!state.price) errors.push({ path: 'price', message: 'Verplicht' })
     if (!state.location) errors.push({ path: 'location', message: 'Verplicht' })
-    if (!state.province) errors.push({ path: 'province', message: 'Verplicht' })
-    if (!state.country) errors.push({ path: 'country', message: 'Verplicht' })
+    if (!state.images[0]) errors.push({ path: 'images', message: 'Verplicht' })
 
     return errors
 }
+
 const onSubmit = () => {
-    profileStore.editListing(state.title, state.city, state.description, state.price, state.location, state.province, state.country, state.images, state.private)
+    profileStore.editListing(
+        profileStore.selectedListing.Title,
+        profileStore.selectedListing.City,
+        profileStore.selectedListing.Tags,
+        profileStore.selectedListing.Description,
+        profileStore.selectedListing.Price,
+        profileStore.selectedListing.Location,
+        profileStore.selectedListing.Images,
+        profileStore.selectedListing.Private
+    )
 }
-
 </script>
+
 <template>
-    <div>  
-        <UModal v-model="profileStore.isEditListingOpen" prevent-close>
-            <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-                <template #header>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                            Listing aanpassen
-                        </h3>
-                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="profileStore.isEditListingOpen = false" />
-                    </div>
-                </template>
-                <div class="">
-                    <UForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
-                        <UFormGroup label="Titel" name="title">
-                            <UInput v-model="state.title" />
-                        </UFormGroup>
-
-                        <UFormGroup label="Stad" name="city">
-                            <UInput v-model="state.city" />
-                        </UFormGroup>
-
-                        <UFormGroup label="Omschrijving" name="description">
-                            <UTextarea v-model="state.description" />
-                        </UFormGroup>
-
-                        <UFormGroup label="Prijs" name="price">
-                            <UInput v-model="state.price" />
-                        </UFormGroup>
-
-                        <UFormGroup label="Locatie" name="location">
-                            <UInput v-model="state.location" />
-                        </UFormGroup>
-
-                        <UFormGroup label="Provincie" name="province">
-                            <UInput v-model="state.province" />
-                        </UFormGroup>
-
-                        <UFormGroup label="Land" name="country">
-                            <UInput v-model="state.country" />
-                        </UFormGroup>
-                        <UFormGroup label="Foto 1 (hoofd foto)" name="image1">
-                            <input @change="onFilePicked1" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                        </UFormGroup>
-                        <UFormGroup label="Foto 2 " name="image2">
-                            <input @change="onFilePicked2" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                        </UFormGroup>
-                        <UFormGroup label="Foto 3 " name="image3">
-                            <input @change="onFilePicked3" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                        </UFormGroup>
-                        <UFormGroup label="Foto 4 " name="image4">
-                            <input @change="onFilePicked4" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                        </UFormGroup>
-                        <UFormGroup label="Foto 5" name="image5">
-                            <input @change="onFilePicked5" placeholder="Upload een foto" type="file" name="upload" accept="image/*"/>
-                        </UFormGroup>
-                        <UFormGroup label="Prive listing" name="private">
-                            <UCheckbox v-model="state.private" name="private" label="prive" />
-                        </UFormGroup>
-                        <div class="flex w-[full] justify-between">
-                            <UButton type="submit">
-                                Opslaan
-                            </UButton>
-                            <UButton @click="profileStore.deleteListing()" color="red" variant="outline">Listing verwijderen</UButton>
-                        </div>
-                    </UForm>
+    <UModal v-model="profileStore.isEditListingOpen" prevent-close>
+        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+                <div class="flex items-center justify-between">
+                    <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                        Listing Aanpassen
+                    </h3>
+                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                        @click="profileStore.isEditListingOpen = false" />
                 </div>
-            </UCard>
-        </UModal>
-    </div>
-</template>
+            </template>
+            <UForm :validate="validate" :state="profileStore.selectedListing" class="space-y-4" @submit="onSubmit">
+                <UFormGroup label="Titel" name="title">
+                    <UInput v-model="profileStore.selectedListing.Title" />
+                </UFormGroup>
 
+                <UFormGroup label="Tags" name="tags">
+                    <USelectMenu v-model="profileStore.selectedListing.Tags" :options="tags" multiple>
+                        <template #label>
+                            <span v-if="profileStore.selectedListing.Tags.length" class="truncate">{{ profileStore.selectedListing.Tags.map((tag) => tag.Name).join(', ') }}</span>
+                            <span v-else>Select tags</span>
+                        </template>
+                    </USelectMenu>
+                </UFormGroup>
+
+                <UFormGroup label="Stad" name="city">
+                    <UInput v-model="profileStore.selectedListing.City" />
+                </UFormGroup>
+
+                <UFormGroup label="Locatie" name="location">
+                    <UInput v-model="profileStore.selectedListing.Location" />
+                </UFormGroup>
+
+                <UFormGroup label="Omschrijving" name="description">
+                    <UTextarea v-model="profileStore.selectedListing.Description" />
+                </UFormGroup>
+
+                <UFormGroup label="Prijs" name="price">
+                    <UInput v-model="profileStore.selectedListing.Price">
+                        <template #trailing>
+                            <span class="text-gray-500 dark:text-gray-400 text-xs">EUR</span>
+                        </template>
+                    </UInput>
+                </UFormGroup>
+
+                <div class="flex justify-between" v-for="image, index in profileStore.selectedListing.Images" :key="index">
+                    <UFormGroup :label="'Foto ' + (index + 1)" name="images">
+                        <label class="block">
+                            <span class="sr-only">Choose profile photo</span>
+                            <input type="file" @change="handleFile($event, index)" name="upload" accept="image/*" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-gray-50 file:text-gray-500
+                                hover:file:bg-gray-100
+                                " />
+                        </label>
+                    </UFormGroup>
+                    <MinusCircleIcon v-show="index !== 0" @click="profileStore.selectedListing.Images.splice(index, 1)"
+                        class="h-6 w-6 mt-auto text-red-500 hover:cursor-pointer" />
+                </div>
+                <div class="w-fit mx-auto">
+                    <PlusCircleIcon @click="profileStore.selectedListing.Images.push('')"
+                        class="h-6 w-6 text-green-500 hover:cursor-pointer" />
+                </div>
+
+                <UFormGroup label="Prive Listing" name="private" class="flex space-x-2 align-end">
+                    <UCheckbox v-model="profileStore.selectedListing.Private" name="private" />
+                </UFormGroup>
+
+                <UButton type="submit" block label="Opslaan">
+                </UButton>
+            </UForm>
+        </UCard>
+    </UModal>
+</template>

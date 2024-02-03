@@ -23,8 +23,6 @@ func CreateListing(c *gin.Context) {
 		Price       string
 		Location    string
 		City        string
-		Province    string
-		Country     string
 		Private     bool
 		Tags		string
 	}
@@ -42,8 +40,6 @@ func CreateListing(c *gin.Context) {
 		Price:    realprice,
 		Location: body.Location,
 		City:     body.City,
-		Province: body.Province,
-		Country:  body.Country,
 		Private:  body.Private,
 		UserID:   userID,
 	}
@@ -109,10 +105,9 @@ func UpdateListing(c *gin.Context) {
 		Price       string
 		Location    string
 		City        string
-		Province    string
-		Country     string
 		Private     bool
 		Images      []models.ListingImage
+		Tags		string
 	}
 	
 	user, _ := c.Get("user")
@@ -142,10 +137,19 @@ func UpdateListing(c *gin.Context) {
 	listing.Price = realprice
 	listing.Location = body.Location
 	listing.City = body.City
-	listing.Province = body.Province
-	listing.Country = body.Country
 	listing.Private = body.Private
 	listing.UserID = userID
+
+	Tags := strings.SplitN(body.Tags, ",", -1)
+
+	initializers.DB.Where("listing_id = ?", id).Delete(&models.ListingTag{})
+
+	for _, tag := range Tags {
+		var listingTag models.ListingTag
+		listingTag.ListingID = listing.ID
+		listingTag.Name = tag
+		initializers.DB.Create(&listingTag)
+	}
 
 	for i := 1; i <= 5; i++ {
 		var fullfilename string = ""
@@ -192,7 +196,6 @@ func UpdateListing(c *gin.Context) {
 
 }
 
-
 func DeleteListing(c *gin.Context) {
 
 	id := c.Param("id")
@@ -222,7 +225,6 @@ func DeleteListing(c *gin.Context) {
 	})
 
 }
-
 
 func GetListings(c *gin.Context) {
 
@@ -257,8 +259,7 @@ func GetListingsByUser(c *gin.Context) {
 	userID := c.Param("id")
 	var listings []models.Listing
 
-
-	initializers.DB.Preload("Images").Where("user_id = ?", userID).Order("created_at desc").Find(&listings)
+	initializers.DB.Preload("Images").Preload("Tags").Where("user_id = ?", userID).Order("created_at desc").Find(&listings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,

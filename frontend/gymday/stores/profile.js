@@ -16,8 +16,6 @@ const useProfileStore = defineStore({
       price: 0,
       location: "",
       city: "",
-      province: "",
-      country: "",
       images: [""],
       private: true,
     },
@@ -64,7 +62,7 @@ const useProfileStore = defineStore({
         await this.getUser(this.user.ID);
       }
     },
-    async addListing(title, city, tags, description, price, location, province, country, images, privatelisting) {
+    async addListing(title, city, tags, description, price, location, images, privatelisting) {
         let dataForm = new FormData()
 
         for (let i = 0; i < images.length; i++) {
@@ -79,8 +77,6 @@ const useProfileStore = defineStore({
         dataForm.append('Description', description)
         dataForm.append('Price', price)
         dataForm.append('Location', location)
-        dataForm.append('Province', province)
-        dataForm.append('Country', country)
         dataForm.append('Private', privatelisting)
 
         const { data, pending, error} = await useFetch(`${baseURL}/user/listing`, {
@@ -124,11 +120,10 @@ const useProfileStore = defineStore({
     async editListing(
       title,
       city,
+      tags,
       description,
       price,
       location,
-      province,
-      country,
       images,
       privatelisting
     ) {
@@ -139,13 +134,13 @@ const useProfileStore = defineStore({
         dataForm.append(`file${i + 1}`, images[i]);
       }
 
+      dataForm.append("ImageAmount", images.length);
       dataForm.append("Title", title);
+      dataForm.append("Tags", tags);
       dataForm.append("City", city);
       dataForm.append("Description", description);
       dataForm.append("Price", price);
       dataForm.append("Location", location);
-      dataForm.append("Province", province);
-      dataForm.append("Country", country);
       dataForm.append("Private", privatelisting);
 
       const { data, pending, error } = await useFetch(
@@ -224,15 +219,7 @@ const useProfileStore = defineStore({
         this.profileimages = data.value.images;
       }
     },
-
-
   },
 });
-
-
-
-
-
-
 
 export default useProfileStore
