@@ -40,7 +40,13 @@ const useAuthStore = defineStore({
             date.setFullYear(2050);
 
             if (data.value) {
-                const token = useCookie('gymdaytoken', { expires: date }); // useCookie new hook in nuxt 3
+                const token = useCookie('gymdaytoken', { 
+                    expires: date,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                }); // useCookie new hook in nuxt 3
+
                 token.value = data?.value?.cookie; // set token to cookie
                 this.authenticated = true; // set authenticated  state value to true
                 this.user = data?.value?.user; // set user state value to user
