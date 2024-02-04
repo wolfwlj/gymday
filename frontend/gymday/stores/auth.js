@@ -24,29 +24,33 @@ const useAuthStore = defineStore({
     },
     actions: {
         async loginuser(Email, Password) {
-
-            // useFetch from nuxt 3
-            const { data, pending } = await useFetch(`${baseURL}/user/login`, {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    Email : Email,
-                    Password : Password,
-                },
-            });
+            const event = useRequestEvent()
+            // fetchWithCookie(event, `${baseURL}/user/login`)
+            const { data, pending } = await useAsyncData(() => postWithCookie(event, `${baseURL}/user/login`,{
+                Email : Email,
+                Password : Password,
+            }))
+        
+            // // useFetch from nuxt 3
+            // const { data, pending } = await useFetch(`${baseURL}/user/login`, {
+            //     method: 'post',
+            //     headers: useRequestHeaders(['cookie']),
+            //     body: {
+            //         Email : Email,
+            //         Password : Password,
+            //     },
+            // });
             this.loading = pending;
             let date = new Date();
             // token expires in 2050 year
             date.setFullYear(2050);
 
-            if (data.value) {
-                const token = useCookie('gymdaytoken', { 
-                    expires: date,
-                    secure: true,
-                    sameSite: 'none',
-                }); // useCookie new hook in nuxt 3
-
+            if (data.value) {   
+                const token = useCookie('gymdaytoken', { expires: date}); // useCookie new hook in nuxt 3
                 token.value = data?.value?.cookie; // set token to cookie
+
+                
+                console.log(data.value)
                 this.authenticated = true; // set authenticated  state value to true
                 this.user = data?.value?.user; // set user state value to user
             }
@@ -63,7 +67,11 @@ const useAuthStore = defineStore({
 
             if (token === undefined) return;
 
-            const user = await $fetch(`${baseURL}/user/validate`, {
+
+            // set headers to include token
+            
+
+            const user = await useFetch(`${baseURL}/user/validate`, {
                 method: 'get',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
