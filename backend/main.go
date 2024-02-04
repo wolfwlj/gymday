@@ -20,7 +20,7 @@ func main() {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:5174", "http://localhost:3000", "http://10.0.2.2", "https://gymday.nl"},
+		AllowOrigins:     []string{"http://localhost:3000", "http://10.0.2.2", "https://gymday.nl", "https://www.gymday.nl"},
 		AllowMethods:     []string{"GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type", "X-Requested-With", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -35,6 +35,7 @@ func main() {
 
 	}
 	router.Run(":9090") //development
+	// router.Run() //production
 
 
 }

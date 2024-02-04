@@ -1,0 +1,17 @@
+runtime: go121
+
+# handlers:
+# - url: /fonts
+#   static_dir: fonts
+#   http_headers:
+#     Access-Control-Allow-Origin: "*"
+
+automatic_scaling:
+  min_instances: 1
+
+inbound_services:
+- warmup
+
+handlers:
+- url: /_ah/warmup
+  script: main.go
