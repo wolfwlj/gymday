@@ -45,6 +45,7 @@ const useAuthStore = defineStore({
                     httpOnly: true,
                     secure: true,
                     sameSite: 'none',
+                    path: '/',
                 }); // useCookie new hook in nuxt 3
 
                 token.value = data?.value?.cookie; // set token to cookie
