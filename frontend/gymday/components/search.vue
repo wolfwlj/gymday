@@ -10,7 +10,7 @@ const query = ref('')
 
 async function search() {
     if (query.value == '') {
-        const { data: listings } = await useFetch(`${baseURL}/user/listings`, {
+        const { data: listings } = await useFetch(`${baseURL}/user/listings/none`, {
             method: 'get',
             credentials: 'include',
         })

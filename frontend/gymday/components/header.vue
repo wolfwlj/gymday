@@ -31,6 +31,7 @@ const navigation = ref([
   { name: 'Zwemmen', to: '#', current: false },
   { name: 'Vechtsporten', to: '#', current: false },
   { name: 'Andere', to: '#', current: false },
+  
 ])
 
 const router = useRouter()
@@ -69,6 +70,13 @@ const { logoutuser } = useAuthStore()
 const logout = () => {
   logoutuser()
   router.push('/login')
+}
+
+function scrollleft() {
+  document.getElementById('scrollshizz').scrollLeft -= 1000
+}
+function scrollright() {
+  document.getElementById('scrollshizz').scrollLeft += 1000
 }
 
 </script>
@@ -182,14 +190,17 @@ const logout = () => {
           </Menu>
         </div>
       </div>
-      <nav class="relative hidden overflow-x-auto scroll-smooth no-scrollbar lg:space-x-3 lg:flex lg:py-2" aria-label="Global">
-        <div class="sticky left-2 cursor-pointer" @click="$event.target.parentElement.parentElement.scrollLeft -= 1000">
+      <nav class="w-[100%] relative hidden overflow-x-auto  lg:space-x-3 lg:flex lg:py-2 justify-evenly" aria-label="Global">
+        <div class="sticky left-2 cursor-pointer justify-self-start" @click="scrollleft">
           <ChevronLeftIcon class="h-8 w-8 text-gray-900" />
         </div>
-        <span v-for="item in navigation" :key="item.name"
+        <div id="scrollshizz" class="overflow-auto flex flex-nowrap scroll-smooth no-scrollbar">
+          <span v-for="item in navigation" :key="item.name"
           :class="[item.current ? 'bg-gray-200 text-gray-900' : 'text-gray-600 bg-gray-50 hover:bg-gray-100 hover:text-gray-900', 'inline-flex items-center rounded-md py-2 px-3 text-sm font-medium cursor-pointer']"
-          :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</span>
-        <div class="sticky right-2 cursor-pointer px-3" @click="$event.target.parentElement.parentElement.scrollLeft += 1000">
+          :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}
+          </span>
+        </div>
+        <div class="sticky right-2 cursor-pointer px-3 justify-self-end" @click="scrollright">
           <ChevronRightIcon class="h-8 w-8 text-gray-900" />
         </div>
       </nav>

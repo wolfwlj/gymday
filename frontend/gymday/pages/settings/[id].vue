@@ -100,7 +100,11 @@ await profileStore.getUser(param)
                         <div class="pt-6 sm:flex">
                             <dt class="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Bio</dt>
                             <dd class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div class="text-gray-900">{{ profileStore.user?.Bio }}</div>
+                                <div class="text-gray-900 max-w-[40vh]">
+                                    <p class="text-wrap overflow-hidden break-words truncate">
+                                        {{ profileStore.user?.Bio }}
+                                    </p>
+                                </div>
                             </dd>
                         </div>
                     </dl>

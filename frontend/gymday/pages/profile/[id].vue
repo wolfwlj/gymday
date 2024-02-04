@@ -20,10 +20,10 @@ await profileStore.getUser(param)
     <main class="flex flex-col w-full h-[90vh] pt-4">
         <div class="flex justify-center">
             <div class="flex space-x-8 w-[70%] max-h-[20vh]  ">
-                <div class="w-[20%]">
-                    <img v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
+                <div class="w-[20%] flex my-auto justify-center">
+                    <img v-if="profileStore.user?.ProfilePicture && profileStore.user?.ProfilePicture !== ''" class="h-48 w-48 rounded-lg" :src="profileStore.user?.ProfilePicture" alt="" />
                     <div v-else class="mx-auto w-fit">
-                        <UserIcon class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
+                        <UserIcon class="inline-block h-48 w-48 rounded-full text-gray-500/50" />
                     </div>
                 </div>
                 <div class="w-[80%] max-w-[80%]">
