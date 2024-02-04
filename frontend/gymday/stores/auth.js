@@ -42,9 +42,8 @@ const useAuthStore = defineStore({
             if (data.value) {
                 const token = useCookie('gymdaytoken', { 
                     expires: date,
-                    httpOnly: true,
+                    secure: true,
                     sameSite: 'none',
-                    path: '/',
                 }); // useCookie new hook in nuxt 3
 
                 token.value = data?.value?.cookie; // set token to cookie
