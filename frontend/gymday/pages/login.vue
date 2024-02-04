@@ -24,10 +24,29 @@ const form = ref({
 async function login() {
     await loginuser(form.value.Email, form.value.Password); // call authenticateUser and pass the user object
     // redirect to homepage if user is authenticated
+
+
+    
     if (authenticated) {
         router.push('/');
     };
 }
+// const authService = useAuthService()
+
+// async function login() {
+//     try {
+//         await authService.login(email.value, password.value)
+//         const user = await authService.getUser()
+//         console.log(user)
+//         store.setUser(user)
+//         router.push('/')
+//     } catch (e) {
+//         console.log(e)
+//     }
+// }
+
+
+
 </script>
 
 <template>

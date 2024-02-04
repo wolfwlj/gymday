@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gymday/initializers"
 	"gymday/models"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -15,13 +16,14 @@ import (
 func UserAuth(c *gin.Context) {
 
 	tokenString, err := c.Cookie("gymdaytoken")
-
+	log.Println(tokenString)
 	if err != nil {
 		if err == http.ErrNoCookie {
-
+			log.Println("No token")
 			c.AbortWithStatus(400)
 			return
 		}
+		log.Println("andere error met token")
 		c.AbortWithStatus(http.StatusForbidden)
 
 		return
@@ -47,7 +49,9 @@ func UserAuth(c *gin.Context) {
 		initializers.DB.First(&user, claims["sub"])
 
 		if user.ID == 0 {
+			log.Println("kan user niet vinden")
 			c.AbortWithStatus(http.StatusUnauthorized)
+
 		}
 
 		//attach to req

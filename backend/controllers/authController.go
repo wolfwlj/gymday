@@ -151,7 +151,7 @@ func Login(c *gin.Context) {
 	}
 
 	//Send a response with the user data
-	c.SetSameSite(http.SameSiteNoneMode)
+	c.SetSameSite(http.SameSiteLaxMode)
 	//secure flag moet true staan voor production, false zodat je het kan testen in postman
 
 	c.SetCookie("gymdaytoken", tokenString, 3600*24*30, "", "", true, true)
