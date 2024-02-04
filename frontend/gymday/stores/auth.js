@@ -43,7 +43,6 @@ const useAuthStore = defineStore({
                 const token = useCookie('gymdaytoken', { 
                     expires: date,
                     httpOnly: true,
-                    secure: true,
                     sameSite: 'none',
                     path: '/',
                 }); // useCookie new hook in nuxt 3
