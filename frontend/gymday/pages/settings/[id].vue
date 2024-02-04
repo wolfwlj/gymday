@@ -18,6 +18,9 @@ import editprofile from '~/components/profile/modals/editprofile.vue';
 import listingsprofile from '~/components/profile/listingsprofile.vue';
 import Galleryprofile from '~/components/profile/galleryprofile.vue';
 import Bookings from '~/components/booking/bookings.vue';
+import Calendar from '~/components/availability/Calendar.vue';
+
+
 const navigation = [
     { name: 'General', icon: UserCircleIcon },
     { name: 'Listings', icon: QueueListIcon },
@@ -113,7 +116,7 @@ await profileStore.getUser(param)
                 Betaling beheer
             </div>
             <div v-if="currentProfileTab === 'Mijn Beschikbaarheid'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                Beschikbaarheid
+                <Calendar />
             </div>
         </main>
     </div>

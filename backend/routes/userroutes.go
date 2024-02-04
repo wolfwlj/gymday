@@ -58,4 +58,9 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.POST("/manualbooking", middleware.UserAuth, controllers.ManualCreateBooking)
 	router.GET("/bookings", middleware.UserAuth, controllers.GetBookings)
 	router.PUT("/booking/:id", middleware.UserAuth, controllers.UpdateBooking)
+
+	// timeslot routers
+	router.POST("/timeslot", middleware.UserAuth, controllers.CreateTimeSlot)
+	router.GET("/timeslotsbyuserowner/:startdate/:enddate", middleware.UserAuth, controllers.GetTimeSlotsByUserOwner)
+	router.GET("/timeslotsbyuserclient/:startdate/:enddate", middleware.UserAuth, controllers.GetTimeSlotsByUserClient)
 }
