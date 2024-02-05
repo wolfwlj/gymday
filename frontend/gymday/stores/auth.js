@@ -67,17 +67,28 @@ const useAuthStore = defineStore({
             token.value = null; // set token to null
         },
 
-        async validate(token){
+        async validate(){
 
+            const authService = useAuthService()
+            try {
+                const user = await authService.getUser()
+                console.log(user)
 
-            const user = await $fetch(`${baseURL}/user/validate`, {
-                method: 'get',
-                headers: { 'Content-Type': 'application/json'},
-                credentials: 'include',
-            }).catch((error) => error.data)
+                this.authenticated = true
+                this.user = user.user
 
-            this.authenticated = true
-            this.user = user.user
+            } catch (e) {
+                console.log(e)
+            }
+
+            // const user = await $fetch(`${baseURL}/user/validate`, {
+            //     method: 'get',
+            //     headers: { 'Content-Type': 'application/json'},
+            //     credentials: 'include',
+            // }).catch((error) => error.data)
+
+            // this.authenticated = true
+            // this.user = user.user
 
         },
         async verifyEmail(token){

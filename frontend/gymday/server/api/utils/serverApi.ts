@@ -5,13 +5,11 @@ import Client from '../../../utils/client'
 export const serverApi = (event: H3Event) => {
   const { apiUrl } = useRuntimeConfig().public
 
-  const accessToken = getCookie(event, 'Authorization')
-  const refreshToken = getCookie(event, 'Refresh-Token')
+  const accessToken = getCookie(event, 'gymdaytoken')
 
   const client = new Client(apiUrl as string, {
     headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Refresh-Token': `Bearer ${refreshToken}`,
+      'Authorization': `${accessToken}`,
     } as HeadersInit
   })
 

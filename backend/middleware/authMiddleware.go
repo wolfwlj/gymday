@@ -17,16 +17,22 @@ func UserAuth(c *gin.Context) {
 
 	tokenString, err := c.Cookie("gymdaytoken")
 	log.Println(tokenString)
+	log.Println(c.GetHeader("Authorization"))
+
+	if tokenString == "" && c.GetHeader("Authorization") == "undefined"	{
+		log.Println("No token")
+		c.AbortWithStatus(400)
+		return
+	}
+
 	if err != nil {
-		if err == http.ErrNoCookie {
+		if c.GetHeader("Authorization") != "" || c.GetHeader("Authorization") != "undefined"{
+			tokenString = c.GetHeader("Authorization")
+		} else {
 			log.Println("No token")
 			c.AbortWithStatus(400)
 			return
 		}
-		log.Println("andere error met token")
-		c.AbortWithStatus(http.StatusForbidden)
-
-		return
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
