@@ -22,7 +22,7 @@ export default defineEventHandler (async event => {
     }
 
 
-    return { message: 'success' }
+    return { message: 'success', user: res._data.user }
 
   } catch (err) {
     throw createError('An error occurred while fetching the data.')

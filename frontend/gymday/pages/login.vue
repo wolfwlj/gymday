@@ -24,8 +24,6 @@ const form = ref({
 async function login() {
     await loginuser(form.value.Email, form.value.Password); // call authenticateUser and pass the user object
     // redirect to homepage if user is authenticated
-
-
     
     if (authenticated) {
         router.push('/');
@@ -35,10 +33,8 @@ async function login() {
 
 // async function login() {
 //     try {
-//         await authService.login(email.value, password.value)
-//         const user = await authService.getUser()
+//         const user = await authService.login(form.value.Email, form.value.Password)
 //         console.log(user)
-//         store.setUser(user)
 //         router.push('/')
 //     } catch (e) {
 //         console.log(e)

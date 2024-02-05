@@ -24,34 +24,40 @@ const useAuthStore = defineStore({
     },
     actions: {
         async loginuser(Email, Password) {
-            // fetchWithCookie(event, `${baseURL}/user/login`)
-            // const { data, pending } = await useAsyncData(() => postWithCookie(event, `${baseURL}/user/login`,{
-            //     Email : Email,
-            //     Password : Password,
-            // }))
-        
-            // // useFetch from nuxt 3
-            const { data, pending } = await useFetch(`${baseURL}/user/login`, {
-                method: 'post',
-                headers: useRequestHeaders(['cookie']),
-                body: {
-                    Email : Email,
-                    Password : Password,
-                },
-                credentials: 'include',
-            });
-            this.loading = pending;
-            let date = new Date();
-            // token expires in 2050 year
-            date.setFullYear(2050);
+            const authService = useAuthService()
+            try {
+                const user = await authService.login(Email, Password)
+                console.log(user)
 
-            if (data.value) {   
-                const token = useCookie('gymdaytoken', { expires: date}); // useCookie new hook in nuxt 3
-                token.value = data?.value?.cookie; // set token to cookie
-                console.log(data.value)
-                this.authenticated = true; // set authenticated  state value to true
-                this.user = data?.value?.user; // set user state value to user
+                this.authenticated = true
+                this.user = user.user
+
+            } catch (e) {
+                console.log(e)
             }
+            // useFetch from nuxt 3
+            // const { data, pending } = await useFetch(`${baseURL}/user/login`, {
+            //     method: 'post',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: {
+            //         Email : Email,
+            //         Password : Password,
+            //     },
+            // });
+            // this.loading = pending;
+            // let date = new Date();
+            // // token expires in 2050 year
+            // date.setFullYear(2050);
+
+            // if (data.value) {
+            //     const token = useCookie('gymdaytoken', { expires: date }); // useCookie new hook in nuxt 3
+            //     token.value = data?.value?.cookie; // set token to cookie
+            //     this.authenticated = true; // set authenticated  state value to true
+            //     this.user = data?.value?.user; // set user state value to user
+            // }
+
+
+            
         },
 
         async logoutuser() { // logout action
@@ -62,12 +68,12 @@ const useAuthStore = defineStore({
         },
 
         async validate(token){
-            const headers = useRequestHeaders(['cookie'])
 
-            // if (token === undefined) return;
-            // set headers to include token
-            const user = await useFetch(`${baseURL}/user/validate`, {
-                headers
+
+            const user = await $fetch(`${baseURL}/user/validate`, {
+                method: 'get',
+                headers: { 'Content-Type': 'application/json'},
+                credentials: 'include',
             }).catch((error) => error.data)
 
             this.authenticated = true
