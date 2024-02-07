@@ -68,10 +68,10 @@ func UpdateUser(c *gin.Context) {
 	
 		randomfilename := uuid.New().String()
 		extension := filepath.Ext(file.Filename)
-		prefix := "https://gymdayfilestore.s3.eu-central-1.amazonaws.com/"
+		prefix := "https://storage.googleapis.com/tapsaveevents.appspot.com/imagestore/"
 		fullfilename = prefix + randomfilename + extension
 
-		result := utils.UploadImage(blobFile, randomfilename + extension)
+		result := utils.UploadImage(blobFile, randomfilename, extension)
 	
 		if result != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{

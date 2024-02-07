@@ -100,7 +100,7 @@ const useProfileStore = defineStore({
         const profileService = useProfileService()
 
         try {
-          const result = await profileService.addListing(title, city, tags, description, price, location, images, privatelisting)
+          const result = await profileService.addListing(title, city, tags, description, price, location, images, images.length, privatelisting)
           console.log(result.success)
           await this.getlistings()
           this.isAddListingOpen = false

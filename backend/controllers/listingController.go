@@ -50,6 +50,8 @@ func CreateListing(c *gin.Context) {
 
 	Tags := strings.SplitN(body.Tags, ",", -1)
 
+	log.Println(body.ImageAmount)
+
 	for _, tag := range Tags {
 		var listingTag models.ListingTag
 		listingTag.ListingID = listing.ID
@@ -61,6 +63,7 @@ func CreateListing(c *gin.Context) {
 		var fullfilename string = ""
 		file, err := c.FormFile("file" + fmt.Sprint(i))
 		if err != nil {
+			log.Println(err)
 			log.Println("no file found")
 		} else {
 			blobFile, err := file.Open()
@@ -72,10 +75,10 @@ func CreateListing(c *gin.Context) {
 			}
 			randomfilename := uuid.New().String()
 			extension := filepath.Ext(file.Filename)
-			prefix := "https://gymdayfilestore.s3.eu-central-1.amazonaws.com/"
+			prefix := "https://storage.googleapis.com/tapsaveevents.appspot.com/imagestore/"
 			fullfilename = prefix + randomfilename + extension
 	
-			result := utils.UploadImage(blobFile, randomfilename + extension)
+			result := utils.UploadImage(blobFile, randomfilename, extension)
 		
 			if result != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
@@ -153,7 +156,9 @@ func UpdateListing(c *gin.Context) {
 		initializers.DB.Create(&listingTag)
 	}
 
-	for i := 1; i <= 5; i++ {
+	for i := 1; i <= len(body.Images); i++ {
+		log.Println("kanker1")
+		log.Println(body.Images[i-1].ImageURL)
 		var fullfilename string = ""
 		file, err := c.FormFile("file" + fmt.Sprint(i))
 		if err != nil {
@@ -168,10 +173,12 @@ func UpdateListing(c *gin.Context) {
 			}
 			randomfilename := uuid.New().String()
 			extension := filepath.Ext(file.Filename)
-			prefix := "https://gymdayfilestore.s3.eu-central-1.amazonaws.com/"
+			prefix := "https://storage.googleapis.com/tapsaveevents.appspot.com/imagestore/"
 			fullfilename = prefix + randomfilename + extension
 	
-			result := utils.UploadImage(blobFile, randomfilename + extension)
+			log.Println(fullfilename)
+
+			result := utils.UploadImage(blobFile, randomfilename, extension)
 		
 			if result != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{

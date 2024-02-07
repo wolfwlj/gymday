@@ -90,7 +90,7 @@ export const useProfileService = () => {
 
     // const result = await profileService.addListing(title, city, tags, description, price, location, images, privatelisting)
 
-    async function addListing(title : string, city : string, tags : string, description : string, price : string, location : string, images : File[], privatelisting : boolean){
+    async function addListing(title : string, city : string, tags : string, description : string, price : string, location : string, images : File[], imageamount : number,privatelisting : boolean){
         let form = new FormData()
         form.append('Title', title)
         form.append('City', city)
@@ -99,9 +99,10 @@ export const useProfileService = () => {
         form.append('Price', price)
         form.append('Location', location)
         form.append('PrivateListing', privatelisting.toString())
+        form.append('ImageAmount', imageamount.toString())
         for (let i = 0; i < images.length; i++) {
-            form.append('name', 'file')
-            form.append('file', images[i])
+            form.append(`name${i+1}`, `file${i+1}`);
+            form.append(`file${i+1}`,  images[i]); 
         }
 
         try {

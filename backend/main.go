@@ -34,8 +34,8 @@ func main() {
 		routes.WarmupRoutes(v1.Group("/_ah"))
 
 	}
-	// router.Run(":9090") //development
-	router.Run() //production
+	router.Run(":9090") //development
+	// router.Run() //production
 
 
 }
