@@ -123,6 +123,10 @@ const onSubmit = () => {
 
                 <UButton type="submit" block label="Opslaan">
                 </UButton>
+
+                <!-- delete listing -->
+                <UButton color="red" block label="Verwijderen" @click="profileStore.deleteListing(profileStore.selectedListing.Id)">
+                </UButton>
             </UForm>
         </UCard>
     </UModal>

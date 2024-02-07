@@ -16,34 +16,62 @@ const useListingStore = defineStore({
     },
     actions: {
         async getListingReviews(listingid) {
-            const {data, error } = await useFetch(`${baseURL}/user/reviews/${listingid}`, {
-                method: 'get',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-            })
-            if (data.value) {
-                this.reviews = data.value.reviews
+
+            const listingService = useListingService()
+
+            try {
+                const result = await listingService.getListingReviews(listingid)
+                console.log(result.reviews)
+
+                this.reviews = result.reviews
             }
-            return data.value.reviews
+            catch (e) {
+                console.log(e)
+            }
+
+
+            // const {data, error } = await useFetch(`${baseURL}/user/reviews/${listingid}`, {
+            //     method: 'get',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     credentials: 'include',
+            // })
+            // if (data.value) {
+            //     this.reviews = data.value.reviews
+            // }
+            // return data.value.reviews
         },
 
         async submitReview(listingid, rating, review) {
-            const {data, error} = await useFetch(`${baseURL}/user/review`, {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    Body : review,
-                    Rating : rating,
-                    ListingID : listingid,
 
-                },
-                credentials: 'include',
-            })
-            if (data.value) {
+            const listingService = useListingService()
+
+            try {
+                const result = await listingService.createReview(listingid, rating, review)
+
+                console.log(result)
                 await this.getListingReviews(listingid)
-            } else {
-                console.log(error)
             }
+            catch (e) {
+                console.log(e)
+            }
+
+
+            // const {data, error} = await useFetch(`${baseURL}/user/review`, {
+            //     method: 'post',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: {
+            //         Body : review,
+            //         Rating : rating,
+            //         ListingID : listingid,
+
+            //     },
+            //     credentials: 'include',
+            // })
+            // if (data.value) {
+            //     await this.getListingReviews(listingid)
+            // } else {
+            //     console.log(error)
+            // }
         },
     },
 

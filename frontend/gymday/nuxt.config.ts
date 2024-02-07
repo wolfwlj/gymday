@@ -24,7 +24,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiUrl: 'http://localhost:9090/api/v1',
+      // apiUrl: 'http://localhost:9090/api/v1',
+      // apiUrl: 'https://gymday-production.up.railway.app/api/v1',
+      apiUrl: 'https://horeca-370718.ew.r.appspot.com/api/v1'
     }
   },
 })

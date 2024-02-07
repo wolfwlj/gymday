@@ -15,6 +15,7 @@ import (
 )
 
 func CreateListing(c *gin.Context) {
+    println(string(c.Request.Header.Get("Content-Type")))
 
 	var body struct {
 		ImageAmount int
@@ -31,6 +32,7 @@ func CreateListing(c *gin.Context) {
 	userID := user.(models.User).ID
 
 	c.Bind(&body)
+	log.Println(c.Request.MultipartForm)
 
 	realprice, _ := decimal.NewFromString(body.Price)
 
@@ -221,7 +223,7 @@ func DeleteListing(c *gin.Context) {
 	// todo
 
 	c.JSON(http.StatusOK, gin.H{
-		"listing": listing,
+		"succes": "listing deleted",
 	})
 
 }

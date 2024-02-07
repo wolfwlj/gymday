@@ -17,15 +17,22 @@ func SuperUser(c *gin.Context) {
 
 	tokenString, err := c.Cookie("gymdaytoken")
 	log.Println(tokenString)
-	if err != nil {
-		if err == http.ErrNoCookie {
+	log.Println(c.GetHeader("Authorization"))
 
+	if tokenString == "" && c.GetHeader("Authorization") == "undefined"	{
+		log.Println("No token")
+		c.AbortWithStatus(400)
+		return
+	}
+
+	if err != nil {
+		if c.GetHeader("Authorization") != "" || c.GetHeader("Authorization") != "undefined"{
+			tokenString = c.GetHeader("Authorization")
+		} else {
+			log.Println("No token")
 			c.AbortWithStatus(400)
 			return
 		}
-		c.AbortWithStatus(http.StatusForbidden)
-
-		return
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

@@ -35,29 +35,6 @@ const useAuthStore = defineStore({
             } catch (e) {
                 console.log(e)
             }
-            // useFetch from nuxt 3
-            // const { data, pending } = await useFetch(`${baseURL}/user/login`, {
-            //     method: 'post',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: {
-            //         Email : Email,
-            //         Password : Password,
-            //     },
-            // });
-            // this.loading = pending;
-            // let date = new Date();
-            // // token expires in 2050 year
-            // date.setFullYear(2050);
-
-            // if (data.value) {
-            //     const token = useCookie('gymdaytoken', { expires: date }); // useCookie new hook in nuxt 3
-            //     token.value = data?.value?.cookie; // set token to cookie
-            //     this.authenticated = true; // set authenticated  state value to true
-            //     this.user = data?.value?.user; // set user state value to user
-            // }
-
-
-            
         },
 
         async logoutuser() { // logout action
@@ -80,34 +57,19 @@ const useAuthStore = defineStore({
             } catch (e) {
                 console.log(e)
             }
-
-            // const user = await $fetch(`${baseURL}/user/validate`, {
-            //     method: 'get',
-            //     headers: { 'Content-Type': 'application/json'},
-            //     credentials: 'include',
-            // }).catch((error) => error.data)
-
-            // this.authenticated = true
-            // this.user = user.user
-
         },
         async verifyEmail(token){
-                
-                if (token === undefined) return;
-    
-                const result = await $fetch(`${baseURL}/user/verifyemail`, {
-                    method: 'post',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: {
-                        Token : token
-                    },
-                }).catch((error) => error.data)
+            const authService = useAuthService()
+            try {
+                const user = await authService.verifyEmail(token)
+                console.log(user)
 
-                if (result.status === 200) {
-                    this.emailverified = true
-                }
-            },
+                this.emailverified = true
+            } catch (e) {
+                console.log(e)
+            }
+
+        },
     },
 })
 
