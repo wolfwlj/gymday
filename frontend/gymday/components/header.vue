@@ -258,7 +258,7 @@ function scrollright() {
           <DisclosureButton class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
               <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
                   <NuxtLink :to="`/settings/${authstore.user?.ID}`">
-                    Settings
+                    Instellingen
                   </NuxtLink>
               </div>
           </DisclosureButton>
