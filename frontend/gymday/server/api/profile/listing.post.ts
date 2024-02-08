@@ -20,6 +20,8 @@ export default defineEventHandler (async event => {
         }
     })
 
+    console.log(formData)
+
     try {
         // Do the actual request to the external API
         const res = await api.raw('/user/listing', 'POST', {

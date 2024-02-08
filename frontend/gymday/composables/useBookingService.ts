@@ -69,9 +69,7 @@ export const useBookingService = () => {
                 },
                 method: 'PUT'
             })
-
             return response
-
         } catch(err) {
             return Promise.reject(err)
         }

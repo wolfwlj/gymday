@@ -38,10 +38,19 @@ const useAuthStore = defineStore({
         },
 
         async logoutuser() { // logout action
-            const token = useCookie('gymdaytoken'); // useCookie new hook in nuxt 3
-            this.authenticated = false; // set authenticated  state value to false
-            this.user = null; // set user state value to null
-            token.value = null; // set token to null
+
+            const authService = useAuthService()
+
+            try {
+                const user = await authService.logout() // call logout method from auth service
+                console.log(user)
+
+                this.authenticated = false; // set authenticated  state value to false
+                this.user = null; // set user state value to null
+
+            } catch (e) {
+                console.log(e)
+            }
         },
 
         async validate(){

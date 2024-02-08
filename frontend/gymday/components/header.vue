@@ -118,7 +118,7 @@ function scrollright() {
             <button class="font-semibold text-sm hover:bg-gray-50 py-2 px-2 rounded">Post een Listing</button>
           </NuxtLink>
 
-          <div class="flex space-x-3" v-show="!authstore.user">
+          <div class="flex space-x-3" v-show="!authstore.authenticated">
             <UButton
               size="sm"
               class="text-black bg-transparent hover:bg-gray-50"
@@ -140,7 +140,7 @@ function scrollright() {
           </div>
 
           <!-- Profile dropdown -->
-          <Menu as="div" class="relative ml-4 flex-shrink-0" v-show="authstore.user">
+          <Menu as="div" class="relative ml-4 flex-shrink-0" v-show="authstore.authenticated">
             <div>
               <MenuButton
                 class="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
@@ -213,7 +213,7 @@ function scrollright() {
           :aria-current="item.current ? 'page' : undefined" @click="setFilter(item.name)">{{ item.name }}</DisclosureButton>
       </div>
 
-      <div class="flex space-x-3 justify-end" v-show="!authstore.user">
+      <div class="flex space-x-3 justify-end" v-if="!authstore.authenticated">
         <UButton
           size="sm"
           class="text-black bg-transparent hover:bg-gray-50"
@@ -234,21 +234,53 @@ function scrollright() {
         />
       </div>
 
-      <div class="border-t border-gray-200 pb-3 pt-4" v-show="authstore.user">
+      <div class="border-t border-gray-200 pb-3 pt-4" v-if="authstore.authenticated">
         <div class="flex items-center px-4">
           <div class="flex-shrink-0">
             <img v-if="authstore.user?.ProfilePicture && authstore.user.ProfilePicture !== ''" class="h-10 w-10 rounded-full" :src="authstore.user.ProfilePicture" alt="" />
             <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
           </div>
           <div class="ml-3">
-            <div class="text-base font-medium text-gray-800">{{ user.name }}</div>
-            <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
+            <div class="text-base font-medium text-gray-800">{{ authstore.user.Name }}</div>
+            <div class="text-sm font-medium text-gray-500">{{ authstore.user.Email }}</div>
           </div>
         </div>
         <div class="mt-3 space-y-1 px-2">
-          <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href"
-            class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">{{
-              item.name }}</DisclosureButton>
+          <DisclosureButton class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
+              <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
+                <NuxtLink :to="`/profile/${authstore.user?.ID}`">
+                  Profiel
+                </NuxtLink>
+              </div>
+          </DisclosureButton>
+
+
+          <DisclosureButton class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
+              <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
+                  <NuxtLink :to="`/settings/${authstore.user?.ID}`">
+                    Settings
+                  </NuxtLink>
+              </div>
+          </DisclosureButton>
+
+
+          <DisclosureButton v-show="authstore.user?.Tier == 999" class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
+              <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
+                <NuxtLink :to="`/verification/dashboard`">
+                    Dash
+                </NuxtLink>
+              </div>
+          </DisclosureButton>
+
+          <DisclosureButton  class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
+              <div div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
+                  <NuxtLink v-on:click="logout()">
+                      Uitloggen
+                  </NuxtLink>
+              </div>
+          </DisclosureButton>
+
+          
         </div>
       </div>
     </DisclosurePanel>
