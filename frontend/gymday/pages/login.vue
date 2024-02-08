@@ -23,23 +23,11 @@ const form = ref({
 
 async function login() {
     await loginuser(form.value.Email, form.value.Password); // call authenticateUser and pass the user object
-    // redirect to homepage if user is authenticated
     
     if (authenticated) {
         router.push('/');
     };
 }
-// const authService = useAuthService()
-
-// async function login() {
-//     try {
-//         const user = await authService.login(form.value.Email, form.value.Password)
-//         console.log(user)
-//         router.push('/')
-//     } catch (e) {
-//         console.log(e)
-//     }
-// }
 
 
 
@@ -48,7 +36,7 @@ async function login() {
 <template>
     <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md flex justify-between">
-            <h2 class="mt-6 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account
+            <h2 class="mt-6 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Login op jouw account
             </h2>
             <NuxtLink :to="`/`" >
                 <button class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GymDay</button>
@@ -59,7 +47,7 @@ async function login() {
             <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
                 <form class="space-y-6" @submit.prevent="login(form)">
                     <div>
-                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email Adres </label>
                         <div class="mt-2">
                             <input v-model="form.Email" id="email" name="email" type="email" autocomplete="email"
                                 required=""
@@ -68,7 +56,7 @@ async function login() {
                     </div>
 
                     <div>
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Wachtword</label>
                         <div class="mt-2 relative">
                             <input v-model="form.Password" :type="togglePassword ? 'text' : 'password'" id="password"
                                 name="password" autocomplete="current-password" required=""
@@ -80,13 +68,13 @@ async function login() {
                     </div>
 
                     <div class="text-sm leading-6 w-fit ms-auto">
-                        <a href="#" class="font-semibold text-green-600 hover:text-green-500">Forgot password?</a>
+                        <a href="#" class="font-semibold text-green-600 hover:text-green-500">Wachtwoord vergeten?</a>
                     </div>
 
                     <div>
-                        <button type="submit"
-                            class="flex w-full justify-center rounded-md bg-green-500 px-3 p-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Sign
-                            in</button>
+                        <button type="submit" class="flex w-full justify-center rounded-md bg-green-500 px-3 p-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                            Inloggen
+                        </button>
                     </div>
                 </form>
 
@@ -96,14 +84,14 @@ async function login() {
                             <div class="w-full border-t border-gray-200" />
                         </div>
                         <div class="relative flex justify-center text-sm font-medium leading-6">
-                            <span class="bg-white px-6 text-gray-900">Or</span>
+                            <span class="bg-white px-6 text-gray-900">Of</span>
                         </div>
                     </div>
 
                     <div>
                         <NuxtLink :to="`/register`"
                             class="flex w-full justify-center rounded-md bg-slate-300 px-3 p-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-300">
-                            Create Account</NuxtLink>
+                            Account maken</NuxtLink>
                     </div>
                 </div>
             </div>
