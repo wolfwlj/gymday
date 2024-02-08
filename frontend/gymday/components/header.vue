@@ -19,18 +19,19 @@ const authstore = useAuthStore()
 // })
 
 const navigation = ref([
-  { name: 'Bodybuilding', to: '#', current: false },
-  { name: 'Crossfit', to: '#', current: false },
-  { name: 'Calisthenics', to: '#', current: false },
-  { name: 'Yoga', to: '#', current: false },
-  { name: 'Cardio', to: '#', current: false },
-  { name: 'Fitness', to: '#', current: false },
-  { name: 'Powerlifting', to: '#', current: false },
-  { name: 'Powerbuilding', to: '#', current: false },
-  { name: 'Strongman', to: '#', current: false },
-  { name: 'Zwemmen', to: '#', current: false },
-  { name: 'Vechtsporten', to: '#', current: false },
-  { name: 'Andere', to: '#', current: false },
+  { name: 'Bodybuilding', current: false },
+  { name: 'Crossfit', current: false },
+  { name: 'Padel', current: false },
+  { name: 'Calisthenics', current: false },
+  { name: 'Yoga', current: false },
+  { name: 'Cardio', current: false },
+  { name: 'Fitness', current: false },
+  { name: 'Powerlifting', current: false },
+  { name: 'Powerbuilding', current: false },
+  { name: 'Strongman', current: false },
+  { name: 'Zwemmen', current: false },
+  { name: 'Vechtsporten', current: false },
+  { name: 'Andere', current: false },
   
 ])
 
@@ -58,12 +59,6 @@ async function setFilter(filter) {
   listingstore.listings = listings.value.listings
   router.push('../');
 } 
-
-const userNavigation = [
-  { name: 'Your Profile', to: '#' },
-  { name: 'Settings', to: '#' },
-  { name: 'Sign out', to: '#' },
-]
 
 const { logoutuser } = useAuthStore()
 
@@ -167,7 +162,7 @@ function scrollright() {
                 <MenuItem>
                     <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
                       <NuxtLink :to="`/settings/${authstore.user?.ID}`">
-                        Settings
+                        Instellingen
                       </NuxtLink>
                     </div>
                 </MenuItem>
@@ -254,7 +249,6 @@ function scrollright() {
               </div>
           </DisclosureButton>
 
-
           <DisclosureButton class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
               <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
                   <NuxtLink :to="`/settings/${authstore.user?.ID}`">
@@ -262,7 +256,6 @@ function scrollright() {
                   </NuxtLink>
               </div>
           </DisclosureButton>
-
 
           <DisclosureButton v-show="authstore.user?.Tier == 999" class="block rounded-md px-3 py-2 text-base font-medium cursor-pointer text-gray-500 hover:bg-gray-50 hover:text-gray-900">
               <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
