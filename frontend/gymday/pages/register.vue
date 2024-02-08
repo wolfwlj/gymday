@@ -4,6 +4,14 @@ import { ref, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 import useAuthStore from '../stores/auth'
 
+
+useSeoMeta({
+    title: 'Registreer',
+    ogTitle: 'Registreer - GymDay',
+    description: 'Registreer een account op GymDay',
+    ogDescription: 'Registreer een account op GymDay', 
+})
+
 definePageMeta({
     layout: 'guest',
 });

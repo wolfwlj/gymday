@@ -4,9 +4,24 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import useAuthStore from '../stores/auth'
 
+useSeoMeta({
+    title: 'Login',
+    ogTitle: 'Login - GymDay',
+    description: 'Login op jouw GymDay account',
+    ogDescription: 'Login op jouw GymDay account', 
+})
+
+
+
+
 definePageMeta({
     layout: 'guest',
 });
+
+
+
+
+
 
 const { loginuser } = useAuthStore(); // use authenticateUser action from  auth store
 

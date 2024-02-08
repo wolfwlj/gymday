@@ -1,7 +1,14 @@
 <script setup>
 import { baseURL } from '../api';
-// import  useAuthStore  from './stores/auth'; // import the auth store we just created
-// const authstore = useAuthStore()
+
+useSeoMeta({
+    title: 'Homepagina',
+    ogTitle: 'Homepagina - GymDay',
+    description: 'Vind hier de perfecte personal trainer voor jouw!',
+    ogDescription: 'Vind hier de perfecte personal trainer voor jouw!', 
+})
+
+
 </script>
 
 <template>
