@@ -18,7 +18,7 @@ listingstore.listings = listings.value.listings
         <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
             <h2 class="sr-only">Listings</h2>
 
-            <div class="-mx-px grid grid-cols-2 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+            <div class="-mx-px grid sm:grid-cols-1 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
                 <div v-for="listing in listingstore.listings" :key="listing.ID"
                     class="group relative border-b border-r border-gray-200 p-4 sm:p-6">
                     <NuxtLink :to="`listing/${listing.ID}`">
