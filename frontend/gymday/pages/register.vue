@@ -4,6 +4,14 @@ import { ref, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 import useAuthStore from '../stores/auth'
 
+
+useSeoMeta({
+    title: 'Registreer',
+    ogTitle: 'Registreer - GymDay',
+    description: 'Registreer een account op GymDay',
+    ogDescription: 'Registreer een account op GymDay', 
+})
+
 definePageMeta({
     layout: 'guest',
 });
@@ -46,7 +54,7 @@ async function signup() {
 
     if (form.Password !== form.PasswordConfirmation) {
         errorCheck.value = true;
-        errors.push('Password is verplicht!');
+        errors.push('Wachtwoord is verplicht!');
     }
 
     if (errorCheck.value) return;
@@ -73,7 +81,7 @@ async function signup() {
 <template>
     <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md flex justify-between">
-            <h2 class="mt-6 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Create Account</h2>
+            <h2 class="mt-6 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Creeër een account</h2>
             <NuxtLink :to="`/`" >
                 <button class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GymDay</button>
             </NuxtLink>
@@ -85,7 +93,7 @@ async function signup() {
                     <div class="flex">
                         <div class="ml-3 w-full">
                             <div class="flex justify-between">
-                                <h3 class="text-sm font-medium text-red-800">There were {{ Object.keys(errors).length }} errors with your submission</h3>
+                                <h3 class="text-sm font-medium text-red-800">Er zijn {{ Object.keys(errors).length }} met jouw invoer.</h3>
                                 <UIcon name="i-heroicons-x-mark" @click="errorCheck = false" class="cursor-pointer" />
                             </div>
 
@@ -105,18 +113,18 @@ async function signup() {
                 <form class="space-y-6" @submit.prevent="signup()">
                     <div class="flex justify-between">
                         <div>
-                            <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First
-                                Name</label>
+                            <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">
+                                Voornaam
+                            </label>
                             <div class="mt-2">
                                 <input v-model="form.First_Name" id="first_name" name="first_name" type="text"
-                                    autocomplete="given-name"
+                                    autocomplete=""
                                     class="block w-full rounded-md border-0 p-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6" />
                             </div>
                         </div>
 
                         <div>
-                            <label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last
-                                Name</label>
+                            <label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Achternaam</label>
                             <div class="mt-2">
                                 <input v-model="form.Last_Name" id="last_name" name="last_name" type="text"
                                     autocomplete="family-name"
@@ -126,7 +134,7 @@ async function signup() {
                     </div>
 
                     <div>
-                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email Address</label>
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email Adres</label>
                         <div class="mt-2">
                             <input v-model="form.Email" id="email" name="email" type="email" autocomplete="email"
                                 class="block w-full rounded-md border-0 p-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6" />
@@ -134,8 +142,8 @@ async function signup() {
                     </div>
 
                     <div>
-                        <label for="phone_number" class="block text-sm font-medium leading-6 text-gray-900">Telephone
-                            Number</label>
+                        <label for="phone_number" class="block text-sm font-medium leading-6 text-gray-900">Telefoon    
+                            nummer</label>
                         <div class="mt-2">
                             <input v-model="form.Phone_Number" id="phone_number" name="phone_number" type="tel"
                                 autocomplete="tel"
@@ -144,7 +152,7 @@ async function signup() {
                     </div>
 
                     <div>
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Wachtwoord</label>
                         <div class="mt-2 relative">
                             <input v-model="form.Password" :type="togglePassword ? 'text' : 'password'" id="password"
                                 name="password" autocomplete="current-password"
@@ -156,8 +164,8 @@ async function signup() {
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="block text-sm font-medium leading-6 text-gray-900">Confirm
-                            Password</label>
+                        <label for="password_confirmation" class="block text-sm font-medium leading-6 text-gray-900">
+                            Wachtwoord herhalen</label>
                         <div class="mt-2 relative">
                             <input v-model="form.PasswordConfirmation" type="password" id="password_confirmation"
                                 name="password_confirmation" autocomplete="current-password"
@@ -167,8 +175,7 @@ async function signup() {
 
                     <div>
                         <button type="submit"
-                            class="flex w-full justify-center rounded-md bg-green-500 px-3 p-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Create
-                            Account</button>
+                            class="flex w-full justify-center rounded-md bg-green-500 px-3 p-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Creeër Account</button>
                     </div>
                 </form>
 
@@ -178,14 +185,14 @@ async function signup() {
                             <div class="w-full border-t border-gray-200" />
                         </div>
                         <div class="relative flex justify-center text-sm font-medium leading-6">
-                            <span class="bg-white px-6 text-gray-900">Or</span>
+                            <span class="bg-white px-6 text-gray-900">Of</span>
                         </div>
                     </div>
 
                     <div>
                         <NuxtLink :to="`/login`"
                             class="flex w-full justify-center rounded-md bg-slate-300 px-3 p-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-300">
-                            Sign In</NuxtLink>
+                            Inloggen</NuxtLink>
                     </div>
                 </div>
             </div>
