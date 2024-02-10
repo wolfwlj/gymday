@@ -1,1 +1,3 @@
 ./backend/.aws/
+./frontend/nuxt.config.ts
+./frontend/api.js
