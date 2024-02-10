@@ -7,6 +7,7 @@ const tags = [
     'Bodybuilding',
     'Crossfit',
     'Calisthenics',
+    'Padel',
     'Yoga',
     'Cardio',
     'Fitness',

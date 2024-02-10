@@ -11,16 +11,9 @@ useSeoMeta({
     ogDescription: 'Login op jouw GymDay account', 
 })
 
-
-
-
 definePageMeta({
     layout: 'guest',
 });
-
-
-
-
 
 
 const { loginuser } = useAuthStore(); // use authenticateUser action from  auth store
