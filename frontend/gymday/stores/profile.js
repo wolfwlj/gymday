@@ -19,8 +19,10 @@ const useProfileStore = defineStore({
       images: [""],
       private: true,
     },
+
     user: null,
     selectedListing: null,
+    images_to_be_deleted: [],
     profilelistings: [],
     profileimages: [],
   }),
@@ -40,14 +42,6 @@ const useProfileStore = defineStore({
 
 
     async updateProfile() {
-      // update user
-      // let bodydata = new FormData();
-
-      // bodydata.append("name", "file");
-      // bodydata.append("file", this.user.ProfilePicture);
-      // bodydata.append("FirstName", this.user.FirstName);
-      // bodydata.append("LastName", this.user.LastName);
-      // bodydata.append("Bio", this.user.Bio);
 
       const profileService = useProfileService()
 
@@ -61,44 +55,14 @@ const useProfileStore = defineStore({
         console.log(e)
       }
 
-      // const { data, pending } = await useFetch(
-      //   `${baseURL}/user/user`,
-      //   {
-      //     method: "put",
-      //     body: {
-      //       FirstName: this.user.FirstName,
-      //       LastName: this.user.LastName,
-      //       Bio: this.user.Bio,
-      //       ProfilePicture: this.user.ProfilePicture,
-      //     },
-      //     credentials: "include",
-      //   }
-      // );
-      // this.loading = pending;
-      // if (data.value) {
-      //   await this.getUser(this.user.ID);
-      // }
     },
 
 
     async addListing(title, city, tags, description, price, location, images, privatelisting) {
-        // let dataForm = new FormData()
-
-        // for (let i = 0; i < images.length; i++) {
-        //     dataForm.append(`name${i+1}`, `file${i+1}`);
-        //     dataForm.append(`file${i+1}`,  images[i]); 
-        // }
-        // dataForm.append('ImageAmount', images.length)
-        // dataForm.append('Title', title)
-        // dataForm.append('Tags', tags)
-        // dataForm.append('City', city)
-        // dataForm.append('Description', description)
-        // dataForm.append('Price', price)
-        // dataForm.append('Location', location)
-        // dataForm.append('Private', privatelisting)
 
         const profileService = useProfileService()
 
+        console.log(tags)
         try {
           const result = await profileService.addListing(title, city, tags, description, price, location, images, images.length, privatelisting)
           console.log(result.success)
@@ -107,29 +71,6 @@ const useProfileStore = defineStore({
         } catch (e) {
           console.log(e)
         }
-
-        // const { data, pending, error} = await useFetch(`${baseURL}/user/listing`, {
-        //     method: 'post',
-        //     body: dataForm,
-        //     credentials: 'include',
-        // });
-        // this.loading = pending;
-        // if (data.value) {
-        //     this.addListingState = {
-        //         title: "",
-        //         tags: [],
-        //         description: "",
-        //         price: 0,
-        //         location: "",
-        //         city: "",
-        //         province: "",
-        //         country: "",
-        //         images: [""],
-        //         private: true,
-        //     }
-        //     await this.getlistings()
-        //     this.isAddListingOpen = false
-        // }
     },
     async getlistings() {
         const profileService = useProfileService()
@@ -144,16 +85,8 @@ const useProfileStore = defineStore({
 
     },
 
-    async editListing(
-      title,
-      city,
-      tags,
-      description,
-      price,
-      location,
-      images,
-      privatelisting
-    ) {
+    async editListing(title, city, tags, description, price, location, images, images_to_delete, privatelisting) {
+
       let dataForm = new FormData();
 
       for (let i = 0; i < images.length; i++) {
@@ -161,7 +94,8 @@ const useProfileStore = defineStore({
         dataForm.append(`file${i + 1}`, images[i]);
       }
 
-      dataForm.append("ImageAmount", images.length);
+      console.log(images_to_delete)
+
       dataForm.append("Title", title);
       dataForm.append("Tags", tags);
       dataForm.append("City", city);
@@ -169,28 +103,29 @@ const useProfileStore = defineStore({
       dataForm.append("Price", price);
       dataForm.append("Location", location);
       dataForm.append("Private", privatelisting);
+      dataForm.append("ImagesToBeDeleted", images_to_delete);
+      dataForm.append("ImageAmount", images.length);
 
-      const { data, pending, error } = await useFetch(
-        `${baseURL}/user/listing/${this.selectedListing.ID}`,
-        {
-          method: "put",
+      try {
+        const response = await $fetch(`/api/profile/listing?id=${this.selectedListing.ID}`, {
+          headers: useRequestHeaders(['cookies']),
           body: dataForm,
-          credentials: "include",
-        }
-      );
-      this.loading = pending;
-
-      if (data.value) {
+          method: 'PUT'
+        })
+        console.log(response)
         await this.getlistings();
         this.isEditListingOpen = false;
+      } catch (e) {
+        console.log(e)
       }
+
     },
 
     async deleteListing() {
+
         const profileService = useProfileService()
 
         try {
-
             const result = await profileService.deleteListing(this.selectedListing.ID)
             console.log(result.success)
             await this.getlistings()
@@ -200,51 +135,6 @@ const useProfileStore = defineStore({
         }
 
     },
-
-    // async getProfileImages() {
-    //   const { data, pending } = await useFetch(
-    //     `${baseURL}/user/profileimages/${this.user.ID}`,
-    //     {
-    //       method: "get",
-    //       headers: { "Content-Type": "application/json" },
-    //       credentials: "include",
-    //     }
-    //   );
-    //   this.loading = pending;
-    //   if (data.value) {
-    //     this.profileimages = data.value.profileImages;
-    //   }
-    // },
-
-    // async uploadProfileImage() {
-    //   const { data, pending } = await useFetch(
-    //     `${baseURL}/user/profileimages/${this.user.ID}`,
-    //     {
-    //       method: "post",
-    //       headers: { "Content-Type": "application/json" },
-    //       credentials: "include",
-    //     }
-    //   );
-    //   this.loading = pending;
-    //   if (data.value) {
-    //     this.profileimages = data.value.images;
-    //   }
-    // },
-
-    // async deleteProfileImage() {
-    //   const { data, pending } = await useFetch(
-    //     `${baseURL}/user/profileimages/${this.user.ID}`,
-    //     {
-    //       method: "delete",
-    //       headers: { "Content-Type": "application/json" },
-    //       credentials: "include",
-    //     }
-    //   );
-    //   this.loading = pending;
-    //   if (data.value) {
-    //     this.profileimages = data.value.images;
-    //   }
-    // },
   },
 });
 

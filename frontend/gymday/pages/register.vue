@@ -21,7 +21,7 @@ const { loginuser } = useAuthStore(); // use authenticateUser action from  auth 
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
 const router = useRouter();
-
+ 
 const togglePassword = ref(false);
 
 let errors = reactive([]);

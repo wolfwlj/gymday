@@ -12,6 +12,7 @@ import (
 	"github.com/google/uuid"
 	"fmt"
 	"strings"
+	"strconv"
 )
 
 func CreateListing(c *gin.Context) {
@@ -111,7 +112,8 @@ func UpdateListing(c *gin.Context) {
 		Location    string
 		City        string
 		Private     bool
-		Images      []models.ListingImage
+		ImageAmount int
+		ImagesToBeDeleted string
 		Tags		string
 	}
 	
@@ -156,9 +158,16 @@ func UpdateListing(c *gin.Context) {
 		initializers.DB.Create(&listingTag)
 	}
 
-	for i := 1; i <= len(body.Images); i++ {
-		log.Println("kanker1")
-		log.Println(body.Images[i-1].ImageURL)
+	log.Println("dsasadas", body.ImagesToBeDeleted)
+	to_be_deleted := strings.SplitN(body.ImagesToBeDeleted, ",", -1)
+
+	for _, imageID := range to_be_deleted {
+		int_imageID, _ := strconv.Atoi(imageID)
+		initializers.DB.Where("id = ?", int_imageID).Delete(&models.ListingImage{})
+	}
+
+
+	for i := 1; i <= body.ImageAmount; i++ {
 		var fullfilename string = ""
 		file, err := c.FormFile("file" + fmt.Sprint(i))
 		if err != nil {
@@ -187,15 +196,18 @@ func UpdateListing(c *gin.Context) {
 				return
 			}
 		}
-
 		var listingImage models.ListingImage
-		initializers.DB.Where("listing_id = ? AND image_nr = ?", id, i).First(&listingImage)
-
+		// initializers.DB.Where("listing_id = ? AND image_nr = ?", id, i).First(&listingImage)
 		if listingImage.ImageURL != fullfilename {
 			listingImage.ImageURL = fullfilename
+			listingImage.ListingID = listing.ID
+			listingImage.ImageNR = 3
 			initializers.DB.Save(&listingImage)
 		}
 	}	
+
+
+
 
 	initializers.DB.Save(&listing)
 
