@@ -206,9 +206,6 @@ func UpdateListing(c *gin.Context) {
 		}
 	}	
 
-
-
-
 	initializers.DB.Save(&listing)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -250,6 +247,7 @@ func DeleteListing(c *gin.Context) {
 func GetListings(c *gin.Context) {
 
 	var listings []models.Listing
+
 	tag := c.Param("tag")
 
 	// base query
@@ -258,8 +256,12 @@ func GetListings(c *gin.Context) {
 	if tag != "none" {
 		query = query.Joins("JOIN listing_tags on listing_tags.listing_id = listings.id AND listing_tags.name = ?", tag)
 	}	
-	// order by created_at
-	query = query.Order("created_at desc")
+	// count amount of reviews and calculate average rating
+	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
+
+	// order by a combination of the amount of reviews and the average rating
+	query = query.Order("amount_of_reviews desc, average_rating desc")
+	
 
 	// execute query and check for errors
     if err := query.Find(&listings).Error; err != nil {
