@@ -98,6 +98,10 @@ const booking = ref({
     Time: '',
 })
 
+function convertTohighestRating(rating) {
+    return Math.round(rating)
+}
+
 </script>
 
 <template>
@@ -168,13 +172,13 @@ const booking = ref({
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">
                         <div class="flex items-center">
-                            <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"
-                                :class="[reviews.average > rating ? 'text-gray-900' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
+                            <StarIcon v-for="rating in [1, 2, 3, 4, 5]" :key="rating"
+                                :class="[convertTohighestRating(listing.listing.AverageRating) >= rating ? 'text-gray-900' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
                                 aria-hidden="true" />
                         </div>
-                        <p class="sr-only">{{ reviews.average }} out of 5 stars</p>
+                        <p class="sr-only">{{ convertTohighestRating(listing.listing.AverageRating)}} out of 5 stars</p>
                         <a :href="reviews.href" class="ml-3 text-sm font-medium text-green-600 hover:text-green-500">{{
-                            reviews.totalCount }} reviews</a>
+                            listing.listing.AmountOfReviews  }} reviews</a>
                     </div>
                 </div>
 

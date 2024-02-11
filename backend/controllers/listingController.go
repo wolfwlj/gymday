@@ -258,10 +258,8 @@ func GetListings(c *gin.Context) {
 	}	
 	// count amount of reviews and calculate average rating
 	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
-
 	// order by a combination of the amount of reviews and the average rating
 	query = query.Order("amount_of_reviews desc, average_rating desc")
-	
 
 	// execute query and check for errors
     if err := query.Find(&listings).Error; err != nil {
@@ -281,8 +279,20 @@ func GetListingsByUser(c *gin.Context) {
 		
 	userID := c.Param("id")
 	var listings []models.Listing
+	query := initializers.DB.Preload("Images").Preload("Tags")
+	// .Where("user_id = ?", userID).Order("created_at desc").Find(&listings)
+	query = query.Where("user_id = ?", userID)
+	// get reviews
+	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
 
-	initializers.DB.Preload("Images").Preload("Tags").Where("user_id = ?", userID).Order("created_at desc").Find(&listings)
+	// order 
+	query = query.Order("created_at desc")
+	
+	if err := query.Find(&listings).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "No listings found or there is an error.",
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,
@@ -292,11 +302,20 @@ func GetListingsByUser(c *gin.Context) {
 
 func GetListingsBySearch(c *gin.Context) {
 
-	query := c.Param("query")
+	searchquery := c.Param("query")
 
 	var listings []models.Listing
-	
-	initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Tags").Preload("Images").Where("concat(city, country, province, title, users.first_name) like ?", "%"+query+"%").Find(&listings)
+
+	query := initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Tags").Preload("Images").Where("concat(listings.city, listings.country, listings.province, listings.title, users.first_name) like ?", "%"+searchquery+"%")
+	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
+	query = query.Order("amount_of_reviews desc, average_rating desc")
+
+	// initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Tags").Preload("Images").Where("concat(city, country, province, title, users.first_name) like ?", "%"+searchquery+"%").Find(&listings)
+	if err := query.Find(&listings).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "No listings found or there is an error.",
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"listings": listings,
@@ -309,8 +328,17 @@ func GetListing(c *gin.Context) {
 	id := c.Param("id")
 
 	var listing models.Listing
+	query := initializers.DB.Preload("User").Preload("Tags").Preload("Images").Preload("Reviews.User")
+	// initializers.DB.Preload("User").Preload("Tags").Preload("Images").Preload("Reviews.User").First(&listing, id)
 
-	initializers.DB.Preload("User").Preload("Tags").Preload("Images").Preload("Reviews.User").First(&listing, id)
+	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
+	query = query.Where("listings.id = ?", id)
+
+	if err := query.First(&listing).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "No listing found or there is an error.",
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"listing": listing,

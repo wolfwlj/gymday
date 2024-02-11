@@ -2,15 +2,22 @@
 import useProfileStore from '~/stores/profile';
 import Addlisting from './modals/addlisting.vue';
 import Editlisting from './modals/editlisting.vue';
+import useAuthStore from '~/stores/auth';
+
+const route = useRoute()
 const profileStore = useProfileStore();
 await profileStore.getlistings()
+const authstore = useAuthStore()
+const param = route.params.id
+
+const isUser = authstore.user?.ID === parseInt(param)
 
 </script>
 
 <template>
     <!-- sort of header -->
     <div class="">
-        <UButton @click="profileStore.isAddListingOpen = true">Listing toevoegen</UButton>
+        <UButton v-if="isUser" @click="profileStore.isAddListingOpen = true">Listing toevoegen</UButton>
         <Addlisting v-if="profileStore.isAddListingOpen" />
     </div>
     <Editlisting v-if="profileStore.isEditListingOpen" />
@@ -36,7 +43,7 @@ await profileStore.getlistings()
                     </div>
                 </div>
             </NuxtLink>
-            <UButton @click="profileStore.selectedListing = listing, profileStore.isEditListingOpen = true">Listing aanpassen</UButton>
+            <UButton v-if="isUser" @click="profileStore.selectedListing = listing, profileStore.isEditListingOpen = true">Listing aanpassen</UButton>
         </div>
     </div>
 </template>
