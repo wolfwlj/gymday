@@ -252,12 +252,13 @@ func GetListings(c *gin.Context) {
 
 	// base query
 	query := initializers.DB.Preload("User").Preload("Tags").Preload("Images")
-	// add tag to query
-	if tag != "none" {
-		query = query.Joins("JOIN listing_tags on listing_tags.listing_id = listings.id AND listing_tags.name = ?", tag)
-	}	
 	// count amount of reviews and calculate average rating
-	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
+	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating")
+	if tag != "none" {
+		// add tag to query
+		query = query.Joins("INNER join listing_tags on listing_tags.listing_id = listings.id AND listing_tags.deleted_at IS NULL AND listing_tags.name = ?", tag)
+	}
+	query = query.Joins("LEFT join reviews on reviews.listing_id = listings.id").Group("listings.id")
 	// order by a combination of the amount of reviews and the average rating
 	query = query.Order("amount_of_reviews desc, average_rating desc")
 
@@ -284,7 +285,6 @@ func GetListingsByUser(c *gin.Context) {
 	query = query.Where("user_id = ?", userID)
 	// get reviews
 	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
-
 	// order 
 	query = query.Order("created_at desc")
 	
@@ -307,7 +307,7 @@ func GetListingsBySearch(c *gin.Context) {
 	var listings []models.Listing
 
 	query := initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Tags").Preload("Images").Where("concat(listings.city, listings.country, listings.province, listings.title, users.first_name) like ?", "%"+searchquery+"%")
-	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
+	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("inner join reviews on reviews.listing_id = listings.id").Group("listings.id")
 	query = query.Order("amount_of_reviews desc, average_rating desc")
 
 	// initializers.DB.Joins("left join users on users.id = listings.user_id").Preload("User").Preload("Tags").Preload("Images").Where("concat(city, country, province, title, users.first_name) like ?", "%"+searchquery+"%").Find(&listings)
