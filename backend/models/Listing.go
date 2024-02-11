@@ -23,5 +23,8 @@ type Listing struct {
 	Reviews []Review 
 	UserID uint 
 	User User `gorm:"foreignKey:UserID"`
-	
+	// De velden hieronder worden niet als kolommen naar de database geschreven
+	// maar worden gebruikt om de data van de listing te manipuleren
+	AmountOfReviews int 
+	AverageRating float64 
 }
