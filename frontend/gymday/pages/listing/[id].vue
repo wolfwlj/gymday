@@ -20,7 +20,7 @@ import ListingReviews from '~/components/listing/listingreviews.vue'
 import { baseURL } from '../../api'
 import useListingStore from '~/stores/listingstore'
 import useAuthStore from '~/stores/auth'
-import imagemodal from '~/components/listing/imagemodal.vue'
+import imagemodal from '~/components/listing/modals/imagemodal.vue'
 import useBookingStore from '~/stores/booking'
 const hover = ref(1)
 // const days = [

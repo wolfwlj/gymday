@@ -33,7 +33,7 @@ function formatDate(date) {
 
 <template>
 
-    <div class="flex justify-center align-middle item-center">
+    <div class="flex justify-center align-middle item-center ">
         <div class="flex flex-col w-[90%]">
             <div class=" w-full">
                 <div class="flow-root">
@@ -49,7 +49,7 @@ function formatDate(date) {
                     </div>
                     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                        <table class="min-w-full divide-y divide-gray-300">
+                        <table class="min-w-full divide-y divide-gray-300 overflow-auto max-h-[60vh]">
                             <thead>
                             <tr>
                                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
@@ -60,7 +60,7 @@ function formatDate(date) {
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">Actie <span class="sr-only">Open</span></th>
                             </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
+                            <tbody class="divide-y divide-gray-200 bg-white ">
                             <tr v-for="booking in bookingStore.bookings" :key="booking.ID">
                                 <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                                     <div class="flex items-center">

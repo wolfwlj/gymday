@@ -118,7 +118,7 @@ function scrollright() {
               size="sm"
               class="text-black bg-transparent hover:bg-gray-50"
               variant="solid"
-              label="Register"
+              label="Registreren"
               :trailing="false"
               :to="`/register`"
             />
@@ -128,7 +128,7 @@ function scrollright() {
               size="sm"
               class="text-black bg-transparent hover:bg-gray-50"
               variant="solid"
-              label="Login"
+              label="Inloggen"
               :trailing="false"
               :to="`/login`"
             />
@@ -161,7 +161,7 @@ function scrollright() {
                 </MenuItem>
                 <MenuItem>
                     <div class="w-full py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-left ps-5 cursor-pointer">
-                      <NuxtLink :to="`/settings/${authstore.user?.ID}`">
+                      <NuxtLink :to="`/settings`">
                         Instellingen
                       </NuxtLink>
                     </div>

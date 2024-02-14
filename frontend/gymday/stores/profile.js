@@ -48,7 +48,7 @@ const useProfileStore = defineStore({
       try {
         console.log(this.user.ProfilePicture)
         const result = await profileService.updateProfile(this.user.FirstName, this.user.LastName, this.user.Bio, this.user.ProfilePicture)
-        console.log(result.success)
+        console.log(result)
         await this.getUser(this.user.ID)
         this.isEditProfileOpen = false
       } catch (e) {
@@ -65,8 +65,21 @@ const useProfileStore = defineStore({
         console.log(tags)
         try {
           const result = await profileService.addListing(title, city, tags, description, price, location, images, images.length, privatelisting)
-          console.log(result.success)
+          console.log(result)
           await this.getlistings()
+
+          this.addListingState = {
+            title: "",
+            tags: [],
+            description: "",
+            price: 0,
+            location: "",
+            city: "",
+            images: [""],
+            private: true,
+          }
+          
+
           this.isAddListingOpen = false
         } catch (e) {
           console.log(e)

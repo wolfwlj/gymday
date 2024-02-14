@@ -3,7 +3,7 @@ import useAuthStore  from '../../stores/auth'; // import the auth store we just 
 import useProfileStore from '../../stores/profile'
 import { UserIcon } from '@heroicons/vue/20/solid'
 import editprofile from '~/components/profile/modals/editprofile.vue';
-import listingsprofile from '~/components/profile/listingsprofile.vue';
+import publiclistingsprofile from '~/components/listing/publiclistingsprofile.vue';
 import Galleryprofile from '~/components/profile/galleryprofile.vue';
 
 const profileStore = useProfileStore()
@@ -29,7 +29,6 @@ await profileStore.getUser(param)
                 <div class="w-[80%] max-w-[80%]">
                     <div class="flex space-x-2 mb-2">
                         <h2 class="text-2xl font-semibold cursor-pointer">{{profileStore.user?.FirstName}} {{profileStore.user?.LastName}}</h2>
-                        <UButton v-if="isUser" @click="profileStore.isEditProfileOpen = true">Profiel bewerken</UButton>
 
                         <editprofile v-if="profileStore.isEditProfileOpen" />
                     </div>
@@ -41,23 +40,19 @@ await profileStore.getUser(param)
         </div>
 
         <div class="flex justify-center min-h-[70%] mt-4 ">
-            <div class="flex w-[70%] border-solid border-t">
-                <div class="text-gray-500 p-4 w-[20%] m-h-full border-solid border-r">
-                    <ul class="space-y-2 text-lg">
-                        <li><a @click="currentProfileTab = 1" :class="currentProfileTab == 1 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-4 cursor-pointer">Listings</a></li>
-                        <li><a @click="currentProfileTab = 2" :class="currentProfileTab == 2 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-4 cursor-pointer">Producten</a></li>
-                        <li><a @click="currentProfileTab = 3" :class="currentProfileTab == 3 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-4 cursor-pointer">Foto Galerij</a></li>
+            <div class="flex w-[70%] border-solid border-t flex-col">
+                <div class="text-gray-500 p-2 w-[100%] m-h-full flex justify-center">
+                    <ul class=" text-lg flex space-x-4  justify-between">
+                        <li><a @click="currentProfileTab = 1" :class="currentProfileTab == 1 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-[6px] cursor-pointer">Advertensies</a></li>
+                        <li><a @click="currentProfileTab = 2" :class="currentProfileTab == 2 ? 'underline'  : null" class="block hover:text-gray-400 hover:underline underline-offset-[6px] cursor-pointer">Recensies</a></li>
                     </ul>
                 </div>
                 <div class="p-4 w-[80%]">
                     <div v-if="currentProfileTab == 1" >
-                        <listingsprofile />
+                        <publiclistingsprofile />
                     </div>
                     <div v-if="currentProfileTab == 2" >
-                        producten
-                    </div>
-                    <div v-if="currentProfileTab == 3" >
-                        <Galleryprofile />
+                        Recensies
                     </div>
                 </div>
             </div>
