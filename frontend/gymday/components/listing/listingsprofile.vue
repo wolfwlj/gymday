@@ -4,30 +4,24 @@ import Addlisting from './modals/addlisting.vue';
 import Editlisting from './modals/editlisting.vue';
 import useAuthStore from '~/stores/auth';
 
-const route = useRoute()
 const profileStore = useProfileStore();
 await profileStore.getlistings()
 const authstore = useAuthStore()
-const param = route.params.id
-
-const isUser = authstore.user?.ID === parseInt(param)
 
 </script>
 
 <template>
     <!-- sort of header -->
     <div class="">
-        <UButton v-if="isUser" @click="profileStore.isAddListingOpen = true">Listing toevoegen</UButton>
+        <UButton  @click="profileStore.isAddListingOpen = true">Listing toevoegen</UButton>
         <Addlisting v-if="profileStore.isAddListingOpen" />
     </div>
     <Editlisting v-if="profileStore.isEditListingOpen" />
     
-    
-    
     <div v-if="profileStore.profilelistings.length == 0">
         <p>geen listings gevonden..</p>
     </div>
-    <div v-else class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+    <div v-else class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 overflow-auto max-h-[60vh]">
         <div v-for="listing in profileStore.profilelistings" :key="listing.ID" class="group relative">
             <NuxtLink :to="`../listing/${listing.ID}`">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden  bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-40 rounded">
@@ -43,7 +37,8 @@ const isUser = authstore.user?.ID === parseInt(param)
                     </div>
                 </div>
             </NuxtLink>
-            <UButton v-if="isUser" @click="profileStore.selectedListing = listing, profileStore.isEditListingOpen = true">Listing aanpassen</UButton>
+            <UButton  @click="profileStore.selectedListing = listing, profileStore.isEditListingOpen = true">Listing aanpassen</UButton>
+
         </div>
     </div>
 </template>

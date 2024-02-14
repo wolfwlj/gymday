@@ -284,7 +284,7 @@ func GetListingsByUser(c *gin.Context) {
 	// .Where("user_id = ?", userID).Order("created_at desc").Find(&listings)
 	query = query.Where("user_id = ?", userID)
 	// get reviews
-	query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
+	// query = query.Select("listings.*, count(reviews.id) as amount_of_reviews, avg(reviews.rating) as average_rating").Joins("left join reviews on reviews.listing_id = listings.id").Group("listings.id")
 	// order 
 	query = query.Order("created_at desc")
 	
