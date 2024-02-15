@@ -3,7 +3,7 @@ import { serverApi } from '../utils/serverApi'
 
 export default defineEventHandler (async event => {
     const api = serverApi(event)
-    const { title, startdate, enddate } = await readBody(event)
+    const { title, startdate, starttime, endtime } = await readBody(event)
 
     try {
 
@@ -12,7 +12,8 @@ export default defineEventHandler (async event => {
         body: {
             Title : title,
             StartDate : startdate,
-            EndDate : enddate
+            StartTime : starttime,
+            EndTime : endtime
         }
         })
 

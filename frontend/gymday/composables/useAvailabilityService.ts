@@ -14,7 +14,7 @@ export const useAvailabilityService = () => {
         }
     }
 
-    async function createTimeSlot(title : string, startdate : string, enddate : string){
+    async function createTimeSlot(title : string, startdate : string, starttime : string, endtime : string){
         try {
             // Get the current authenticated user
             // useRequestHeaders(['cookies']) will send the httpOnly cookies to the nitro server
@@ -23,7 +23,8 @@ export const useAvailabilityService = () => {
                 body: {
                     title,
                     startdate,
-                    enddate
+                    starttime,
+                    endtime
                 },
                 method: 'POST'
             })

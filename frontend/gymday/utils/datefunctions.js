@@ -163,6 +163,9 @@ export function GetCurrentWeekDayDateNumber(date){
     let currentDate = new Date(date);
     let day = currentDate.getDate();
     return day;
-
-
+}
+// change 2024-02-15 15:33 to 15:33
+export function GetTime(date){
+    let time = date.split(" ")[1];
+    return time;
 }
