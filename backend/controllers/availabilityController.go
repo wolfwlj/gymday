@@ -16,10 +16,14 @@ func CreateTimeSlot(c *gin.Context) {
 	var body struct {
 		Title   string
 		StartDate   string
-		EndDate   string
+		StartTime   string
+		EndTime   string
 	}
 	
 	c.Bind(&body)
+
+	combinedStartDate := body.StartDate + " " + body.StartTime
+	combinedEndDate := body.StartDate + " " + body.EndTime
 
 	user, _ := c.Get("user")
 	log.Println(user)
@@ -30,8 +34,8 @@ func CreateTimeSlot(c *gin.Context) {
 
 	timeslot = models.Timeslot{
 		Title:       body.Title,
-		StartDate: body.StartDate,
-		EndDate: body.EndDate,
+		StartDate: combinedStartDate,
+		EndDate: combinedEndDate,
 		Available: true,
 		OwnerID: userID,
 	}

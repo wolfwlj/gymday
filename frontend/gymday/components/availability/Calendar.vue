@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, EllipsisHorizontalIcon } from '@heroicons/vue/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { GetMondayOfWeek, GetSundayOfWeek, GetCurrentWeekNumber, GetYear, GetMonth, GetDayOfWeek, GetMinuteCount, RetrieveTimestamp, GetWeekDates, GetCurrentWeekDayDateNumber } from "../../utils/datefunctions";
+import { GetTime, GetMondayOfWeek, GetSundayOfWeek, GetCurrentWeekNumber, GetYear, GetMonth, GetDayOfWeek, GetMinuteCount, RetrieveTimestamp, GetWeekDates, GetCurrentWeekDayDateNumber } from "../../utils/datefunctions";
 import useAvailabilityStore from "../../stores/availability";
 import CreateTimeSlotModal from "./CreateTimeSlotModal.vue";
 
@@ -193,8 +193,6 @@ function CalcTimeToCalendarPosition(start){
     return calculatedstartminutes
 }   
 
-
-
 </script>
 
 <template>
@@ -235,12 +233,12 @@ function CalcTimeToCalendarPosition(start){
                     <MenuItems class="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div class="py-1">
                         <MenuItem v-slot="{ active }">
-                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">Voeg Beschikbaarheid toe</a>
+                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']" @click="availabilityStore.createTimeSlotModal = true">Voeg Beschikbaarheid toe</a>
                         </MenuItem>
                         </div>
                         <div class="py-1">
                         <MenuItem v-slot="{ active }">
-                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">Go to today</a>
+                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']" v-on:click="GoToToday()">Go to today</a>
                         </MenuItem>
                         </div>
                     </MenuItems>
@@ -249,51 +247,29 @@ function CalcTimeToCalendarPosition(start){
             </div>
         </header>
         <div ref="container" class="isolate flex flex-auto flex-col overflow-auto bg-white h-[70vh]">
-            <div style="width: 165%" class="flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full">
+            <div style="width: 165%" class="flex max-w-full flex-none flex-col ">
                 <div ref="containerNav" class="sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8">
-                    <div class="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden " v-for="weekday, i in weekdays">
-                        <template v-if="availabilityStore.dateobject.weekdates[i] == availabilityStore.dateobject.dayNumber && availabilityStore.dateobject.weeknumber == availabilityStore.dateobject.currentWeekNumber">
-                            <button type="button" class="flex flex-col items-center pb-3 pt-2">
-                            
-                            <span class="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
-                                {{ availabilityStore.dateobject.weekdates[i] }}
-                            </span>
-                        </button>
-                        </template>
-                        <template v-else>
-                            
-                            <button type="button" class="flex flex-col items-center pb-3 pt-2">
-                                {{ weekday }} 
-                                <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-green-600 font-semibold text-white">
-                                    {{ availabilityStore.dateobject.weekdates[i] }}
-                                </span>
-                            </button>
-                        </template>
-                    </div>
-
                     <div class="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
-
                     </div>
         
-                    <div  class="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
+                    <div class="-mr-px  grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 grid">
                         <div class="col-end-1 w-14" />
                         <div v-for="weekday, i in weekdays">
-                            <div class="flex items-center justify-center py-3">
-                            <span v-if="availabilityStore.dateobject.weekdates[i] == availabilityStore.dateobject.dayNumber && availabilityStore.dateobject.weeknumber == availabilityStore.dateobject.currentWeekNumber" class="flex items-baseline">
-                                {{ weekday }} 
-
-                                <span class="ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-green-600 font-semibold text-white" >
-                                    {{ availabilityStore.dateobject.weekdates[i] }}
+                            <div class="flex items-center justify-center py-3 ">
+                                <span class="flex flex-col justify-center align-middle sm:flex-row sm:space-x-2 sm:space-y-0 space-y-1 items-baseline"  v-if="availabilityStore.dateobject.weekdates[i] == availabilityStore.dateobject.dayNumber && availabilityStore.dateobject.weeknumber == availabilityStore.dateobject.currentWeekNumber" >
+                                    <p class="mx-auto">
+                                        {{ weekday }} 
+                                    </p>
+                                    <span class="ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-green-600 font-semibold text-white" >
+                                        {{ availabilityStore.dateobject.weekdates[i] }}
+                                    </span>
+                                    
                                 </span>
-                                
-                            </span>
-                            <span v-else>
-                                {{ weekday }}  
-                                <span class="items-center justify-center font-semibold text-gray-900">{{ availabilityStore.dateobject.weekdates[i] }}</span>
-                            
-                            </span>
-                        </div>
-
+                                <span v-else class="flex flex-col sm:flex-row sm:space-x-2 sm:space-y-0 space-y-1">
+                                    <p>{{ weekday }}</p>
+                                    <span class="items-center justify-center font-semibold text-gray-900">{{ availabilityStore.dateobject.weekdates[i] }}</span>
+                                </span>
+                            </div>
                         </div>
 
                     </div>
@@ -304,19 +280,17 @@ function CalcTimeToCalendarPosition(start){
                         <!-- Horizontal lines -->
                         <div class="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100" style="grid-template-rows: repeat(48, minmax(3.5rem, 1fr))">
                             <div ref="containerOffset" class="row-end-1 h-7" />
-
                             <template v-for="i in 24">
                                 <div >
                                     <div  class="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">{{ i -1 }}:00</div>
                                 </div>
                                 <div />
                             </template>
-
                             <div />
                         </div>
             
                         <!-- Vertical lines -->
-                        <div class="col-start-1 col-end-2 row-start-1 hidden grid-cols-7 grid-rows-1 divide-x divide-gray-100 sm:grid sm:grid-cols-7">
+                        <div class="col-start-1 col-end-2 row-start-1 hidden grid-cols-7 grid-rows-1 divide-x divide-gray-100  sm:grid-cols-7">
                             <div class="col-start-1 row-span-full" />
                             <div class="col-start-2 row-span-full" />
                             <div class="col-start-3 row-span-full" />
@@ -328,8 +302,7 @@ function CalcTimeToCalendarPosition(start){
                         </div>
             
                         <!-- Events -->
-                        <ol class="col-start-1 col-end-2 row-start-1 grid grid-cols-1 sm:grid-cols-7 sm:pr-8" style="grid-template-rows: 1.75rem repeat(288, minmax(0, 1fr)) auto">
-
+                        <ol class="col-start-1 col-end-2 row-start-1 grid grid-cols-7 sm:pr-8" style="grid-template-rows: 1.75rem repeat(288, minmax(0, 1fr)) auto">
                             <li class="relative mt-px flex sm:col-start-3" style="grid-row: 92 / span 30">
                             <a href="#" class="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-green-50 p-2 text-xs leading-5 hover:bg-green-100">
                                 <p class="order-1 font-semibold text-green-700">Flight to Paris</p>
@@ -338,45 +311,21 @@ function CalcTimeToCalendarPosition(start){
                                 </p>
                             </a>
                             </li>
-
-
                             <template v-for="timeslot in availabilityStore.timeslots">
 
-                                <li :class="`sm:col-start-${GetDayOfWeek(timeslot.StartDate)}`" class="relative mt-px flex " :style="`grid-row: ${CalcTimeToCalendarPosition(timeslot.StartDate)} / span ${CalcTimeToCalendarHeight(timeslot.StartDate, timeslot.EndDate)}`">
+                                <li :class="`col-start-${GetDayOfWeek(timeslot.StartDate)}`" class="relative mt-px flex " :style="`grid-row: ${CalcTimeToCalendarPosition(timeslot.StartDate)} / span ${CalcTimeToCalendarHeight(timeslot.StartDate, timeslot.EndDate)}`">
                                     <a href="#" class="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-green-50 p-2 text-xs leading-5 hover:bg-green-100">
                                         <p class="order-1 font-semibold text-gray-700">Beschikbaar tijdvak</p>
                                         <p class="text-gray-500 group-hover:text-gray-700">
-                                            <time datetime="">7:30 AM</time>
+                                            <time datetime="">{{GetTime(timeslot.StartDate)}}</time>
                                         </p>
                                     </a>
                                 </li>
-
-
-
-
                             </template>
- 
-
                         </ol>
-
-
-
-                        <!-- <ol v-for="weekday, i in weekdays" class="col-start-1 col-end-2 row-start-1 grid grid-cols-1 sm:grid-cols-7 sm:pr-8" style="grid-template-rows: 1.75rem repeat(288, minmax(0, 1fr)) auto">
-
-                                <p>{{i}}</p>
-                                <template v-for="timeslot in availabilityStore.timeslots">
-
-                                    <p>asdas</p>
-                                </template>
-
-                        </ol> -->
-
-
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-  </template>
-  
+</template>

@@ -6,7 +6,7 @@ const authstore = useAuthStore();
 </script>
 
 <template>
-    <div class="px-[20px] sm:px-[40px] lg:px-[64px] ">
+    <div class="px-[10px] sm:px-[40px] lg:px-[64px] ">
         <Header />
 
         <div>
