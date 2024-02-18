@@ -45,7 +45,7 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.GET("/trainer/:id", controllers.GetTrainer)
 	router.POST("/trainer", middleware.UserAuth, controllers.CreateTrainer)
 	router.PUT("/trainer/:id", middleware.UserAuth, controllers.UpdateTrainer)
-	router.DELETE("/trainer/:id", middleware.UserAuth, controllers.DeleteTrainer)	
+	router.DELETE("/trainer/:id", middleware.UserAuth, controllers.DeleteTrainer)
 
 	// verification routers
 	router.GET("/verificationrequest/:id", controllers.GetVerificationRequest)
@@ -63,4 +63,6 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.POST("/timeslot", middleware.UserAuth, controllers.CreateTimeSlot)
 	router.GET("/timeslotsbyuserowner/:startdate/:enddate", middleware.UserAuth, controllers.GetTimeSlotsByUserOwner)
 	router.GET("/timeslotsbyuserclient/:startdate/:enddate", middleware.UserAuth, controllers.GetTimeSlotsByUserClient)
+	router.PUT("/timeslot/:id", middleware.UserAuth, controllers.UpdateTimeSlot)
+	router.DELETE("/timeslot/:id", middleware.UserAuth, controllers.DeleteTimeSlot)
 }

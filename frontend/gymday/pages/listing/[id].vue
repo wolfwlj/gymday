@@ -102,59 +102,82 @@ function convertTohighestRating(rating) {
     return Math.round(rating)
 }
 
+console.log(listing)
+
 </script>
 
 <template>
     <imagemodal v-if="listingstore.imageModal" />
     <div class="pt-6">
-        <div class="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 rounded-lg"
-            :class="listing.listing.Images.length > 1 ? '' : 'bg-gray-50'">
-            <div class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg"
-                :class="listing.listing.Images.length > 1 ? 'col-start-1' : 'col-start-2'">
-                <img :src="listing.listing.Images[0].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
-            </div>
-            <div v-if="listing.listing.Images.length === 2"
-                class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-                <img :src="listing.listing.Images[1].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
-            </div>
-            <div v-if="[3, 4, 5].includes(listing.listing.Images.length)" class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                    <img :src="listing.listing.Images[1].ImageURL" alt="Model wearing plain black basic tee."
-                        class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
+        <div :class="listing.listing.Images.length > 1 ? '' : 'bg-gray-50'">
+            <!-- <div v-if="listing.listing.Images.length == 3" class="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8 rounded-lg">
+                <div class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg" :class="listing.listing.Images.length > 1 ? 'col-start-1' : 'col-start-2'">
+                    <img :src="listing.listing.Images[0].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
+                </div>
+            </div> -->
+
+            <div class="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl  lg:gap-x-8 lg:px-8 rounded-lg" :class="listing.listing.Images.length == 3 ? 'grid-cols-5' : 'grid-cols-3'" >
+                <div class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg col-start-2 col-span-2" v-if="listing.listing.Images.length == 3">
+                    <img :src="listing.listing.Images[0].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
                 </div>
 
-                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                    <img :src="listing.listing.Images[2].ImageURL" alt="Model wearing plain gray basic tee."
-                        class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[2].ImageURL, listingstore.imageModal = true">
+                <div v-else class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg" :class="listing.listing.Images.length > 1 ? 'col-start-1' : 'col-start-2'">
+                    <img :src="listing.listing.Images[0].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[0].ImageURL, listingstore.imageModal = true">
                 </div>
-            </div>
-            <div v-if="listing.listing.Images.length === 4"
-                class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-                <img :src="listing.listing.Images[3].ImageURL" alt="Model wearing plain gray basic tee."
-                    class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
-            </div>
-            <div v-if="listing.listing.Images.length >= 5" class="relative hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                    <img :src="listing.listing.Images[3].ImageURL"
-                        alt="Model wearing plain black basic tee." class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
+                <div v-if="listing.listing.Images.length === 2" class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+                    <img :src="listing.listing.Images[1].ImageURL" alt="" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
                 </div>
-                <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                    <img :src="listing.listing.Images[4].ImageURL"
-                        alt="Model wearing plain gray basic tee." class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[4].ImageURL, listingstore.imageModal = true">
+
+                <div v-if="listing.listing.Images.length == 3" class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8 col-start-4">
+                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                        <img :src="listing.listing.Images[1].ImageURL" 
+                            class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
+                    </div>
+
+                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                        <img :src="listing.listing.Images[2].ImageURL" 
+                            class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[2].ImageURL, listingstore.imageModal = true">
+                    </div>
                 </div>
-                <div class="absolute bottom-5 right-5">
-                    <UButton
-                        icon="i-heroicons-view-columns"
-                        size="sm"
-                        color="black"
-                        variant="solid"
-                        @click="listingstore.imageModal = true, listingstore.selectedimg = listing.listing.Images"
-                        label="Alle foto's tonen"
-                        :trailing="false"
-                    />
+
+                <div v-if="[4, 5].includes(listing.listing.Images.length)" class="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                        <img :src="listing.listing.Images[1].ImageURL" 
+                            class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[1].ImageURL, listingstore.imageModal = true">
+                    </div>
+
+                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                        <img :src="listing.listing.Images[2].ImageURL" 
+                            class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[2].ImageURL, listingstore.imageModal = true">
+                    </div>
+                </div>
+                <div v-if="listing.listing.Images.length === 4"
+                    class="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+                    <img :src="listing.listing.Images[3].ImageURL" 
+                        class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
+                </div>
+                <div v-if="listing.listing.Images.length >= 5" class="relative hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                        <img :src="listing.listing.Images[3].ImageURL" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[3].ImageURL, listingstore.imageModal = true">
+                    </div>
+                    <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                        <img :src="listing.listing.Images[4].ImageURL" class="h-full w-full object-cover object-center aspect-block cursor-pointer" @click="listingstore.selectedimg = listing.listing.Images[4].ImageURL, listingstore.imageModal = true">
+                    </div>
+                    <div class="absolute bottom-5 right-5">
+                        <UButton
+                            icon="i-heroicons-view-columns"
+                            size="sm"
+                            color="black"
+                            variant="solid"
+                            @click="listingstore.imageModal = true, listingstore.selectedimg = listing.listing.Images"
+                            label="Alle foto's tonen"
+                            :trailing="false"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
+
         <div
             class="mx-auto max-w-2xl pb-12 pt-10  lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:pb-18 lg:pt-16">
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
@@ -167,7 +190,7 @@ function convertTohighestRating(rating) {
                 </div>
             </div>
             <div class="mt-4 lg:row-span-3 lg:mt-0 lg:sticky top-20 overflow-hidden h-fit">
-                <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training</p>
+                <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training {{ listing.listing.Images.length }}</p>
                 <div class="mt-6">
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">
@@ -247,7 +270,6 @@ function convertTohighestRating(rating) {
                             </div>
                         </div>
                     </div>
-
                     <TabGroup as="div">
                         <div class="border-b border-gray-200">
                             <TabList class="-mb-px flex space-x-8">
