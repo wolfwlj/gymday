@@ -32,7 +32,6 @@ export function GetDayOfWeek(date){
     let day = [7,1,2,3,4,5,6][new Date(date).getDay()];
     //the weird array is to make sure that the first day of the week is monday and not sunday
 
-    console.log(day)
     return day;
 }
 
@@ -47,6 +46,7 @@ export function GetMinuteCount(date){
 export function RetrieveTimestamp(date){
     //date = "2023-07-10 20:00"
     // get the 20:00
+    console.log(date)
     let timestamp = date.split(" ")[1];
     return timestamp;
 
@@ -168,4 +168,9 @@ export function GetCurrentWeekDayDateNumber(date){
 export function GetTime(date){
     let time = date.split(" ")[1];
     return time;
+}
+
+export function RetrieveDate(date){
+    date = date.split(" ")[0];
+    return date;
 }

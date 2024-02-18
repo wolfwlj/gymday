@@ -5,13 +5,45 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, EllipsisHorizontalI
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { GetTime, GetMondayOfWeek, GetSundayOfWeek, GetCurrentWeekNumber, GetYear, GetMonth, GetDayOfWeek, GetMinuteCount, RetrieveTimestamp, GetWeekDates, GetCurrentWeekDayDateNumber } from "../../utils/datefunctions";
 import useAvailabilityStore from "../../stores/availability";
-import CreateTimeSlotModal from "./CreateTimeSlotModal.vue";
+import CreateTimeSlotModal from "./modals/CreateTimeSlotModal.vue";
+import UpdateTimeSlotModal from "./modals/UpdateTimeSlotModal.vue";
+
+
 
 const availabilityStore = useAvailabilityStore()
 const container = ref(null)
 const containerNav = ref(null)
 const containerOffset = ref(null)
 const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"]
+
+
+
+
+function checkscrollheight(){
+    let lowestminute = 0
+    if (availabilityStore.timeslots.length > 0){
+        console.log(availabilityStore.timeslots)
+        for (let i = 0; i < availabilityStore.timeslots.length; i++){
+            let timeslot = availabilityStore.timeslots[i]
+            let startminutecount = GetMinuteCount(timeslot.StartDate)
+
+
+            startminutecount = ((container.value.scrollHeight - containerNav.value.offsetHeight - containerOffset.value.offsetHeight) *
+            startminutecount) /
+            1440
+
+            if (lowestminute == 0){
+                lowestminute = startminutecount
+            } else if (startminutecount < lowestminute){
+                lowestminute = startminutecount
+            }            
+        }    
+    } else {
+        lowestminute = container.value.scrollHeight / 3
+    }
+    container.value.scrollTop = lowestminute
+}
+
 
 onMounted(async () => {
     let MyTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -57,13 +89,9 @@ onMounted(async () => {
 
     await availabilityStore.GetTimeSlotsByOwner(start, end);
 
-    // Set the container scroll position based on the current time.
-    const currentMinute = new Date().getHours() * 60
+    checkscrollheight()
 
-    container.value.scrollTop =
-        ((container.value.scrollHeight - containerNav.value.offsetHeight - containerOffset.value.offsetHeight) *
-        currentMinute) /
-        1440
+
 })
 
 async function GoToToday(){
@@ -109,8 +137,8 @@ async function GoToToday(){
     }
 
     await availabilityStore.GetTimeSlotsByOwner(start, end);
-    
- 
+
+    checkscrollheight()
 }
 
 
@@ -131,7 +159,6 @@ async function GetNextWeek(direction){
     availabilityStore.dateobject.year = GetYear(start)
 
     if(availabilityStore.dateobject.weeknumber == availabilityStore.dateobject.currentWeekNumber){
-        console.log("in current week")
         availabilityStore.dateobject.InCurrentWeek = true
     } else {
         availabilityStore.dateobject.InCurrentWeek = false
@@ -155,6 +182,7 @@ async function GetNextWeek(direction){
 
     await availabilityStore.GetTimeSlotsByOwner(start, end);
     
+    checkscrollheight()
 
 }
 
@@ -177,7 +205,6 @@ function CalcTimeToCalendarHeight(start, end){
 
     // make sure all the values are integers
     calculatedheight = Math.floor(calculatedheight)
-    console.log(calculatedheight)
 
     return calculatedheight
 }   
@@ -189,7 +216,6 @@ function CalcTimeToCalendarPosition(start){
     let calculatedstartminutes = startminutecount / 5
     // make sure all the values are integers
     calculatedstartminutes = Math.floor(calculatedstartminutes)
-    console.log(calculatedstartminutes)
     return calculatedstartminutes
 }   
 
@@ -246,7 +272,7 @@ function CalcTimeToCalendarPosition(start){
                 </Menu>
             </div>
         </header>
-        <div ref="container" class="isolate flex flex-auto flex-col overflow-auto bg-white h-[70vh]">
+        <div ref="container"    class="isolate flex flex-auto flex-col overflow-auto bg-white h-[70vh]">
             <div style="width: 165%" class="flex max-w-full flex-none flex-col ">
                 <div ref="containerNav" class="sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8">
                     <div class="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
@@ -282,7 +308,7 @@ function CalcTimeToCalendarPosition(start){
                             <div ref="containerOffset" class="row-end-1 h-7" />
                             <template v-for="i in 24">
                                 <div >
-                                    <div  class="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">{{ i -1 }}:00</div>
+                                    <div  class="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-black font-bold">{{ i -1 }}:00</div>
                                 </div>
                                 <div />
                             </template>
@@ -303,21 +329,21 @@ function CalcTimeToCalendarPosition(start){
             
                         <!-- Events -->
                         <ol class="col-start-1 col-end-2 row-start-1 grid grid-cols-7 sm:pr-8" style="grid-template-rows: 1.75rem repeat(288, minmax(0, 1fr)) auto">
-                            <li class="relative mt-px flex sm:col-start-3" style="grid-row: 92 / span 30">
+                            <!-- <li class="relative mt-px flex sm:col-start-3" style="grid-row: 92 / span 30">
                             <a href="#" class="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-green-50 p-2 text-xs leading-5 hover:bg-green-100">
                                 <p class="order-1 font-semibold text-green-700">Flight to Paris</p>
                                 <p class="text-green-500 group-hover:text-green-700">
                                 <time datetime="2022-01-12T07:30">7:30 AM</time>
                                 </p>
                             </a>
-                            </li>
+                            </li> -->
                             <template v-for="timeslot in availabilityStore.timeslots">
-
-                                <li :class="`col-start-${GetDayOfWeek(timeslot.StartDate)}`" class="relative mt-px flex " :style="`grid-row: ${CalcTimeToCalendarPosition(timeslot.StartDate)} / span ${CalcTimeToCalendarHeight(timeslot.StartDate, timeslot.EndDate)}`">
-                                    <a href="#" class="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-green-50 p-2 text-xs leading-5 hover:bg-green-100">
-                                        <p class="order-1 font-semibold text-gray-700">Beschikbaar tijdvak</p>
+                                <UpdateTimeSlotModal v-if="availabilityStore.editTimeSlotModal" />
+                                <li @click="availabilityStore.editTimeSlotModal = true, availabilityStore.selectedTimeSlot = timeslot" :class="`col-start-${GetDayOfWeek(timeslot.StartDate)}` " class="relative mt-px flex border" :style="`grid-row: ${CalcTimeToCalendarPosition(timeslot.StartDate)} / span ${CalcTimeToCalendarHeight(timeslot.StartDate, timeslot.EndDate)}`">
+                                    <a href="#" class="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-green-50 p-2 text-xs leading-5 hover:bg-green-100" >
+                                        <p class="order-1 font-semibold " :class="timeslot.available == 1 ? 'text-green-700' : 'text-gray-700'">Beschikbaar tijdvak</p>
                                         <p class="text-gray-500 group-hover:text-gray-700">
-                                            <time datetime="">{{GetTime(timeslot.StartDate)}}</time>
+                                            <time datetime="" clas>{{GetTime(timeslot.StartDate)}} - {{GetTime(timeslot.EndDate)}}</time>
                                         </p>
                                     </a>
                                 </li>

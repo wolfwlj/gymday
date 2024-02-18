@@ -11,9 +11,9 @@ type Timeslot struct {
 	StartDate string `gorm:"type:text"`
 	EndDate string `gorm:"type:text"`
 	Available bool `gorm:"type:boolean"`
-	BookingID uint `gorm:"type:integer;default:null"`
+	BookingID *uint `gorm:"type:integer;default:null"`
 	Booking Booking `gorm:"foreignKey:BookingID"`
-	UserID uint `gorm:"type:integer;default:null"`
+	UserID *uint `gorm:"type:integer;default:null"`
 	User User `gorm:"foreignKey:UserID"`
 	OwnerID uint `gorm:"type:integer;default:null"`
 	UserOwner User `gorm:"foreignKey:OwnerID"`

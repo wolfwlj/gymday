@@ -5,8 +5,10 @@ const useAvailabilityStore = defineStore({
     state: () => ({
 
         createTimeSlotModal : false,
-
         timeslots : [],
+
+        selectedTimeSlot : null,
+        editTimeSlotModal : false,
 
         dateobject: {
             realCurrentDate : "",
@@ -52,18 +54,43 @@ const useAvailabilityStore = defineStore({
             catch (e) {
                 console.log(e)
             }
-            // const {data, error} = await useFetch(`${baseURL}/user/timeslotsbyuserowner/${startdate}/${enddate}`, {
-            //     method: 'GET',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     credentials: 'include',
-            // })
-            // if (data) {
-            //     this.timeslots = data.value.timeslots
-            // } else if (error) {
-            //     console.log(error)                
-            // }
+        },
+        
+        async UpdateTimeSlot(form) {
+            try{
+                const response = await $fetch(`/api/availability/updatetimeslot`, {
+                    method: 'put',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: {
+                        Title : form.title,
+                        StartDate : form.startdate,
+                        StartTime : form.starttime,
+                        EndTime : form.endtime,
+                        TimeslotID : this.selectedTimeSlot.ID,
+                    },
+                    credentials: 'include',
+                })
+                await this.GetTimeSlotsByOwner(this.dateobject.startdate, this.dateobject.enddate)
+                this.editTimeSlotModal = false
+            }
+            catch (e) {
+                console.log(e)
+            }
+        },
+        async DeleteTimeSlot() {
+            try {
+                const response = await $fetch(`/api/availability/deletetimeslot?timeslotid=${this.selectedTimeSlot.ID}`, {
+                    method: 'delete',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                })
+                console.log(response)
+                await this.GetTimeSlotsByOwner(this.dateobject.startdate, this.dateobject.enddate)
+                this.editTimeSlotModal = false
+            }
+            catch (e) {
+                console.log(e)
+            }
         }
     },
 })
