@@ -48,8 +48,10 @@ const form = ref({
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>
                     </UFormGroup>
-
-                    <UButton color="primary" @click="availabilityStore.CreateTimeSlot(form)" class="mt-4">Voeg toe</UButton>
+                    <div class="space-x-2">
+                        <UButton color="primary" @click="availabilityStore.CreateTimeSlot(form)" class="mt-4">Voeg toe</UButton>
+                        <UButton color="blue" variant="solid" @click="availabilityStore.CreateTimeSlotFourWeeks(form)">Voeg toe voor 4 weken</UButton>
+                    </div>
                 </UForm>
             </div>
         </UCard>

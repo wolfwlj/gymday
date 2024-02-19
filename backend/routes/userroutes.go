@@ -61,6 +61,7 @@ func UserRoutes(router *gin.RouterGroup) {
 
 	// timeslot routers
 	router.POST("/timeslot", middleware.UserAuth, controllers.CreateTimeSlot)
+	router.POST("/timeslotfourweeks", middleware.UserAuth, controllers.CreateTimeslotFourWeeks)
 	router.GET("/timeslotsbyuserowner/:startdate/:enddate", middleware.UserAuth, controllers.GetTimeSlotsByUserOwner)
 	router.GET("/timeslotsbyuserclient/:startdate/:enddate", middleware.UserAuth, controllers.GetTimeSlotsByUserClient)
 	router.PUT("/timeslot/:id", middleware.UserAuth, controllers.UpdateTimeSlot)

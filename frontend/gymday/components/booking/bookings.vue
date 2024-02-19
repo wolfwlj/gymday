@@ -9,6 +9,7 @@ import createbookingModal from './createbookingModal.vue';
 const bookingStore = useBookingStore();
 await bookingStore.getBookings()
 
+
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),

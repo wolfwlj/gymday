@@ -28,13 +28,10 @@ const useAvailabilityStore = defineStore({
     },
     actions: {
         async CreateTimeSlot(form) {
-            console.log(form.startdate, form.starttime, form.endtime)
 
             const availabilityService = useAvailabilityService()
-
             try {
                 const result = await availabilityService.createTimeSlot(form.title, form.startdate, form.starttime, form.endtime)
-                console.log(result)
                 this.createTimeSlotModal = false
                 await this.GetTimeSlotsByOwner(this.dateobject.startdate, this.dateobject.enddate)
             }
@@ -43,13 +40,47 @@ const useAvailabilityStore = defineStore({
             }
         },
 
+        async CreateTimeSlotFourWeeks(form) {
+            // if date is 2024-02-18, get the dates of the next 3 weeks
+            let dates = []
+            let date = new Date(form.startdate)
+            dates.push(date.toISOString().split('T')[0])
+            for (let i = 1; i < 4; i++) {
+                let newdate = new Date(date)
+                console.log(newdate)
+                newdate.setDate(date.getDate() + 7 * i)
+                console.log(dates)
+                // change date to string, from 2024-02-19T00:00:00.000Z to just 2024-02-19
+                dates.push(newdate.toISOString().split('T')[0])
+            }
+            console.log(dates)
+
+            try {
+                const result = await $fetch(`/api/availability/createtimefourweeks`, { 
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: {
+                        Title : form.title,
+                        Dates : dates,
+                        StartTime : form.starttime,
+                        EndTime : form.endtime,
+                    },
+                    credentials: 'include',
+                })
+            }
+            catch (e) {
+                console.log(e)
+            }
+
+            await this.GetTimeSlotsByOwner(this.dateobject.startdate, this.dateobject.enddate)
+            this.createTimeSlotModal = false
+        },
+
         async GetTimeSlotsByOwner(startdate, enddate) {
             const availabilityService = useAvailabilityService()
             try {
                 const result = await availabilityService.getTimeSlotsByOwner(startdate, enddate)
-                console.log(result)
                 this.timeslots = result.timeslots
-                console.log(this.timeslots)
             }
             catch (e) {
                 console.log(e)
