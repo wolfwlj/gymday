@@ -40,12 +40,14 @@ console.log(availabilityStore.selectedTimeSlot)
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>
                     </UFormGroup>
+
                     <UFormGroup label="Starttijd" name="starttime">
                         <div  class="mt-1">
                             <input v-model="form.starttime" type="time" name="time" id="time" 
                                 class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
                         </div>                    
                     </UFormGroup>
+
                     <UFormGroup label="Eindtijd" name="endtime">
                         <div  class="mt-1">
                             <input v-model="form.endtime" type="time" name="time" id="time" 

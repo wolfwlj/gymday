@@ -26,7 +26,6 @@ func CreateTimeSlot(c *gin.Context) {
 	combinedEndDate := body.StartDate + " " + body.EndTime
 
 	user, _ := c.Get("user")
-	log.Println(user)
 
 	userID := user.(models.User).ID
 
@@ -46,6 +45,48 @@ func CreateTimeSlot(c *gin.Context) {
 		"timeslot": timeslot,
 	})
 }
+
+
+func CreateTimeslotFourWeeks(c *gin.Context) {
+	var body struct {
+		Title   string
+		Dates   []string
+		StartTime   string
+		EndTime   string
+	}
+
+	c.Bind(&body)
+
+	log.Println(body.Dates)
+
+	var timeslots []models.Timeslot
+
+	for _, date := range body.Dates {
+		combinedStartDate := date + " " + body.StartTime
+		combinedEndDate := date + " " + body.EndTime
+
+		user, _ := c.Get("user")
+
+		userID := user.(models.User).ID
+
+		timeslot := models.Timeslot{
+			Title:       body.Title,
+			StartDate: combinedStartDate,
+			EndDate: combinedEndDate,
+			Available: true,
+			OwnerID: userID,
+		}
+
+		initializers.DB.Create(&timeslot)
+
+		timeslots = append(timeslots, timeslot)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"timeslots": timeslots,
+	})
+}
+
 
 func GetTimeSlotsByUserOwner(c *gin.Context) {
 
@@ -83,6 +124,10 @@ func GetTimeSlotsByUserClient(c *gin.Context) {
 }
 
 func UpdateTimeSlot(c *gin.Context) {
+
+	user, _ := c.Get("user")
+	userID := user.(models.User).ID
+
 	id := c.Param("id")
 
 	var body struct {
@@ -107,8 +152,13 @@ func UpdateTimeSlot(c *gin.Context) {
 		})
 		return
 	}
-	
 
+	if userID != timeslot.OwnerID {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "You are not the owner of this timeslot",
+		})
+		return
+	}
 
 	timeslot.Title = body.Title
 	timeslot.StartDate = combinedStartDate

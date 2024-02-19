@@ -87,6 +87,7 @@ const WriteReview = ref({
 })
 
 async function SubmitReview() {
+
     await listingstore.submitReview(id, WriteReview.value.Rating, WriteReview.value.Body)
     WriteReview.value.Body = ''
     WriteReview.value.Rating = 1
@@ -190,7 +191,7 @@ console.log(listing)
                 </div>
             </div>
             <div class="mt-4 lg:row-span-3 lg:mt-0 lg:sticky top-20 overflow-hidden h-fit">
-                <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training {{ listing.listing.Images.length }}</p>
+                <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training</p>
                 <div class="mt-6">
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">
@@ -264,8 +265,9 @@ console.log(listing)
                                     </div>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <button @click="SubmitReview"
-                                        class="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Post</button>
+                                    <UButton color="white" variant="solid" @click="SubmitReview"
+                                        >Plaatsen</UButton>
+
                                 </div>
                             </div>
                         </div>
