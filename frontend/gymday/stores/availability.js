@@ -47,10 +47,7 @@ const useAvailabilityStore = defineStore({
             dates.push(date.toISOString().split('T')[0])
             for (let i = 1; i < 4; i++) {
                 let newdate = new Date(date)
-                console.log(newdate)
                 newdate.setDate(date.getDate() + 7 * i)
-                console.log(dates)
-                // change date to string, from 2024-02-19T00:00:00.000Z to just 2024-02-19
                 dates.push(newdate.toISOString().split('T')[0])
             }
             console.log(dates)
