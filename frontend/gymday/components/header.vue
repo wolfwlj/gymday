@@ -108,9 +108,8 @@ function scrollright() {
               trainer!
             </button>
           </NuxtLink>
-
-          <NuxtLink :to="`/listing/createlisting`" v-show="authstore.user?.Tier == 99">
-            <button class="font-semibold text-sm hover:bg-gray-50 py-2 px-2 rounded">Post een Listing</button>
+          <NuxtLink :to="`/settings?page=listings`" v-show="authstore.user?.Tier == 99">
+            <button class="font-semibold text-sm hover:bg-gray-50 py-2 px-2 rounded">Plaats een Listing</button>
           </NuxtLink>
 
           <div class="flex space-x-3" v-show="!authstore.authenticated">

@@ -41,7 +41,10 @@ function formatDate(date) {
 
                 <div>
                     <p>Naam : {{ bookingStore.selectedBooking.User.FirstName }} {{ bookingStore.selectedBooking.User.LastName }}</p>
-                    <p>Tijd voorkeur : {{ formatDate(bookingStore.selectedBooking.StartDate) }}</p>
+                    <br>
+                    <p>Begin Tijd: {{ formatDate(bookingStore.selectedBooking.TimeslotStartDate) }}</p>
+                    <p>Eind Tijd: {{ formatDate(bookingStore.selectedBooking.TimeslotEndDate) }}</p>
+                    <br>
                     <p>Telefoon nummer : {{ bookingStore.selectedBooking.User.PhoneNumber }}</p>
                     <p>Email : {{ bookingStore.selectedBooking.User.Email }}</p>
                     <p class="font-bold">Status : {{  bookingStore.selectedBooking.Status }}</p>

@@ -40,30 +40,9 @@ const useBookingStore = defineStore({
                 console.log(e)
             }
 
-            // const {data, error} = await useFetch(`${baseURL}/user/manualbooking`, {
-            //     method: 'post',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: {
-            //         FirstName : form.firstname,
-            //         LastName : form.lastname,
-            //         Email : form.email,
-            //         Phone : form.phone,
-            //         StartDate : startdate,
-            //         EndDate : enddate,
-            //         ListingID : form.listingID,
-
-            //     },
-            //     credentials: 'include',
-                
-            // })
-            // if (data) {
-            //     this.addbookingModal = false
-            //     await this.getBookings()
-            //     alert('Booking verzonden!')
-            // }
         },
 
-        async createBooking(listingid, startdate, starttime) {
+        async createBooking(listingid, startdate, starttime, timeslotID) {
             // create timestamp
             const date = new Date(startdate)
             const time = starttime.split(':')
@@ -73,8 +52,7 @@ const useBookingStore = defineStore({
             const bookingService = useBookingService()
 
             try {
-                const result = await bookingService.createBooking(listingid, date)
-                console.log(result)
+                const result = await bookingService.createBooking(listingid, date, timeslotID)
                 this.addbookingModal = false
                 await this.getBookings()
                 alert('Booking verzonden!')
@@ -82,19 +60,7 @@ const useBookingStore = defineStore({
             catch (e) {
                 console.log(e)
             }
-            // const {data, error} = await useFetch(`${baseURL}/user/booking`, {
-            //     method: 'post',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: {
-            //         StartDate : date,
-            //         ListingID : listingid,
-            //     },
-            //     credentials: 'include',
-                
-            // })
-            // if (data) {
-            //     alert('Booking verzonden!')
-            // }
+
         },
         async getBookings() {
 
@@ -108,15 +74,6 @@ const useBookingStore = defineStore({
             catch (e) {
                 console.log(e)
             }
-
-            // const { data, error } = await useFetch(`${baseURL}/user/bookings`, {
-            //     method: 'get',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     credentials: 'include',
-            // })
-            // console.log(data)
-            // this.bookings = data.value.bookings
-            // console.log(this.bookings)
         },
         
         async UpdateBooking(status) {
@@ -130,18 +87,7 @@ const useBookingStore = defineStore({
             catch (e) {
                 console.log(e)
             }
-            // const { data, error } = await useFetch(`${baseURL}/user/booking/${this.selectedBooking.ID}`, {
-            //     method: 'put',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: {
-            //         Status : status,
-            //     },
-            //     credentials: 'include',
-            // })
-            // if (data) {
-            //     await this.getBookings()
-            //     this.bookingModal = false
-            // }
+
         }
     },
 })

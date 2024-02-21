@@ -10,6 +10,30 @@ const useListingStore = defineStore({
         reviews : null,
         imageModal : false,
         selectedimg : null,
+
+        openDatePicker : false,
+        selectedTimeSlot : {
+            ID: 0,
+            Title: '',
+            StartDate: '',
+            EndDate: ''
+        },
+        selectedListing : null,
+        selectedOwner : null,
+        retrievedTimeslots : null,
+        dateobject: {
+            selectedDate : "",
+            realCurrentDate : "",
+            rawdate : "",
+            startdate : "",
+            enddate : "",
+            weeknumber : "",
+            dayNumber : "",
+            currentWeekNumber : "",
+            year : "",
+            monthname : "",
+            weekdates : [],
+        },
     }),
     getters: {
 
@@ -41,6 +65,16 @@ const useListingStore = defineStore({
                 console.log(e)
             }
         },
+
+        async gettimeslotsbyday(ownerid) {
+            try {
+                const result = await $fetch(`/api/availability/gettimeslotsbyday?ownerid=${ownerid}&date=${this.dateobject.selectedDate}`)
+                this.retrievedTimeslots = result.timeslots
+            } catch (e) {
+                console.log(e)
+            }
+
+        }
     },
 
 })
