@@ -13,6 +13,7 @@ const authstore = useAuthStore()
 <template>
     <!-- sort of header -->
     <div class="">
+
         <UButton  @click="profileStore.isAddListingOpen = true">Listing toevoegen</UButton>
         <Addlisting v-if="profileStore.isAddListingOpen" />
     </div>
@@ -37,7 +38,7 @@ const authstore = useAuthStore()
                     </div>
                 </div>
             </NuxtLink>
-            <UButton  @click="profileStore.selectedListing = listing, profileStore.isEditListingOpen = true">Listing aanpassen</UButton>
+            <UButton variant="outline" color="black" @click="profileStore.selectedListing = listing, profileStore.isEditListingOpen = true">Listing aanpassen</UButton>
 
         </div>
     </div>

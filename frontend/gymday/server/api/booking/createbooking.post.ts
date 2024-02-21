@@ -3,8 +3,8 @@ import { serverApi } from '../utils/serverApi'
 
 export default defineEventHandler (async event => {
     const api = serverApi(event)
-    const { startdate, listingid } = await readBody(event)
-
+    const { startdate, listingid, timeslotID} = await readBody(event)
+    console.log(timeslotID)
     try {
 
         // Do the actual request to the external API
@@ -12,6 +12,7 @@ export default defineEventHandler (async event => {
         body: {
             StartDate : startdate,
             ListingID : listingid,
+            TimeslotID : timeslotID
         }
         })
 

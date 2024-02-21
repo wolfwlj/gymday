@@ -1,8 +1,7 @@
 <script setup>
-import { StarIcon, UserIcon } from '@heroicons/vue/20/solid'
+import { StarIcon, UserIcon, ChevronLeftIcon, ChevronRightIcon  } from '@heroicons/vue/20/solid'
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
@@ -22,54 +21,9 @@ import useListingStore from '~/stores/listingstore'
 import useAuthStore from '~/stores/auth'
 import imagemodal from '~/components/listing/modals/imagemodal.vue'
 import useBookingStore from '~/stores/booking'
+import bookappointment from '~/components/listing/modals/bookappointment.vue'
+
 const hover = ref(1)
-// const days = [
-//     { date: '2021-12-27' },
-//     { date: '2021-12-28' },
-//     { date: '2021-12-29' },
-//     { date: '2021-12-30' },
-//     { date: '2021-12-31' },
-//     { date: '2022-01-01', isCurrentMonth: true },
-//     { date: '2022-01-02', isCurrentMonth: true },
-//     { date: '2022-01-03', isCurrentMonth: true },
-//     { date: '2022-01-04', isCurrentMonth: true },
-//     { date: '2022-01-05', isCurrentMonth: true },
-//     { date: '2022-01-06', isCurrentMonth: true },
-//     { date: '2022-01-07', isCurrentMonth: true },
-//     { date: '2022-01-08', isCurrentMonth: true },
-//     { date: '2022-01-09', isCurrentMonth: true },
-//     { date: '2022-01-10', isCurrentMonth: true },
-//     { date: '2022-01-11', isCurrentMonth: true },
-//     { date: '2022-01-12', isCurrentMonth: true, isToday: true },
-//     { date: '2022-01-13', isCurrentMonth: true },
-//     { date: '2022-01-14', isCurrentMonth: true },
-//     { date: '2022-01-15', isCurrentMonth: true },
-//     { date: '2022-01-16', isCurrentMonth: true },
-//     { date: '2022-01-17', isCurrentMonth: true },
-//     { date: '2022-01-18', isCurrentMonth: true },
-//     { date: '2022-01-19', isCurrentMonth: true },
-//     { date: '2022-01-20', isCurrentMonth: true },
-//     { date: '2022-01-21', isCurrentMonth: true, isSelected: true },
-//     { date: '2022-01-22', isCurrentMonth: true },
-//     { date: '2022-01-23', isCurrentMonth: true },
-//     { date: '2022-01-24', isCurrentMonth: true },
-//     { date: '2022-01-25', isCurrentMonth: true },
-//     { date: '2022-01-26', isCurrentMonth: true },
-//     { date: '2022-01-27', isCurrentMonth: true },
-//     { date: '2022-01-28', isCurrentMonth: true },
-//     { date: '2022-01-29', isCurrentMonth: true },
-//     { date: '2022-01-30', isCurrentMonth: true },
-//     { date: '2022-01-31', isCurrentMonth: true },
-//     { date: '2022-02-01' },
-//     { date: '2022-02-02' },
-//     { date: '2022-02-03' },
-//     { date: '2022-02-04' },
-//     { date: '2022-02-05' },
-//     { date: '2022-02-06' },
-// ]
-
-
-const reviews = { href: '#', average: 4, totalCount: 117 }
 
 const { id } = useRoute().params
 const listingstore = useListingStore()
@@ -103,7 +57,13 @@ function convertTohighestRating(rating) {
     return Math.round(rating)
 }
 
-console.log(listing)
+listingstore.selectedTimeSlot = { 
+    StartDate: '',
+    StartTime: '',
+    EndDate: '',
+    EndTime: '',
+} 
+
 
 </script>
 
@@ -201,28 +161,23 @@ console.log(listing)
                                 aria-hidden="true" />
                         </div>
                         <p class="sr-only">{{ convertTohighestRating(listing.listing.AverageRating)}} out of 5 stars</p>
-                        <a :href="reviews.href" class="ml-3 text-sm font-medium text-green-600 hover:text-green-500">{{
+                        <a href="#reviews" class="ml-3 text-sm font-medium text-green-600 hover:text-green-500">{{
                             listing.listing.AmountOfReviews  }} reviews</a>
                     </div>
                 </div>
 
                 <form class="mt-10">    
-                    <div class="mt-10 space-y-2">
-                        <p class="block text-sm font-medium text-gray-700">Afspraak tijd voorkeur</p>
 
-                        <label for="date" class="block text-sm font-medium text-gray-700">Datum</label>
-                        <div class="mt-1">
-                            <input v-model="booking.Date" type="date" name="date" id="date" 
-                                class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                    <div class="mt-10 space-y-2">
+                        <p class="block text-sm font-medium text-gray-700">Bekijk beschikbare tijdsloten</p>
+                        <label for="date" class="block text-sm font-medium text-gray-700">Geselecteerd tijdslot</label>
+                        <div class="px-[2px]" @click="listingstore.openDatePicker = true, listingstore.selectedListing = listing">
+                            <UInputMenu v-model="listingstore.selectedTimeSlot.StartDate"/>
                         </div>
-                        <label for="time" class="block text-sm font-medium text-gray-700">Tijd</label>
-                        <div  class="mt-1">
-                            <input v-model="booking.Time" type="time" name="time" id="time" 
-                                class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md" />
-                        </div>
+                        <bookappointment v-if="listingstore.openDatePicker" />
                     </div>
 
-                    <button @click="bookingstore.createBooking(id, booking.Date, booking.Time)" type="button"
+                    <button @click="bookingstore.createBooking(id, booking.Date, booking.Time, listingstore.selectedTimeSlot.ID)" type="button"
                         class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-500 px-8 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Afspraak boeken
                     </button>
                 </form>
@@ -273,7 +228,7 @@ console.log(listing)
                         </div>
                     </div>
                     <TabGroup as="div">
-                        <div class="border-b border-gray-200">
+                        <div class="border-b border-gray-200" id="reviews">
                             <TabList class="-mb-px flex space-x-8">
                                 <Tab as="template" v-slot="{ selected }">
                                     <button
@@ -290,8 +245,8 @@ console.log(listing)
                                 </Tab>
                             </TabList>
                         </div>
-                        <TabPanels as="template">
-                            <TabPanel class="-mb-10">
+                        <TabPanels as="template" >
+                            <TabPanel class="-mb-10" >
                                 <!-- <TabPanel class="-mb-10 overflow-y-scroll no-scrollbar h-96"> -->
                                 <h3 class="sr-only">Klanten Reviews</h3>
 

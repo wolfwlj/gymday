@@ -8,7 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	// decimal "github.com/shopspring/decimal"
+	"gorm.io/gorm"
+	decimal "github.com/shopspring/decimal"
 )
 
 
@@ -17,6 +18,7 @@ func CreateBooking(c *gin.Context) {
 	var body struct {
 		StartDate   string
 		ListingID   string
+		TimeslotID   int
 	}
 	
 	c.Bind(&body)
@@ -24,7 +26,7 @@ func CreateBooking(c *gin.Context) {
 	user, _ := c.Get("user")
 	log.Println(user)
 
-	userID := user.(models.User).ID
+	getuser := user.(models.User)
 
 
 	listingid, err3 := strconv.Atoi(body.ListingID)
@@ -43,12 +45,31 @@ func CreateBooking(c *gin.Context) {
 		Price:    listing.Price,
 		StartDate: body.StartDate,
 		EndDate: body.StartDate,
-		UserID:   userID,
+		UserID:   getuser.ID,
 		ListingID: uint(listingid),
 		Status: "Pending",
+		FirstName: getuser.FirstName,
+		LastName: getuser.LastName,
+		Email: getuser.Email,
+		Phone: getuser.PhoneNumber,
+
 	}
 
 	initializers.DB.Create(&booking)
+	// get the booking id
+	BookingID := booking.ID
+	// now fill the timeslot userId, timeslotid, bookingid
+	err := FillTimeSlot(getuser.ID, BookingID, uint(body.TimeslotID))
+
+	if err != nil {
+		// delete the booking
+		initializers.DB.Delete(&booking)
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Timeslot not found",
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"booking": booking,
@@ -105,7 +126,7 @@ func ManualCreateBooking(c *gin.Context) {
 	initializers.DB.Create(&booking)
 
 	c.JSON(http.StatusOK, gin.H{
-		"booking": booking,
+			"booking": booking,
 	})
 }
 
@@ -116,10 +137,35 @@ func GetBookings(c *gin.Context) {
 
 	userID := user.(models.User).ID
 
-	var bookings []models.Booking
+	type Booking struct {
+		gorm.Model
+		FirstName string `gorm:"type:text;default:null"`
+		LastName string `gorm:"type:text;default:null"`
+		Email string `gorm:"type:text;default:null"`
+		Phone string `gorm:"type:text;default:null"`
+		Title string `gorm:"type:text"`
+		Price decimal.Decimal `gorm:"type:decimal(10,2)"`
+		Status string `gorm:"type:ENUM('Pending', 'Accepted', 'Declined', 'Cancelled', 'Completed');default:'Pending'"`
+		StartDate string `gorm:"type:text"`
+		EndDate string `gorm:"type:text"`
+		UserID uint 
+		User models.User `gorm:"foreignKey:UserID"`
+		ListingID uint
+		Listing models.Listing `gorm:"foreignKey:ListingID"`
+		// these are not part of the booking model but we need them for the frontend
+		TimeslotStartDate string `gorm:"column:timeslot_start_date"`
+		TimeslotEndDate string `gorm:"column:timeslot_end_date"`
+	}
+
+	var bookings []Booking
 	// get bookings from listings that belong to the user. This requires a join
-	initializers.DB.Joins("JOIN listings ON listings.id = bookings.listing_id").Preload("User").Where("listings.user_id = ?", userID).Order("start_date DESC").Find(&bookings)
+	// initializers.DB.Table("bookings").Select("bookings.*, timeslots.start_date as timeslot_start_date, timeslots.end_date as timeslot_end_date").Preload("User").Joins("JOIN listings ON listings.id = bookings.listing_id").Joins("JOIN timeslots ON timeslots.booking_id = bookings.id").Where("listings.user_id = ?", userID).Scan(&bookings)
+	// initializers.DB.Select("bookings.*, listings.title as listing_title, timeslots.start_date as timeslot_start_date, timeslots.end_date as timeslot_end_date").Joins("JOIN listings ON listings.id = bookings.listing_id").Joins("JOIN timeslots ON timeslots.booking_id = bookings.id").Preload("User").Where("listings.user_id = ?", userID).Order("start_date DESC").Find(&bookings)
+	initializers.DB.Select("bookings.*, listings.title as listing_title, timeslots.start_date as timeslot_start_date, timeslots.end_date as timeslot_end_date").Joins("JOIN listings ON listings.id = bookings.listing_id").Joins("JOIN timeslots ON timeslots.booking_id = bookings.id").Preload("User").Preload("Listing").Where("listings.user_id = ?", userID).Order("start_date DESC").Find(&bookings)
 	// initializers.DB.Where("user_id = ?", userID).Find(&bookings)
+
+
+	// initializers.DB.Preload("Booking.Listing").Preload("User").Where("owner_id = ?", userID).Find(&bookings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"bookings": bookings,
@@ -156,6 +202,15 @@ func UpdateBooking(c *gin.Context) {
 	}
 
 	booking.Status = body.Status
+	if body.Status == "Declined" {
+		// get the timeslot and set it to available
+		var timeslot models.Timeslot
+		initializers.DB.First(&timeslot, "booking_id = ?", booking.ID)
+		timeslot.Available = true
+		timeslot.BookingID = nil
+		initializers.DB.Save(&timeslot)
+	}
+
 
 	initializers.DB.Save(&booking)
 

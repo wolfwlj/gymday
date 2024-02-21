@@ -24,17 +24,6 @@ const useAdminStore = defineStore({
             }   catch (e) {
 
             }
-            // const {data, error} = await useFetch(`${baseURL}/user/verificationrequest`, {
-            //     method: 'post',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: {
-            //         Reason : Reason,
-            //     },
-            //     credentials: 'include',
-            // })
-            // if (data) {
-            //     return 'success'
-            // }
         },
         async getApplications() {
 
@@ -48,15 +37,7 @@ const useAdminStore = defineStore({
                 console.log(e)
             }
 
-            // const {data, error} = await useFetch(`${baseURL}/user/verificationrequests`, {
-            //     method: 'get',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     credentials: 'include',
-            // })
-            // if (data) {
-            //     this.applications = data.value.verificationrequests
-            //     return data.value.verificationrequests
-            // }
+
         },
         async UpdateApplication(reply, status) {
             const adminService = useAdminService()

@@ -14,7 +14,8 @@ export const useBookingService = () => {
         }
     }
 
-    async function createBooking(listingid : string, startdate : string){
+    async function createBooking(listingid : string, startdate : string, timeslotID : number){
+        console.log(timeslotID)
         try {
             // Get the current authenticated user
             // useRequestHeaders(['cookies']) will send the httpOnly cookies to the nitro server
@@ -22,7 +23,8 @@ export const useBookingService = () => {
                 headers: useRequestHeaders(['cookies']),
                 body: {
                     startdate,
-                    listingid
+                    listingid,
+                    timeslotID
                 },
                 method: 'POST'
             })

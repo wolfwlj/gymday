@@ -79,13 +79,15 @@ function formatDate(date) {
                                     <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{booking.Status}}</span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{formatDate(booking.StartDate)}}</span>
+                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{formatDate(booking.TimeslotStartDate)}}</span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                                     <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{booking.User.PhoneNumber}}</span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{booking.Title}}</span>
+                                    <NuxtLink :to="'/listing/'+booking.Listing.ID">
+                                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{booking.Listing.Title}}</span>
+                                    </NuxtLink>
                                 </td>
                                 <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                     <UButton  @click="bookingStore.bookingModal = true, bookingStore.selectedBooking = booking">Beheer booking</UButton>

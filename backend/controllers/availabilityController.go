@@ -123,6 +123,49 @@ func GetTimeSlotsByUserClient(c *gin.Context) {
 	})
 }
 
+func GetAvailableTimeSlots(c *gin.Context) {
+	// this function returns the dates which have slots available for booking
+	startdate := c.Param("startdate")
+	enddate := c.Param("enddate")
+	ownerid := c.Param("ownerid")
+
+	var timeslots []models.Timeslot
+	// just select the startdates
+	initializers.DB.Select("start_date").Find(&timeslots, "owner_id = ? AND start_date >= ? AND end_date <= ? AND available = ?", ownerid, startdate, enddate, true)
+
+	uniqueDates := map[string]struct{}{}
+
+	for _, timeslot := range timeslots {
+		uniqueDates[timeslot.StartDate] = struct{}{}
+	}
+	// convert the map to a slice
+	var availableDates []string
+	for date := range uniqueDates {
+		availableDates = append(availableDates, date)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"timeslots": availableDates,
+	})
+}
+
+func GetTimeSlotsByDay(c *gin.Context) {
+	// this function returns the timeslots for a specific day
+	date := c.Param("date")
+	ownerid := c.Param("ownerid")
+	suffix := " 00:00:00"
+	suffix2 := " 23:59:59"
+	startdate := date + suffix
+	enddate := date + suffix2
+	var timeslots []models.Timeslot
+
+	initializers.DB.Find(&timeslots, "owner_id = ? AND start_date >= ? AND end_date <= ? AND available = 1", ownerid, startdate, enddate)
+
+	c.JSON(http.StatusOK, gin.H{
+		"timeslots": timeslots,
+	})
+}
+
 func UpdateTimeSlot(c *gin.Context) {
 
 	user, _ := c.Get("user")
@@ -189,13 +232,16 @@ func DeleteTimeSlot(c *gin.Context) {
 func FillTimeSlot(UserID uint, BookingID uint, TimeSlotID uint) (error) {
 	var timeslot models.Timeslot
 
-	initializers.DB.First(&timeslot, TimeSlotID)
+	err := initializers.DB.First(&timeslot, TimeSlotID)
 
+	if timeslot.ID == 0 {
+		return err.Error
+	}
 	timeslot.UserID = &UserID
 	timeslot.BookingID = &BookingID
 	timeslot.Available = false
 
-	err := initializers.DB.Save(&timeslot)
+	err = initializers.DB.Save(&timeslot)
 
 	if err.Error != nil {
 		return err.Error
