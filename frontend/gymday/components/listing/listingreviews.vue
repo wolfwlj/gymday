@@ -13,15 +13,21 @@ const { reviews } = storeToRefs(listingstore);
 </script>
 <template>
     <div v-for="review in reviews" :key="review.id" class="flex space-x-4 text-sm text-gray-500">
-        <div class="flex-none py-10">
-            <img v-if="review.User.ProfilePicture !== ''" :src="review.User.ProfilePicture" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
-            <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />
+        <div class="flex-none py-10 cursor-pointer">
+            <NuxtLink :to="`/profile/${review.User.ID}`">
+                <img v-if="review.User.ProfilePicture !== ''" :src="review.User.ProfilePicture" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+                <UserIcon v-else class="inline-block h-10 w-10 rounded-full text-gray-500/50" />   
+            </NuxtLink>
+
         </div>
         <div :class="'border-t border-gray-200 py-10'">
-            <h3 class="font-medium text-gray-900">{{ review.User.FirstName + ' ' + review.User.LastName }}</h3>
-            <p>
-                <time :datetime="review.datetime">{{ (new Date(review.CreatedAt)).toLocaleDateString("en-US") }}</time>
-            </p>
+
+            <NuxtLink :to="`/profile/${review.User.ID}`">
+                <h3 class="font-medium text-gray-900">{{ review.User.FirstName + ' ' + review.User.LastName }}</h3>
+                <p>
+                    <time :datetime="review.datetime">{{ (new Date(review.CreatedAt)).toLocaleDateString("en-US") }}</time>
+                </p>
+            </NuxtLink>
 
             <div class="mt-4 flex items-center">
                 <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating"

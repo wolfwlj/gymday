@@ -12,7 +12,7 @@ await profileStore.getlistings()
     <div v-if="profileStore.profilelistings.length == 0">
         <p>geen listings gevonden..</p>
     </div>
-    <div v-else class="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 overflow-auto max-h-[60vh]">
+    <div v-else class=" mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 overflow-auto max-h-[60vh]">
         <div v-for="listing in profileStore.profilelistings" :key="listing.ID" class="group relative">
             <NuxtLink :to="`../listing/${listing.ID}`">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden  bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-40 rounded">
@@ -22,7 +22,6 @@ await profileStore.getlistings()
                     <div>
                         {{ listing.Title }}
                     </div>
-
                     <div>
                         {{ listing.Location }}
                     </div>
