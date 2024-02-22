@@ -19,19 +19,7 @@ import Listingsprofile from '~/components/listing/listingsprofile.vue';
 import Galleryprofile from '~/components/profile/galleryprofile.vue';
 import Bookings from '~/components/booking/bookings.vue';
 import Calendar from '~/components/availability/Calendar.vue';
-
-
-const navigation = [
-    { name: 'General', val: 'general',  to: '?page=general', icon: UserCircleIcon },
-    { name: 'Listings',  val: 'listings', to: '?page=listings', icon: QueueListIcon },
-    { name: 'Bookings',  val: 'bookings', to: '?page=bookings', icon: ArchiveBoxIcon },
-    { name: 'Betalingen',  val: 'betalingen', to: '?page=betalingen', icon: CurrencyEuroIcon },
-    { name: 'Mijn Beschikbaarheid', val: 'availability', to: '?page=availability', icon: CalendarDaysIcon },
-    { name: 'Notifications',  val: 'notifications', to: '?page=notifications', icon: BellIcon },
-    { name: 'Plan',  val: 'plan', to: '?page=plan', icon: CubeIcon },
-    { name: 'Billing',  val: 'billing', to: '?page=billing',icon: CreditCardIcon },
-]
-
+import Myorders from '~/components/booking/myorders.vue';
 const profileStore = useProfileStore()
 const authstore = useAuthStore()
 const route = useRoute()
@@ -39,6 +27,17 @@ const page = ref(route.query.page)
 const currentProfileTab = ref('General')
 
 await profileStore.getUser(authstore.user?.ID)
+
+const navigation = [
+    { name: 'General', val: 'general',  to: '?page=general', icon: UserCircleIcon, can_see : authstore.user.Tier <= 999 },
+    { name: 'Listings',  val: 'listings', to: '?page=listings', icon: QueueListIcon, can_see : authstore.user.Tier >= 99  },
+    { name: 'Bookings',  val: 'bookings', to: '?page=bookings', icon: ArchiveBoxIcon, can_see : authstore.user.Tier >= 99  },
+    { name: 'Betalingen',  val: 'betalingen', to: '?page=betalingen', icon: CurrencyEuroIcon, can_see : authstore.user.Tier >= 99  },
+    { name: 'Mijn Beschikbaarheid', val: 'availability', to: '?page=availability', icon: CalendarDaysIcon, can_see : authstore.user.Tier >= 99  },
+    { name: 'Notifications',  val: 'notifications', to: '?page=notifications', icon: BellIcon, can_see : authstore.user.Tier >= 99  },
+    { name: 'Plan',  val: 'plan', to: '?page=plan', icon: CubeIcon, can_see : authstore.user.Tier >= 99  },
+    { name: 'Bestellingen',  val: 'orders', to: '?page=orders',icon: CreditCardIcon, can_see : authstore.user.Tier <= 999 },
+]
 </script>
 
 <template>
@@ -47,13 +46,14 @@ await profileStore.getUser(authstore.user?.ID)
             class="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20">
             <nav class="flex-none px-4 sm:px-6 lg:px-0">
                 <ul role="list" class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
-                    <NuxtLink @click="page = item.val" v-for="item in navigation" :key="item.name" :to="item.to"
-                        :class="[item.val === page ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-green-600 hover:bg-gray-50', 'cursor-pointer group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold']">
-                        <component :is="item.icon"
-                            :class="[item.val === page  ? 'text-green-600' : 'text-gray-400 group-hover:text-green-600', 'cursor-pointer h-6 w-6 shrink-0']"
-                            aria-hidden="true" />
-                        {{ item.name }}
-                    </NuxtLink>
+                    <template v-for="item in navigation" :key="item.name">
+                        <NuxtLink @click="page = item.val" v-show="item.can_see"  :to="item.to" :class="[item.val === page ? 'bg-gray-50 text-green-600' : 'text-gray-700 hover:text-green-600 hover:bg-gray-50', 'cursor-pointer group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold']">
+                            <component :is="item.icon"
+                                :class="[item.val === page  ? 'text-green-600' : 'text-gray-400 group-hover:text-green-600', 'cursor-pointer h-6 w-6 shrink-0']"
+                                aria-hidden="true" />
+                            {{ item.name }}
+                        </NuxtLink>
+                    </template>
                 </ul>
             </nav>
         </aside>
@@ -107,18 +107,22 @@ await profileStore.getUser(authstore.user?.ID)
                     </dl>
                 </div>
             </div>
-            <div v-if="page === 'listings'" class="mx-auto max-w-2xl  lg:mx-0 lg:max-w-none">
+            <div v-if="page === 'listings' && authstore.user.Tier >= 99" class="mx-auto max-w-2xl  lg:mx-0 lg:max-w-none">
                 <Listingsprofile />
             </div>
-            <div v-if="page === 'bookings'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+            <div v-if="page === 'bookings' && authstore.user.Tier >= 99" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 <Bookings />
             </div>
-            <div v-show="page === 'betalingen'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+            <div v-if="page === 'betalingen'&& authstore.user.Tier >= 99" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 Betaling beheer
             </div>
-            <div v-if="page === 'availability'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+            <div v-if="page === 'availability' && authstore.user.Tier >= 99" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 <Calendar />
             </div>
+            <div v-if="page === 'orders'" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+                <Myorders />
+            </div>
+            
         </main>
     </div>
 </template> 

@@ -31,9 +31,11 @@ const useAuthStore = defineStore({
 
                 this.authenticated = true
                 this.user = user.user
-
+                return true
             } catch (e) {
                 console.log(e)
+                return false
+
             }
         },
 

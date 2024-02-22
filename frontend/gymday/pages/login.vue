@@ -3,6 +3,7 @@ import { baseURL } from '../api';
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import useAuthStore from '../stores/auth'
+import Swal from 'sweetalert2'
 
 useSeoMeta({
     title: 'Login',
@@ -30,11 +31,25 @@ const form = ref({
 })
 
 async function login() {
-    await loginuser(form.value.Email, form.value.Password); // call authenticateUser and pass the user object
-    
-    if (authenticated) {
+    if(await loginuser(form.value.Email, form.value.Password)){
+        await Swal.fire({
+            title: 'Ingelogd!',
+            icon: 'success',
+            timerProgressBar: true,
+            timer: 1000,
+
+        }) 
         router.push('/');
-    };
+    } else {
+        Swal.fire({
+            title: 'Verkeerde login gegevens',
+            text: 'Probeer het opnieuw',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+        })    
+    }
+    
+
 }
 
 

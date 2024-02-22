@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import { baseURL } from '../api.js'
+import Swal from 'sweetalert2'
 
 
 const useListingStore = defineStore({
@@ -60,9 +61,22 @@ const useListingStore = defineStore({
 
                 console.log(result)
                 await this.getListingReviews(listingid)
+                await Swal.fire({
+                    title: 'Recensie geplaatst!',
+                    icon: 'success',
+                    timerProgressBar: true,
+                    timer: 1500,
+                }) 
+                return true
             }
             catch (e) {
                 console.log(e)
+                Swal.fire({
+                    title: 'Er is iets fout gegaan',
+                    text: 'Mogelijk probeert u meer dan 1 recensie te plaatsen. ',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
             }
         },
 

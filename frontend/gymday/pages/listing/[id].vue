@@ -22,6 +22,10 @@ import useAuthStore from '~/stores/auth'
 import imagemodal from '~/components/listing/modals/imagemodal.vue'
 import useBookingStore from '~/stores/booking'
 import bookappointment from '~/components/listing/modals/bookappointment.vue'
+import Swal from 'sweetalert2'
+
+
+
 
 const hover = ref(1)
 
@@ -41,7 +45,15 @@ const WriteReview = ref({
 })
 
 async function SubmitReview() {
-
+    if(!authstore.authenticated){
+        Swal.fire({
+            title: 'Je bent niet ingelogd',
+            text: 'Log in om review te plaatsen',
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+        })
+        return
+    }
     await listingstore.submitReview(id, WriteReview.value.Rating, WriteReview.value.Body)
     WriteReview.value.Body = ''
     WriteReview.value.Rating = 1
@@ -63,6 +75,33 @@ listingstore.selectedTimeSlot = {
     EndDate: '',
     EndTime: '',
 } 
+
+async function CreateBooking(){
+    // check if user is logged in
+    if(!authstore.authenticated){
+        Swal.fire({
+            title: 'Je bent niet ingelogd',
+            text: 'Log in om een afspraak te boeken',
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+        })
+        return
+    }
+
+    if (bookingstore.createBooking(id, booking.value.Date, booking.value.Time, listingstore.selectedTimeSlot.ID)){
+        listingstore.selectedTimeSlot = { 
+            StartDate: '',
+            StartTime: '',
+            EndDate: '',
+            EndTime: '',
+        }
+        booking.value.Date = ''
+        booking.value.Time = ''
+    }
+
+
+}
+
 
 
 </script>
@@ -143,10 +182,15 @@ listingstore.selectedTimeSlot = {
             class="mx-auto max-w-2xl pb-12 pt-10  lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:pb-18 lg:pt-16">
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{{ listing.listing.Title }}</h1>
-                <div class="text-gray-500 w-[20%]">
-                    <NuxtLink class="text-lg" :to="`../profile/${listing.listing.User.ID}`">
-                        <a href="#" class="block hover:text-gray-400">{{ listing.listing.User.FirstName }} {{
-                            listing.listing.User.LastName }}</a>
+                <div class="text-gray-500 w-[80%] mt-2">
+                    <NuxtLink class="text-lg flex align-middle space-x-2" :to="`../profile/${listing.listing.User.ID}`">
+                        <img class="inline-block h-12 w-12 rounded-full" v-if="listing.listing.User?.ProfilePicture && listing.listing.User.ProfilePicture !== ''" :src="listing.listing.User.ProfilePicture" alt="" />
+                        
+                        <a href="#" class="block hover:text-gray-400 align-middle self-center">
+                            {{ listing.listing.User.FirstName }} 
+                            {{ listing.listing.User.LastName }}
+                        </a>
+
                     </NuxtLink>
                 </div>
             </div>
@@ -177,8 +221,8 @@ listingstore.selectedTimeSlot = {
                         <bookappointment v-if="listingstore.openDatePicker" />
                     </div>
 
-                    <button @click="bookingstore.createBooking(id, booking.Date, booking.Time, listingstore.selectedTimeSlot.ID)" type="button"
-                        class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-500 px-8 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Afspraak boeken
+                    <button @click="CreateBooking()" type="button"
+                        class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-green-500 px-8 py-3 text-base font-medium text-white hover:bg-green-700 ">Afspraak boeken
                     </button>
                 </form>
             </div>

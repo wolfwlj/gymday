@@ -190,33 +190,15 @@ func Logout(c *gin.Context) {
 
 
 func SendVerificationEmail(Email string) {
-	// server := smtpmock.New(smtpmock.ConfigurationAttr{
-	// 	LogToStdout:       true,
-	// 	LogServerActivity: true,
-	//   })
 
-	//   if err := server.Start(); err != nil {
-	// 	fmt.Println(err)
-	//   }
-
-	//   hostAddress, portNumber := "127.0.0.1", server.PortNumber()
-
-	//Find the user by email
 	var user models.User
 
 	initializers.DB.First(&user, "email= ?", Email)
-	// EMAIL_HOST = ''
-	// EMAIL_HOST_USER = ''
-	// EMAIL_HOST_PASSWORD = ''
-	// EMAIL_PORT = ''
-
-	// emailtoken := randstr.String(20)
-
 
 	initializers.DB.Save(&user)
-	username := "d0fe083e0b75a0"
-
-	password := "1a106f143121a9"
+	
+	username := os.Getenv("EMAIL_HOST_USER")
+	password := os.Getenv("EMAIL_HOST_PASSWORD")
 	
 	smtpHost := "sandbox.smtp.mailtrap.io"
 	
@@ -226,7 +208,7 @@ func SendVerificationEmail(Email string) {
 	
 	// Message data
 	
-	from := "john.doe@your.domain"
+	from := "noreply@gymday.nl"
 	
 	to := []string{"wolfolthuis@gmail.com"}
 	
@@ -242,7 +224,6 @@ func SendVerificationEmail(Email string) {
 	
 	"Here's the space for your great sales pitch\r\n")
 	
-	// Connect to the server and send message
 	
 	smtpUrl := smtpHost + ":2525"
 	
@@ -251,23 +232,7 @@ func SendVerificationEmail(Email string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// url := "https://localhost:3000/verifyemail/" + emailtoken
 
-	// //Send an email with the new password
-	// emailpass := os.Getenv("EMAIL_PASS")
-	
-	// m := gomail.NewMessage()
-	// m.SetHeader("From", "admin@wolfolthuis.com")
-	// m.SetHeader("To", Email)
-	// m.SetHeader("Subject", "Gymday - verifieer email")
-	// m.SetBody("text/html", "Goedendag,  <br><br> U heeft een wachtwoord reset aangevraagd. <br><br> Klik op de onderstaande link om Uw wachtwoord te resetten. <br><br> <a href='" + url + "'>Reset wachtwoord</a> <br><br> <i>Deze link is na 15 minuten ongeldig</i>")
-
-	// d := gomail.NewDialer("mx1.titan.email", 465, "admin@wolfolthuis.com", emailpass)
-
-	// if err := d.DialAndSend(m); err != nil {
-	// 	log.Println(err)
-	// 	panic(err)
-	// }
 }
 
 func VerifyEmail(c *gin.Context){

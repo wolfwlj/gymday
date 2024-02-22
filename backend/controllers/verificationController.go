@@ -16,11 +16,22 @@ func CreateVerificationRequest(c *gin.Context) {
 		Reason string `gorm:"type:text"`
 	}
 	c.Bind(&body)
-	log.Println(body.Reason)
 
 	userauth, _ := c.Get("user")
 	user := userauth.(models.User)
-	
+
+	// check if user has already submitted a verification request
+	var existingVerificationRequest models.VerificationRequest
+
+	initializers.DB.First(&existingVerificationRequest, "user_id = ?", user.ID)
+
+	if existingVerificationRequest.ID != 0 {
+		c.JSON(400, gin.H{
+			"error": "You have already submitted a verification request",
+		})
+		return
+	}
+
 	verificationRequest := models.VerificationRequest{
 		Status: "pending",
 		Reason: body.Reason,

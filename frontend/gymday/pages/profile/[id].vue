@@ -47,7 +47,7 @@ await profileStore.getUser(param)
                         <publiclistingsprofile />
                     </div>
                     <div v-if="currentProfileTab == 2" >
-                        Recencies
+                        Deze tab komt nog, work in progress
                     </div>
                 </div>
             </div>

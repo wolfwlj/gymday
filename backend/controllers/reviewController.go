@@ -48,11 +48,18 @@ func CreateReview(c *gin.Context) {
 
 	c.Bind(&body) 
 
+	// check if user already reviewed the listing
+	var checkreview models.Review
+	initializers.DB.Where("user_id = ? AND listing_id = ?", userID, body.ListingID).First(&checkreview)
+	if checkreview.ID != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "You have already reviewed this listing",
+		})
+		return
+	}
 
-	log.Println("create review")
-
-	jemoeder, _  :=   strconv.Atoi(body.ListingID)
-	listingidtoint := uint(jemoeder)
+	convertedListingID, _  :=   strconv.Atoi(body.ListingID)
+	listingidtoint := uint(convertedListingID)
 	// to unint 
 
 	review := models.Review{
