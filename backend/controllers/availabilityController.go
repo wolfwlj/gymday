@@ -229,14 +229,19 @@ func DeleteTimeSlot(c *gin.Context) {
 	})
 }
 
-func FillTimeSlot(UserID uint, BookingID uint, TimeSlotID uint) (error) {
+func FillTimeSlot(UserID uint, BookingID uint, TimeSlotID uint) (error, int) {
 	var timeslot models.Timeslot
 
 	err := initializers.DB.First(&timeslot, TimeSlotID)
 
 	if timeslot.ID == 0 {
-		return err.Error
+		return err.Error, 0
 	}
+
+	if timeslot.Available == false {
+		return nil, 0
+	}
+
 	timeslot.UserID = &UserID
 	timeslot.BookingID = &BookingID
 	timeslot.Available = false
@@ -244,7 +249,7 @@ func FillTimeSlot(UserID uint, BookingID uint, TimeSlotID uint) (error) {
 	err = initializers.DB.Save(&timeslot)
 
 	if err.Error != nil {
-		return err.Error
+		return err.Error, 0
 	}
-	return nil
+	return nil, 1
 }

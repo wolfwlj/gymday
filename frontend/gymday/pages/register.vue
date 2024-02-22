@@ -3,6 +3,7 @@ import { baseURL } from '../api';
 import { ref, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 import useAuthStore from '../stores/auth'
+import Swal from 'sweetalert2'
 
 
 useSeoMeta({
@@ -40,6 +41,7 @@ const errorCheck = ref(false);
 async function signup() {
     errors = [];
     const fields = Object.entries(form.value);
+    console.log(fields)
 
     for (let i = 0; i < fields.length; i++) {
         if (fields[i][0] === 'PasswordConfirmation') continue;
@@ -47,6 +49,8 @@ async function signup() {
         fields[i][0] = fields[i][0].replace('_', ' ');
 
         if (!fields[i][1]) {
+            console.log(fields[i] + ' is verplicht!')
+
             errors.push(fields[i][0] + ' is verplicht!');
             errorCheck.value = true;
         }
@@ -71,9 +75,23 @@ async function signup() {
     });
 
     if (data.value.user) {
-        await loginuser(form.value.Email, form.value.Password);
+        if(await loginuser(form.value.Email, form.value.Password)){
+            await Swal.fire({
+                title: 'Ingelogd!',
+                icon: 'success',
+                timerProgressBar: true,
+                timer: 1000,
 
-        if (authenticated) router.push('/');
+            }) 
+            router.push('/');
+        } else {
+            Swal.fire({
+                title: 'Iets is verkeerd gegaan',
+                text: 'Probeer handmatig in te loggen',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            })    
+        }
     }
 }
 </script>
@@ -93,7 +111,7 @@ async function signup() {
                     <div class="flex">
                         <div class="ml-3 w-full">
                             <div class="flex justify-between">
-                                <h3 class="text-sm font-medium text-red-800">Er zijn {{ Object.keys(errors).length }} met jouw invoer.</h3>
+                                <h3 class="text-sm font-medium text-red-800">Er zijn {{ Object.keys(errors).length }} velden zonder invoer.</h3>
                                 <UIcon name="i-heroicons-x-mark" @click="errorCheck = false" class="cursor-pointer" />
                             </div>
 

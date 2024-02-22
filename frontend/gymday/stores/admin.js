@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import { baseURL } from '../api.js'
+import Swal from 'sweetalert2'
 
 const useAdminStore = defineStore({
     id: 'adminstore',
@@ -18,11 +19,21 @@ const useAdminStore = defineStore({
             try {
                 const result = await adminService.submitApplication(Reason)
                 console.log(result)
-                if (result.message === 'success') {
-                    return 'success'
-                }
-            }   catch (e) {
-
+                
+                await Swal.fire({
+                    title: 'Verificatie aanvraag verzonden',
+                    icon: 'success',
+                    timerProgressBar: true,
+                    timer: 3000,
+                }) 
+                
+            } catch (e) {
+                Swal.fire({
+                    title: 'Er is iets fout gegaan',
+                    text: 'Je kan maar 1 verificatie aanvraag per keer doen. Wacht tot je vorige aanvraag is afgehandeld.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
             }
         },
         async getApplications() {

@@ -1,10 +1,12 @@
 import {defineStore} from 'pinia'
 import { baseURL } from '../api.js'
+import Swal from 'sweetalert2'
 
 const useBookingStore = defineStore({
     id: 'bookingstore',
     state: () => ({
         bookings : [],
+        myorders : [],
         
         addbookingModal : false,
         bookingModal : false,
@@ -34,13 +36,31 @@ const useBookingStore = defineStore({
                 console.log(result)
                 this.addbookingModal = false
                 await this.getBookings()
-                alert('Booking verzonden!')
+                await Swal.fire({
+                    title: 'Booking verzonden!',
+                    icon: 'success',
+                    timerProgressBar: true,
+                    timer: 1000,
+                })             
             }
             catch (e) {
                 console.log(e)
             }
 
         },
+
+        async getMyOrders() {
+            try {
+                const result = await $fetch(`/api/booking/getmyorders`, {
+                    method: 'GET',
+                })
+                this.myorders = result.bookings
+            } catch (e) {
+                console.log(e)
+            }
+
+        },
+
 
         async createBooking(listingid, startdate, starttime, timeslotID) {
             // create timestamp
@@ -55,10 +75,23 @@ const useBookingStore = defineStore({
                 const result = await bookingService.createBooking(listingid, date, timeslotID)
                 this.addbookingModal = false
                 await this.getBookings()
-                alert('Booking verzonden!')
+
+                await Swal.fire({
+                    title: 'Booking verzonden!',
+                    icon: 'success',
+                    timerProgressBar: true,
+                    timer: 1000,
+                }) 
+                return true
             }
             catch (e) {
-                console.log(e)
+                Swal.fire({
+                    title: 'Er is iets fout gegaan',
+                    text: 'Mogelijk is het tijdslot al bezet, excuus voor het ongemak. ',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+                return false
             }
 
         },
@@ -83,6 +116,7 @@ const useBookingStore = defineStore({
                 console.log(result)
                 await this.getBookings()
                 this.bookingModal = false
+                
             }
             catch (e) {
                 console.log(e)

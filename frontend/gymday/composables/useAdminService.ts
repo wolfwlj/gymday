@@ -21,7 +21,7 @@ export const useAdminService = () => {
             console.log(useRequestHeader('Cookie'))
             // Get the current authenticated user
             // useRequestHeaders(['cookies']) will send the httpOnly cookies to the nitro server
-            const response = await $fetch('/api/admin/verificationrequest', {
+            const response = await $fetch('/api/admin/submitapplication', {
                 headers: useRequestHeaders(['cookies']),
                 body: {
                     reason

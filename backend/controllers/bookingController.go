@@ -59,9 +59,9 @@ func CreateBooking(c *gin.Context) {
 	// get the booking id
 	BookingID := booking.ID
 	// now fill the timeslot userId, timeslotid, bookingid
-	err := FillTimeSlot(getuser.ID, BookingID, uint(body.TimeslotID))
+	err, allerror := FillTimeSlot(getuser.ID, BookingID, uint(body.TimeslotID))
 
-	if err != nil {
+	if err != nil || allerror != 1 {
 		// delete the booking
 		initializers.DB.Delete(&booking)
 
@@ -70,6 +70,9 @@ func CreateBooking(c *gin.Context) {
 		})
 		return
 	}
+
+	// Send email to the owner of the listing
+	// send email to the person who made the booking
 
 	c.JSON(http.StatusOK, gin.H{
 		"booking": booking,
@@ -90,11 +93,7 @@ func ManualCreateBooking(c *gin.Context) {
 	}
 	
 	c.Bind(&body)
-
-	log.Println(body.ListingID)
-
 	user, _ := c.Get("user")
-	log.Println(user)
 
 	userID := user.(models.User).ID
 
@@ -137,25 +136,7 @@ func GetBookings(c *gin.Context) {
 
 	userID := user.(models.User).ID
 
-	type Booking struct {
-		gorm.Model
-		FirstName string `gorm:"type:text;default:null"`
-		LastName string `gorm:"type:text;default:null"`
-		Email string `gorm:"type:text;default:null"`
-		Phone string `gorm:"type:text;default:null"`
-		Title string `gorm:"type:text"`
-		Price decimal.Decimal `gorm:"type:decimal(10,2)"`
-		Status string `gorm:"type:ENUM('Pending', 'Accepted', 'Declined', 'Cancelled', 'Completed');default:'Pending'"`
-		StartDate string `gorm:"type:text"`
-		EndDate string `gorm:"type:text"`
-		UserID uint 
-		User models.User `gorm:"foreignKey:UserID"`
-		ListingID uint
-		Listing models.Listing `gorm:"foreignKey:ListingID"`
-		// these are not part of the booking model but we need them for the frontend
-		TimeslotStartDate string `gorm:"column:timeslot_start_date"`
-		TimeslotEndDate string `gorm:"column:timeslot_end_date"`
-	}
+
 
 	var bookings []Booking
 	// get bookings from listings that belong to the user. This requires a join
@@ -164,13 +145,29 @@ func GetBookings(c *gin.Context) {
 	initializers.DB.Select("bookings.*, listings.title as listing_title, timeslots.start_date as timeslot_start_date, timeslots.end_date as timeslot_end_date").Joins("JOIN listings ON listings.id = bookings.listing_id").Joins("JOIN timeslots ON timeslots.booking_id = bookings.id").Preload("User").Preload("Listing").Where("listings.user_id = ?", userID).Order("start_date DESC").Find(&bookings)
 	// initializers.DB.Where("user_id = ?", userID).Find(&bookings)
 
-
 	// initializers.DB.Preload("Booking.Listing").Preload("User").Where("owner_id = ?", userID).Find(&bookings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"bookings": bookings,
 	})
 }
+
+func GetMyOrders(c *gin.Context){
+	// this one is very simple, do same as above but dont check listing. Just check the user id of the booking, the person that placed the order.
+	user, _ := c.Get("user")
+
+	userID := user.(models.User).ID
+
+	var bookings []Booking
+
+	initializers.DB.Select("bookings.*, listings.title as listing_title, timeslots.start_date as timeslot_start_date, timeslots.end_date as timeslot_end_date").Joins("JOIN listings ON listings.id = bookings.listing_id").Joins("JOIN timeslots ON timeslots.booking_id = bookings.id").Preload("User").Preload("Listing").Where("bookings.user_id = ?", userID).Order("start_date DESC").Find(&bookings)
+
+	c.JSON(http.StatusOK, gin.H{
+		"bookings": bookings,
+	})
+}
+
+
 
 
 func UpdateBooking(c *gin.Context) {
@@ -217,4 +214,25 @@ func UpdateBooking(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"booking": booking,
 	})
+}
+
+
+type Booking struct {
+	gorm.Model
+	FirstName string `gorm:"type:text;default:null"`
+	LastName string `gorm:"type:text;default:null"`
+	Email string `gorm:"type:text;default:null"`
+	Phone string `gorm:"type:text;default:null"`
+	Title string `gorm:"type:text"`
+	Price decimal.Decimal `gorm:"type:decimal(10,2)"`
+	Status string `gorm:"type:ENUM('Pending', 'Accepted', 'Declined', 'Cancelled', 'Completed');default:'Pending'"`
+	StartDate string `gorm:"type:text"`
+	EndDate string `gorm:"type:text"`
+	UserID uint 
+	User models.User `gorm:"foreignKey:UserID"`
+	ListingID uint
+	Listing models.Listing `gorm:"foreignKey:ListingID"`
+	// these are not part of the booking model but we need them for the frontend
+	TimeslotStartDate string `gorm:"column:timeslot_start_date"`
+	TimeslotEndDate string `gorm:"column:timeslot_end_date"`
 }

@@ -135,7 +135,7 @@ let defaulttimeslot = {
                             </div>
                         </div>
                         <section class="mt-12 md:mt-0 md:pl-6">
-                            <div class="h-[80%]">
+                            <div class="">
                                 <h2 class="text-base font-semibold leading-6 text-gray-900 md:pl-4">Beschikbare tijden, <time > {{ listingStore.dateobject.selectedDate }} </time></h2>
 
                                 <ol class="mt-4 space-y-1 text-sm leading-6 text-gray-500">
@@ -157,7 +157,7 @@ let defaulttimeslot = {
                                     </div>
                                 </ol>
                             </div>
-                            <div class="h-[10%]  ">
+                            <div class="">
                                 <UButton v-if="listingStore.selectedTimeSlot.StartDate != ''" color="green" class="mt-4" @click="listingStore.openDatePicker = false">Bevestigen</UButton>
                             </div>
 
