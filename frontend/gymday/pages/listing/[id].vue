@@ -195,7 +195,7 @@ async function CreateBooking(){
                 </div>
             </div>
             <div class="mt-4 lg:row-span-3 lg:mt-0 lg:sticky top-20 overflow-hidden h-fit">
-                <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / training</p>
+                <p class="text-3xl tracking-tight text-gray-900">&euro;{{ listing.listing.Price }} / sessie</p>
                 <div class="mt-6">
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">

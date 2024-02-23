@@ -20,6 +20,9 @@ import Galleryprofile from '~/components/profile/galleryprofile.vue';
 import Bookings from '~/components/booking/bookings.vue';
 import Calendar from '~/components/availability/Calendar.vue';
 import Myorders from '~/components/booking/myorders.vue';
+import Paymentmanagement from '~/components/payments/paymentmanagement.vue';
+
+
 const profileStore = useProfileStore()
 const authstore = useAuthStore()
 const route = useRoute()
@@ -29,7 +32,7 @@ const currentProfileTab = ref('General')
 await profileStore.getUser(authstore.user?.ID)
 
 const navigation = [
-    { name: 'General', val: 'general',  to: '?page=general', icon: UserCircleIcon, can_see : authstore.user.Tier <= 999 },
+    { name: 'Algemeen', val: 'general',  to: '?page=general', icon: UserCircleIcon, can_see : authstore.user.Tier <= 999 },
     { name: 'Listings',  val: 'listings', to: '?page=listings', icon: QueueListIcon, can_see : authstore.user.Tier >= 99  },
     { name: 'Bookings',  val: 'bookings', to: '?page=bookings', icon: ArchiveBoxIcon, can_see : authstore.user.Tier >= 99  },
     { name: 'Betalingen',  val: 'betalingen', to: '?page=betalingen', icon: CurrencyEuroIcon, can_see : authstore.user.Tier >= 99  },
@@ -114,7 +117,7 @@ const navigation = [
                 <Bookings />
             </div>
             <div v-if="page === 'betalingen'&& authstore.user.Tier >= 99" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-                Betaling beheer
+                <Paymentmanagement />
             </div>
             <div v-if="page === 'availability' && authstore.user.Tier >= 99" class="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
                 <Calendar />
