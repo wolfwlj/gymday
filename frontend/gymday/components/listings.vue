@@ -53,7 +53,7 @@ function convertTohighestRating(rating) {
                                 <p class="mt-1 text-sm text-gray-500">{{ listing.AmountOfReviews }} reviews </p>
                             </div>
                             <p class="mt-4 text-base font-medium text-gray-900">
-                                &euro; {{ listing.Price }} / training
+                                &euro; {{ listing.Price }} / sessie
                             </p>
                             <p class="mt-4 text-base font-medium text-gray-900">
                                 {{ listing.Location }}
